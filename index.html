@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Online Word Counter | SitPanda</title>
+    <meta name="description" content="Count words, characters, sentences, and paragraphs in real-time with SitPanda's free online Word Counter tool. Simple, fast, and secure online digital toolkit.">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen font-sans">
+
+    <!-- Header Navigation -->
+    <header class="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-indigo-600">SitPanda<span class="text-gray-500 text-sm font-normal">.com</span></a>
+            <nav class="hidden md:flex space-x-6 text-sm font-medium text-gray-600">
+                <a href="#text-tools" class="hover:text-indigo-600">Text Tools</a>
+                <a href="#image-tools" class="hover:text-indigo-600">Image Tools</a>
+                <a href="#pdf-tools" class="hover:text-indigo-600">PDF Tools</a>
+                <a href="#calculators" class="hover:text-indigo-600">Calculators</a>
+                <a href="#dev-tools" class="hover:text-indigo-600">Developer</a>
+                <a href="#seo-tools" class="hover:text-indigo-600">SEO & Marketing</a>
+                <a href="#business-tools" class="hover:text-indigo-600">Business</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto px-4 py-10 flex-grow">
+        
+        <!-- Tool Title & Description -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-3">Free Online Word Counter</h1>
+            <p class="text-gray-600 text-lg">Instantly count words, characters, sentences, and paragraphs in browser-side real time.</p>
+        </div>
+
+        <!-- Word Counter App -->
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-indigo-50 p-4 rounded-xl text-center border border-indigo-100">
+                    <span id="wordCount" class="block text-3xl md:text-4xl font-bold text-indigo-600">0</span>
+                    <span class="text-xs md:text-sm font-semibold uppercase tracking-wider text-gray-500 mt-1 block">Words</span>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-xl text-center border border-blue-100">
+                    <span id="charCount" class="block text-3xl md:text-4xl font-bold text-blue-600">0</span>
+                    <span class="text-xs md:text-sm font-semibold uppercase tracking-wider text-gray-500 mt-1 block">Characters</span>
+                </div>
+                <div class="bg-green-50 p-4 rounded-xl text-center border border-green-100">
+                    <span id="sentenceCount" class="block text-3xl md:text-4xl font-bold text-green-600">0</span>
+                    <span class="text-xs md:text-sm font-semibold uppercase tracking-wider text-gray-500 mt-1 block">Sentences</span>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-xl text-center border border-purple-100">
+                    <span id="paragraphCount" class="block text-3xl md:text-4xl font-bold text-purple-600">0</span>
+                    <span class="text-xs md:text-sm font-semibold uppercase tracking-wider text-gray-500 mt-1 block">Paragraphs</span>
+                </div>
+            </div>
+
+            <!-- Text Input Area -->
+            <textarea id="textInput" rows="9" class="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none text-gray-800 text-base leading-relaxed placeholder-gray-400 transition" placeholder="Type or paste your text here to begin counting..."></textarea>
+
+            <!-- Action Buttons & Details -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
+                <button id="clearBtn" class="w-full sm:w-auto px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium text-sm transition">Clear Text</button>
+                <span id="readingTime" class="text-sm font-medium text-gray-500">Estimated Reading Time: ~0 min</span>
+            </div>
+        </div>
+
+        <!-- SEO Article / Supporting Content -->
+        <article class="mt-14 space-y-8 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-3">How to Use the SitPanda Word Counter?</h2>
+                <p class="text-gray-600 leading-relaxed">Our browser-side text processing tool gives you accurate metrics for any text content without sending your data to external servers. Simply paste or type your document in the input field above, and the counters update automatically in real time.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-100">
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Key Features</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-sm text-gray-600">
+                        <li><strong>100% Private:</strong> Processing happens entirely in your browser.</li>
+                        <li><strong>Instant Metrics:</strong> Live updates for words, letters, sentences, and paragraphs.</li>
+                        <li><strong>Reading Speed Estimate:</strong> Helps content creators gauge average reading times.</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-100">
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Who Is This For?</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-sm text-gray-600">
+                        <li><strong>SEO Writers & Bloggers:</strong> Keep content lengths optimized for search intent.</li>
+                        <li><strong>Students & Academics:</strong> Stay within strict word limits for assignments.</li>
+                        <li><strong>Social Media Managers:</strong> Monitor post length for X/Twitter and LinkedIn.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-bold text-gray-900 mb-3">Frequently Asked Questions (FAQs)</h2>
+                <div class="space-y-4">
+                    <div class="border-b pb-3">
+                        <h4 class="font-semibold text-gray-800">Is my text stored or saved anywhere?</h4>
+                        <p class="text-sm text-gray-600 mt-1">No, all processing happens locally on your device via client-side JavaScript. Your content is never stored or uploaded.</p>
+                    </div>
+                    <div class="border-b pb-3">
+                        <h4 class="font-semibold text-gray-800">How is reading time calculated?</h4>
+                        <p class="text-sm text-gray-600 mt-1">Estimated reading time is based on an average reading speed of 200 words per minute for standard prose.</p>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-8 border-t mt-16">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-4">
+            <p class="text-base font-semibold text-white">SitPanda.com — Your Everyday Digital Toolkit</p>
+            <p class="text-xs text-gray-500">&copy; 2026 SitPanda. All rights reserved. Free, Fast, and Useful Web Tools.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const textInput = document.getElementById('textInput');
+        const wordCount = document.getElementById('wordCount');
+        const charCount = document.getElementById('charCount');
+        const sentenceCount = document.getElementById('sentenceCount');
+        const paragraphCount = document.getElementById('paragraphCount');
+        const readingTime = document.getElementById('readingTime');
+        const clearBtn = document.getElementById('clearBtn');
+
+        textInput.addEventListener('input', updateCounts);
+
+        function updateCounts() {
+            const text = textInput.value;
+
+            // Character count
+            charCount.textContent = text.length;
+
+            // Word count
+            const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+            const wordsNum = words.length;
+            wordCount.textContent = wordsNum;
+
+            // Sentence count
+            const sentences = text.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0);
+            sentenceCount.textContent = sentences.length;
+
+            // Paragraph count
+            const paragraphs = text.split(/\n+/).filter(para => para.trim().length > 0);
+            paragraphCount.textContent = paragraphs.length;
+
+            // Reading time (~200 words per minute)
+            const minutes = Math.ceil(wordsNum / 200);
+            readingTime.textContent = `Estimated Reading Time: ~${wordsNum === 0 ? 0 : minutes} min`;
+        }
+
+        clearBtn.addEventListener('click', () => {
+            textInput.value = '';
+            updateCounts();
+        });
+    </script>
+</body>
+</html>
