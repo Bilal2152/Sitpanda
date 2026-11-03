@@ -1,163 +1,421 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Online Word Counter | SitPanda</title>
-    <meta name="description" content="Count words, characters, sentences, and paragraphs in real-time with SitPanda's free online Word Counter tool. Simple, fast, and secure online digital toolkit.">
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen font-sans">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word Counter, Character Counter & Case Converter – Free Online | SitPanda</title>
+<meta name="description" content="Count words, characters, sentences and paragraphs instantly, then convert text to UPPERCASE, lowercase, Title Case and more. Free, private, works with Urdu and English.">
+<link rel="canonical" href="https://sitpanda.com/word-counter/">
+<meta property="og:title" content="Free Word Counter, Character Counter & Case Converter">
+<meta property="og:description" content="Count words and characters and change text case in one click. Runs in your browser, nothing is uploaded.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sitpanda.com/word-counter/">
+<meta name="robots" content="index, follow, max-image-preview:large">
 
-    <!-- Header Navigation -->
-    <header class="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-indigo-600">SitPanda<span class="text-gray-500 text-sm font-normal">.com</span></a>
-            <nav class="hidden md:flex space-x-6 text-sm font-medium text-gray-600">
-                <a href="#text-tools" class="hover:text-indigo-600">Text Tools</a>
-                <a href="#image-tools" class="hover:text-indigo-600">Image Tools</a>
-                <a href="#pdf-tools" class="hover:text-indigo-600">PDF Tools</a>
-                <a href="#calculators" class="hover:text-indigo-600">Calculators</a>
-                <a href="#dev-tools" class="hover:text-indigo-600">Developer</a>
-                <a href="#seo-tools" class="hover:text-indigo-600">SEO & Marketing</a>
-                <a href="#business-tools" class="hover:text-indigo-600">Business</a>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Main Content Container -->
-    <main class="max-w-4xl mx-auto px-4 py-10 flex-grow">
-        
-        <!-- Tool Title & Description -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-3">Free Online Word Counter</h1>
-            <p class="text-gray-600 text-lg">Instantly count words, characters, sentences, and paragraphs in browser-side real time.</p>
-        </div>
-
-        <!-- Word Counter App -->
-        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div class="bg-indigo-50 p-4 rounded-xl text-center border border-indigo-100">
-                    <span id="wordCount" class="block text-3xl md:text-4xl font-bold text-indigo-600">0</span>
-                    <span class="text-xs md:text-sm font-semibold uppercase tracking-wider text-gray-500 mt-1 block">Words</span>
-                </div>
-                <div class="bg-blue-50 p-4 rounded-xl text-center border border-blue-100">
-                    <span id="charCount" class="block text-3xl md:text-4xl font-bold text-blue-600">0</span>
-                    <span class="text-xs md:text-sm font-semibold uppercase tracking-wider text-gray-500 mt-1 block">Characters</span>
-                </div>
-                <div class="bg-green-50 p-4 rounded-xl text-center border border-green-100">
-                    <span id="sentenceCount" class="block text-3xl md:text-4xl font-bold text-green-600">0</span>
-                    <span class="text-xs md:text-sm font-semibold uppercase tracking-wider text-gray-500 mt-1 block">Sentences</span>
-                </div>
-                <div class="bg-purple-50 p-4 rounded-xl text-center border border-purple-100">
-                    <span id="paragraphCount" class="block text-3xl md:text-4xl font-bold text-purple-600">0</span>
-                    <span class="text-xs md:text-sm font-semibold uppercase tracking-wider text-gray-500 mt-1 block">Paragraphs</span>
-                </div>
-            </div>
-
-            <!-- Text Input Area -->
-            <textarea id="textInput" rows="9" class="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none text-gray-800 text-base leading-relaxed placeholder-gray-400 transition" placeholder="Type or paste your text here to begin counting..."></textarea>
-
-            <!-- Action Buttons & Details -->
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
-                <button id="clearBtn" class="w-full sm:w-auto px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium text-sm transition">Clear Text</button>
-                <span id="readingTime" class="text-sm font-medium text-gray-500">Estimated Reading Time: ~0 min</span>
-            </div>
-        </div>
-
-        <!-- SEO Article / Supporting Content -->
-        <article class="mt-14 space-y-8 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
-            <div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-3">How to Use the SitPanda Word Counter?</h2>
-                <p class="text-gray-600 leading-relaxed">Our browser-side text processing tool gives you accurate metrics for any text content without sending your data to external servers. Simply paste or type your document in the input field above, and the counters update automatically in real time.</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-gray-50 p-5 rounded-xl border border-gray-100">
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">Key Features</h3>
-                    <ul class="list-disc pl-5 space-y-2 text-sm text-gray-600">
-                        <li><strong>100% Private:</strong> Processing happens entirely in your browser.</li>
-                        <li><strong>Instant Metrics:</strong> Live updates for words, letters, sentences, and paragraphs.</li>
-                        <li><strong>Reading Speed Estimate:</strong> Helps content creators gauge average reading times.</li>
-                    </ul>
-                </div>
-                <div class="bg-gray-50 p-5 rounded-xl border border-gray-100">
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">Who Is This For?</h3>
-                    <ul class="list-disc pl-5 space-y-2 text-sm text-gray-600">
-                        <li><strong>SEO Writers & Bloggers:</strong> Keep content lengths optimized for search intent.</li>
-                        <li><strong>Students & Academics:</strong> Stay within strict word limits for assignments.</li>
-                        <li><strong>Social Media Managers:</strong> Monitor post length for X/Twitter and LinkedIn.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div>
-                <h2 class="text-xl font-bold text-gray-900 mb-3">Frequently Asked Questions (FAQs)</h2>
-                <div class="space-y-4">
-                    <div class="border-b pb-3">
-                        <h4 class="font-semibold text-gray-800">Is my text stored or saved anywhere?</h4>
-                        <p class="text-sm text-gray-600 mt-1">No, all processing happens locally on your device via client-side JavaScript. Your content is never stored or uploaded.</p>
-                    </div>
-                    <div class="border-b pb-3">
-                        <h4 class="font-semibold text-gray-800">How is reading time calculated?</h4>
-                        <p class="text-sm text-gray-600 mt-1">Estimated reading time is based on an average reading speed of 200 words per minute for standard prose.</p>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-8 border-t mt-16">
-        <div class="max-w-7xl mx-auto px-4 text-center space-y-4">
-            <p class="text-base font-semibold text-white">SitPanda.com — Your Everyday Digital Toolkit</p>
-            <p class="text-xs text-gray-500">&copy; 2026 SitPanda. All rights reserved. Free, Fast, and Useful Web Tools.</p>
-        </div>
-    </footer>
-
-    <!-- JavaScript Logic -->
-    <script>
-        const textInput = document.getElementById('textInput');
-        const wordCount = document.getElementById('wordCount');
-        const charCount = document.getElementById('charCount');
-        const sentenceCount = document.getElementById('sentenceCount');
-        const paragraphCount = document.getElementById('paragraphCount');
-        const readingTime = document.getElementById('readingTime');
-        const clearBtn = document.getElementById('clearBtn');
-
-        textInput.addEventListener('input', updateCounts);
-
-        function updateCounts() {
-            const text = textInput.value;
-
-            // Character count
-            charCount.textContent = text.length;
-
-            // Word count
-            const words = text.trim().split(/\s+/).filter(word => word.length > 0);
-            const wordsNum = words.length;
-            wordCount.textContent = wordsNum;
-
-            // Sentence count
-            const sentences = text.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0);
-            sentenceCount.textContent = sentences.length;
-
-            // Paragraph count
-            const paragraphs = text.split(/\n+/).filter(para => para.trim().length > 0);
-            paragraphCount.textContent = paragraphs.length;
-
-            // Reading time (~200 words per minute)
-            const minutes = Math.ceil(wordsNum / 200);
-            readingTime.textContent = `Estimated Reading Time: ~${wordsNum === 0 ? 0 : minutes} min`;
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Word Counter, Character Counter & Case Converter",
+      "url": "https://sitpanda.com/word-counter/",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any (runs in the browser)",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Free online tool to count words, characters, sentences and paragraphs and convert text case."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does the word counter count words?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Words are groups of characters separated by spaces or line breaks. This works for English, Urdu, Arabic and most other languages that use spaces between words." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it count spaces as characters?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Both counts are shown: characters with spaces and characters without spaces. Use whichever your platform requires." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my text saved or uploaded?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Everything runs in your browser. Your text never leaves your device." }
+        },
+        {
+          "@type": "Question",
+          "name": "How is reading time calculated?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Reading time assumes about 200 words per minute and speaking time about 130 words per minute, which are common averages for adults." }
         }
+      ]
+    }
+  ]
+}
+</script>
 
-        clearBtn.addEventListener('click', () => {
-            textInput.value = '';
-            updateCounts();
-        });
-    </script>
+<style>
+:root {
+  --bg: #f5f6f2;
+  --surface: #ffffff;
+  --ink: #1c211d;
+  --muted: #5d665f;
+  --line: #d9ddd5;
+  --accent: #1f7a4d;
+  --accent-ink: #ffffff;
+  --accent-soft: #e3f1e8;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121512;
+    --surface: #1a1e1a;
+    --ink: #eceee9;
+    --muted: #9aa39c;
+    --line: #2d332d;
+    --accent: #4fc283;
+    --accent-ink: #0b1a11;
+    --accent-soft: #1b2b21;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121512; --surface: #1a1e1a; --ink: #eceee9; --muted: #9aa39c;
+  --line: #2d332d; --accent: #4fc283; --accent-ink: #0b1a11; --accent-soft: #1b2b21;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: 1rem; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
+header.top { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; }
+.brand { font-weight: 700; letter-spacing: -0.01em; text-decoration: none; color: var(--ink); }
+nav.crumbs { font-size: .875rem; color: var(--muted); }
+nav.crumbs a { color: var(--muted); }
+h1 { font-size: clamp(1.6rem, 4.5vw, 2.4rem); line-height: 1.15; margin: .5rem 0 .5rem; letter-spacing: -0.02em; }
+.lead { color: var(--muted); margin: 0 0 1.25rem; max-width: 62ch; }
+
+.editor {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+textarea {
+  display: block; width: 100%; min-height: 240px; resize: vertical;
+  border: 0; outline: 0; padding: 1rem;
+  background: transparent; color: var(--ink);
+  font: inherit; line-height: 1.7;
+}
+.editor:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+.stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--line);
+}
+.stat { padding: .75rem 1rem; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.stat:nth-child(3n) { border-right: 0; }
+.stat:nth-last-child(-n+3) { border-bottom: 0; }
+.stat b { display: block; font-size: 1.5rem; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.stat span { font-size: .8125rem; color: var(--muted); }
+@media (min-width: 640px) {
+  .stats { grid-template-columns: repeat(6, 1fr); }
+  .stat:nth-child(3n) { border-right: 1px solid var(--line); }
+  .stat:nth-child(6n) { border-right: 0; }
+  .stat:nth-last-child(-n+3) { border-bottom: 0; }
+  .stat { border-bottom: 0; }
+}
+
+h2 { font-size: 1.25rem; margin: 2rem 0 .75rem; letter-spacing: -0.01em; }
+.btns { display: flex; flex-wrap: wrap; gap: .5rem; }
+button {
+  font: inherit; font-size: .9375rem; cursor: pointer;
+  padding: .5rem .85rem; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  min-height: 40px;
+}
+button:hover { border-color: var(--accent); }
+button:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.row { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; align-items: center; }
+.row .spacer { flex: 1; }
+#status { font-size: .875rem; color: var(--accent); min-height: 1.25rem; }
+
+.density { margin-top: 1.5rem; }
+.density ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+.density li { background: var(--accent-soft); border-radius: 999px; padding: .2rem .75rem; font-size: .875rem; }
+.density li em { font-style: normal; color: var(--muted); margin-left: .35rem; }
+.empty { color: var(--muted); font-size: .9375rem; }
+
+article { margin-top: 2.5rem; border-top: 1px solid var(--line); padding-top: .5rem; }
+article p, article li { max-width: 68ch; }
+details { border-bottom: 1px solid var(--line); padding: .75rem 0; }
+summary { cursor: pointer; font-weight: 600; }
+details p { margin: .5rem 0 0; color: var(--muted); }
+table { border-collapse: collapse; width: 100%; max-width: 68ch; font-size: .9375rem; }
+th, td { text-align: left; padding: .4rem .5rem; border-bottom: 1px solid var(--line); }
+.table-scroll { overflow-x: auto; }
+footer { margin-top: 3rem; font-size: .875rem; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="/">SitPanda</a>
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/tools/">Tools</a> / Word Counter</nav>
+  </header>
+
+  <main>
+    <h1>Word Counter, Character Counter & Case Converter</h1>
+    <p class="lead">Paste or type your text to see live counts, then change its case in one click. Works with English and Urdu. Your text stays in your browser.</p>
+
+    <section class="editor" aria-label="Text counter">
+      <label for="text" class="sr" style="position:absolute;left:-9999px">Your text</label>
+      <textarea id="text" dir="auto" placeholder="Start typing or paste your text here…" spellcheck="true"></textarea>
+      <div class="stats" aria-live="polite">
+        <div class="stat"><b id="sWords">0</b><span>Words</span></div>
+        <div class="stat"><b id="sChars">0</b><span>Characters</span></div>
+        <div class="stat"><b id="sNoSpace">0</b><span>Without spaces</span></div>
+        <div class="stat"><b id="sSent">0</b><span>Sentences</span></div>
+        <div class="stat"><b id="sPara">0</b><span>Paragraphs</span></div>
+        <div class="stat"><b id="sRead">0 sec</b><span>Reading time</span></div>
+      </div>
+    </section>
+
+    <h2>Change case</h2>
+    <div class="btns" role="group" aria-label="Case options">
+      <button data-case="upper">UPPERCASE</button>
+      <button data-case="lower">lowercase</button>
+      <button data-case="title">Title Case</button>
+      <button data-case="sentence">Sentence case</button>
+      <button data-case="camel">camelCase</button>
+      <button data-case="snake">snake_case</button>
+      <button data-case="kebab">kebab-case</button>
+      <button data-case="alt">aLtErNaTiNg</button>
+    </div>
+    <div class="row">
+      <button data-act="spaces">Remove extra spaces</button>
+      <button data-act="lines">Remove empty lines</button>
+      <span class="spacer"></span>
+      <button id="undo" disabled aria-label="Undo last change">↶ Undo</button>
+      <button id="redo" disabled aria-label="Redo">↷ Redo</button>
+      <button class="primary" id="copy">Copy text</button>
+      <button id="clear">Clear</button>
+    </div>
+    <div id="status" role="status"></div>
+
+    <section class="density">
+      <h2>Most used words</h2>
+      <div id="density"><p class="empty">Type some text to see which words you use most.</p></div>
+    </section>
+
+    <article>
+      <h2>How to use this word counter</h2>
+      <ol>
+        <li>Paste or type your text in the box. Counts update as you type.</li>
+        <li>Check words, characters (with and without spaces), sentences and paragraphs.</li>
+        <li>Click a case button to convert the text, then press Copy text.</li>
+      </ol>
+
+      <h2>Common character and word limits</h2>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Where</th><th>Limit</th></tr></thead>
+          <tbody>
+            <tr><td>SEO title tag</td><td>about 60 characters</td></tr>
+            <tr><td>Meta description</td><td>about 155 characters</td></tr>
+            <tr><td>X (Twitter) post</td><td>280 characters</td></tr>
+            <tr><td>Instagram caption</td><td>2,200 characters</td></tr>
+            <tr><td>SMS (single message)</td><td>160 characters</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="color:var(--muted);font-size:.875rem">Limits change over time, so confirm them on the platform you are posting to.</p>
+
+      <h2>What each case option does</h2>
+      <ul>
+        <li><strong>Sentence case</strong> capitalises the first letter of each sentence.</li>
+        <li><strong>Title Case</strong> capitalises the first letter of every word.</li>
+        <li><strong>camelCase, snake_case, kebab-case</strong> are naming styles used in code, URLs and file names.</li>
+      </ul>
+
+      <h2>Frequently asked questions</h2>
+      <details><summary>How does the word counter count words?</summary><p>Words are groups of characters separated by spaces or line breaks. This works for English, Urdu, Arabic and most languages that use spaces between words.</p></details>
+      <details><summary>Does it count spaces as characters?</summary><p>Both counts are shown: characters with spaces and characters without spaces. Use whichever your platform requires.</p></details>
+      <details><summary>Is my text saved or uploaded?</summary><p>No. Everything runs in your browser. Your text never leaves your device.</p></details>
+      <details><summary>How is reading time calculated?</summary><p>Reading time assumes about 200 words per minute and speaking time about 130 words per minute, which are common averages for adults.</p></details>
+    </article>
+  </main>
+
+  <footer>© SitPanda. Free online tools that run in your browser.</footer>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var ta = $("text");
+  var STOP = new Set(("the a an and or but of to in on at for with is are was were be it this that as by from i you he she we they not no so if my your our their am has have had do does did will would can could should").split(" "));
+
+  function fmtTime(mins) {
+    var s = Math.round(mins * 60);
+    if (s < 60) return s + " sec";
+    var m = Math.floor(s / 60), r = s % 60;
+    return m + " min" + (r ? " " + r + " sec" : "");
+  }
+
+  function update() {
+    var t = ta.value;
+    var words = t.trim() ? t.trim().split(/\s+/) : [];
+    var chars = Array.from(t).length;
+    var noSpace = Array.from(t.replace(/\s/g, "")).length;
+    var sents = (t.match(/[^.!?۔؟\n]+[.!?۔؟]*/g) || []).filter(function (s) { return /[\p{L}\p{N}]/u.test(s); }).length;
+    var paras = t.split(/\n\s*\n/).filter(function (p) { return p.trim(); }).length;
+
+    $("sWords").textContent = words.length.toLocaleString();
+    $("sChars").textContent = chars.toLocaleString();
+    $("sNoSpace").textContent = noSpace.toLocaleString();
+    $("sSent").textContent = sents.toLocaleString();
+    $("sPara").textContent = paras.toLocaleString();
+    $("sRead").textContent = words.length ? fmtTime(words.length / 200) : "0 sec";
+
+    var counts = {};
+    (t.toLowerCase().match(/[\p{L}\p{N}']+/gu) || []).forEach(function (w) {
+      if (w.length > 2 && !STOP.has(w)) counts[w] = (counts[w] || 0) + 1;
+    });
+    var top = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; }).slice(0, 8);
+    var box = $("density");
+    if (!top.length) {
+      box.innerHTML = '<p class="empty">Type some text to see which words you use most.</p>';
+    } else {
+      var ul = document.createElement("ul");
+      top.forEach(function (w) {
+        var li = document.createElement("li");
+        li.textContent = w;
+        var em = document.createElement("em");
+        em.textContent = counts[w] + "×";
+        li.appendChild(em);
+        ul.appendChild(li);
+      });
+      box.innerHTML = "";
+      box.appendChild(ul);
+    }
+  }
+
+  function wordsOf(t) { return t.match(/[\p{L}\p{N}]+/gu) || []; }
+
+  var converters = {
+    upper: function (t) { return t.toUpperCase(); },
+    lower: function (t) { return t.toLowerCase(); },
+    title: function (t) {
+      return t.toLowerCase().replace(/(^|[\s\-(\["'])(\p{L})/gu, function (_, a, b) { return a + b.toUpperCase(); });
+    },
+    sentence: function (t) {
+      return t.toLowerCase().replace(/(^\s*|[.!?]\s+|\n\s*)(\p{L})/gu, function (_, a, b) { return a + b.toUpperCase(); });
+    },
+    camel: function (t) {
+      return wordsOf(t.toLowerCase()).map(function (w, i) { return i ? w.charAt(0).toUpperCase() + w.slice(1) : w; }).join("");
+    },
+    snake: function (t) { return wordsOf(t.toLowerCase()).join("_"); },
+    kebab: function (t) { return wordsOf(t.toLowerCase()).join("-"); },
+    alt: function (t) {
+      var i = 0;
+      return Array.from(t).map(function (c) {
+        if (!/\p{L}/u.test(c)) return c;
+        return (i++ % 2) ? c.toUpperCase() : c.toLowerCase();
+      }).join("");
+    }
+  };
+
+  var actions = {
+    spaces: function (t) { return t.replace(/[ \t]+/g, " ").replace(/ *\n */g, "\n").trim(); },
+    lines: function (t) { return t.split("\n").filter(function (l) { return l.trim(); }).join("\n"); }
+  };
+
+  var statusTimer;
+  function say(msg) {
+    $("status").textContent = msg;
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(function () { $("status").textContent = ""; }, 2200);
+  }
+
+  var undoStack = [], redoStack = [], lastProgrammatic = null;
+  function syncHistoryButtons() {
+    $("undo").disabled = !undoStack.length;
+    $("redo").disabled = !redoStack.length;
+  }
+  // Save the current text, then apply a change (only if it actually changes something)
+  function applyChange(next, msg) {
+    if (next === ta.value) return say("No change.");
+    undoStack.push(ta.value);
+    if (undoStack.length > 100) undoStack.shift();
+    redoStack = [];
+    ta.value = next;
+    lastProgrammatic = next;
+    update();
+    syncHistoryButtons();
+    say(msg);
+  }
+
+  document.querySelectorAll("[data-case]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (!ta.value) return say("Add some text first.");
+      applyChange(converters[b.dataset.case](ta.value), "Converted. You can undo this.");
+    });
+  });
+  document.querySelectorAll("[data-act]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (!ta.value) return say("Add some text first.");
+      applyChange(actions[b.dataset.act](ta.value), "Done. You can undo this.");
+    });
+  });
+
+  $("undo").addEventListener("click", function () {
+    if (!undoStack.length) return;
+    redoStack.push(ta.value);
+    ta.value = undoStack.pop();
+    lastProgrammatic = ta.value;
+    update(); syncHistoryButtons(); say("Undone.");
+  });
+  $("redo").addEventListener("click", function () {
+    if (!redoStack.length) return;
+    undoStack.push(ta.value);
+    ta.value = redoStack.pop();
+    lastProgrammatic = ta.value;
+    update(); syncHistoryButtons(); say("Redone.");
+  });
+  document.addEventListener("keydown", function (e) {
+    if (!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== "z") return;
+    // Use our history only when there is something to undo/redo from button actions
+    if (e.shiftKey && redoStack.length) { e.preventDefault(); $("redo").click(); }
+    else if (!e.shiftKey && undoStack.length && ta.value === lastProgrammatic) { e.preventDefault(); $("undo").click(); }
+  });
+
+
+  $("copy").addEventListener("click", function () {
+    if (!ta.value) return say("Nothing to copy.");
+    var done = function () { say("Copied to clipboard."); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ta.value).then(done, function () { ta.select(); document.execCommand("copy"); done(); });
+    } else { ta.select(); document.execCommand("copy"); done(); }
+  });
+  $("clear").addEventListener("click", function () {
+    if (!ta.value) return;
+    applyChange("", "Cleared. You can undo this.");
+    ta.focus();
+  });
+  ta.addEventListener("input", function () {
+    lastProgrammatic = null;
+    if (redoStack.length) { redoStack = []; syncHistoryButtons(); }
+    update();
+  });
+  update();
+})();
+</script>
 </body>
 </html>
