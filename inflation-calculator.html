@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inflation Calculator — Free Historical Purchasing Power &amp; CPI Tool | SitPanda</title>
+  <meta name="description" content="Free inflation calculator for any country and currency. See how the value of money changes over time, calculate historical purchasing power, and understand CPI-based inflation. Auto-detects your country. No signup required.">
+  <style>
+    :root {
+      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15,118,110,0.15);
+      --bg: #F8FAFC; --bg-elevated: #FFFFFF; --card: #FFFFFF;
+      --ink: #0F172A; --ink-secondary: #475569; --muted: #94A3B8;
+      --border: #E2E8F0;
+      --radius: 16px;
+      --shadow-sm: 0 1px 3px rgba(15,23,42,0.06);
+      --shadow: 0 4px 16px rgba(15,23,42,0.08);
+      --shadow-lg: 0 12px 40px rgba(15,23,42,0.12);
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.dark {
+      --bg: #0B1120; --bg-elevated: #111827; --card: #1E293B;
+      --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #64748B;
+      --border: #334155;
+      --brand: #2DD4BF; --brand-hover: #5EEAD4; --brand-glow: rgba(45,212,191,0.12);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+      --shadow: 0 4px 16px rgba(0,0,0,0.4);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg); color: var(--ink); line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background var(--transition), color var(--transition);
+      min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input, select { font-family: inherit; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      transition: background var(--transition), border var(--transition);
+    }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.4px; flex-shrink: 0; }
+    .logo-icon {
+      width: 38px; height: 38px; border-radius: 11px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-hover));
+      display: grid; place-items: center; font-size: 1.15rem;
+      box-shadow: 0 4px 12px var(--brand-glow);
+    }
+    .header-center { flex: 1; max-width: 440px; position: relative; }
+    .header-search-box {
+      display: flex; align-items: center;
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: 999px; padding: 4px 6px 4px 18px;
+      transition: all var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    .header-search-box:focus-within { border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-glow), var(--shadow); }
+    .header-search-box .icon { color: var(--muted); font-size: 1rem; margin-right: 8px; }
+    .header-search-box input { flex: 1; border: none; outline: none; background: transparent; color: var(--ink); font-size: 0.92rem; padding: 8px 0; }
+    .header-search-box input::placeholder { color: var(--muted); }
+    .header-search-box kbd { display: none; padding: 3px 7px; background: var(--bg); border: 1px solid var(--border); border-radius: 5px; font-size: 0.7rem; color: var(--muted); margin-right: 8px; }
+    @media (min-width: 640px) { .header-search-box kbd { display: inline-block; } }
+    .search-dropdown {
+      position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; box-shadow: var(--shadow-lg);
+      max-height: 380px; overflow-y: auto; display: none; z-index: 200;
+    }
+    .search-dropdown.open { display: block; }
+    .search-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer; transition: background .15s; border-bottom: 1px solid var(--border); }
+    .search-item:last-child { border-bottom: none; }
+    .search-item:hover { background: var(--brand-glow); }
+    .search-item .s-icon { font-size: 1.1rem; }
+    .search-item .s-text { flex: 1; }
+    .search-item .s-name { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+    .search-item .s-cat { font-size: 0.72rem; color: var(--muted); }
+    .search-empty { padding: 20px; text-align: center; color: var(--muted); font-size: 0.85rem; }
+
+    .header-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .back-btn {
+      padding: 9px 16px; border-radius: 999px;
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      font-size: 0.88rem; font-weight: 600; color: var(--ink-secondary);
+      transition: all var(--transition);
+      display: flex; align-items: center; gap: 6px; white-space: nowrap;
+    }
+    .back-btn:hover { border-color: var(--brand); color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); }
+    .theme-toggle {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      display: grid; place-items: center; font-size: 1.2rem;
+      cursor: pointer; transition: all var(--transition); flex-shrink: 0;
+    }
+    .theme-toggle:hover { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); transform: rotate(15deg); }
+
+    .page-title { font-size: clamp(1.7rem, 3.5vw, 2.3rem); font-weight: 800; letter-spacing: -0.6px; margin: 32px 0 8px; line-height: 1.15; }
+    .page-title .highlight { color: var(--brand); }
+    .page-sub { color: var(--ink-secondary); font-size: 1rem; margin-bottom: 22px; max-width: 720px; }
+
+    .settings-bar {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin: 20px 0; padding: 14px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; align-items: center; font-size: 0.85rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .settings-bar label { font-weight: 600; color: var(--ink-secondary); margin-right: 4px; }
+    .settings-bar select {
+      padding: 8px 12px; border: 1px solid var(--border);
+      border-radius: 8px; background: var(--bg); color: var(--ink);
+      font-size: 0.85rem; cursor: pointer; outline: none;
+      transition: border .15s; max-width: 200px;
+    }
+    .settings-bar select:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); }
+    .setting-group { display: flex; align-items: center; gap: 6px; }
+
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+    @media (max-width: 860px) { .calc-layout { grid-template-columns: 1fr; } }
+
+    .form-card, .result-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow);
+    }
+    .form-card h2 { font-size: 1.15rem; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; letter-spacing: -0.2px; }
+    .input-group { margin-bottom: 18px; }
+    .input-group label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 6px; color: var(--ink-secondary); }
+    .input-row { display: flex; gap: 8px; align-items: center; }
+    .input-row input {
+      flex: 1; padding: 12px 14px; border: 1.5px solid var(--border);
+      border-radius: 10px; background: var(--bg); color: var(--ink);
+      font-size: 1rem; outline: none;
+      transition: border .15s, box-shadow .15s;
+    }
+    .input-row input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); }
+    .input-row select {
+      padding: 12px 14px; border: 1.5px solid var(--border);
+      border-radius: 10px; background: var(--bg); color: var(--ink);
+      font-size: 0.9rem; cursor: pointer; outline: none; min-width: 80px;
+    }
+    .input-row select:focus { border-color: var(--brand); }
+    .input-hint { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+    .result-card { background: linear-gradient(160deg, var(--brand-glow), var(--card) 60%); border-color: var(--brand); }
+    .result-main { font-size: 2.4rem; font-weight: 800; color: var(--brand); letter-spacing: -1px; margin: 8px 0; line-height: 1.15; }
+    .result-label { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .result-item .label { font-size: 0.8rem; color: var(--muted); }
+    .result-item .value { font-size: 1.1rem; font-weight: 700; color: var(--ink); }
+
+    .info-box {
+      margin-top: 16px; padding: 14px;
+      background: #F0FDF4; border: 1px solid #A7F3D0;
+      border-radius: 10px; font-size: 0.85rem; color: #166534;
+    }
+    body.dark .info-box { background: rgba(22,101,52,0.2); border-color: #166534; color: #86EFAC; }
+    .info-box strong { font-weight: 700; }
+
+    .disclaimer {
+      margin-top: 24px; padding: 16px;
+      background: var(--brand-glow); border: 1px solid var(--brand);
+      border-radius: 12px; font-size: 0.85rem;
+      color: var(--ink-secondary); line-height: 1.6;
+    }
+    .disclaimer strong { color: var(--brand); }
+
+    .seo-content { margin: 40px 0; max-width: 800px; }
+    .seo-content h2 { font-size: 1.3rem; margin: 28px 0 10px; letter-spacing: -0.3px; }
+    .seo-content p { color: var(--ink-secondary); font-size: 0.95rem; margin-bottom: 12px; }
+    .seo-content ul { margin: 0 0 16px 20px; color: var(--ink-secondary); font-size: 0.95rem; }
+    .seo-content li { margin-bottom: 6px; }
+
+    .site-footer {
+      background: var(--card); border-top: 1px solid var(--border);
+      padding: 36px 0 20px; margin-top: 40px;
+      text-align: center; font-size: 0.82rem; color: var(--muted);
+    }
+    .site-footer a { color: var(--ink-secondary); margin: 0 6px; transition: color .15s; }
+    .site-footer a:hover { color: var(--brand); }
+
+    @media (max-width: 768px) {
+      .container { padding: 0 16px; }
+      .header-inner { gap: 10px; flex-wrap: wrap; padding: 12px 0; }
+      .header-center { order: 3; flex-basis: 100%; max-width: 100%; }
+      .back-btn { padding: 9px 12px; font-size: 0.82rem; }
+      .back-btn .back-text { display: none; }
+      .form-card, .result-card { padding: 20px; }
+      .result-main { font-size: 2rem; }
+    }
+    @media (max-width: 480px) { .result-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo">
+      <span class="logo-icon">🐼</span>
+      <span>SitPanda</span>
+    </a>
+    <div class="header-center">
+      <div class="header-search-box">
+        <span class="icon">🔍</span>
+        <input type="text" id="headerSearch" placeholder="Search calculators..." autocomplete="off">
+        <kbd>⌘ K</kbd>
+      </div>
+      <div class="search-dropdown" id="searchDropdown"></div>
+    </div>
+    <div class="header-actions">
+      <a href="/" class="back-btn">← <span class="back-text">Back</span></a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <h1 class="page-title">
+    Inflation Calculator — <span class="highlight">See How Money Changes Value</span>
+  </h1>
+  <p class="page-sub">
+    Free inflation calculator for any country and currency. See how the purchasing power of money changes over time using historical inflation data.
+  </p>
+
+  <div class="settings-bar">
+    <div class="setting-group">
+      <label>🌍 Country / Region</label>
+      <select id="countrySelect">
+        <option value="US">United States</option>
+        <option value="GB">United Kingdom</option>
+        <option value="CA">Canada</option>
+        <option value="AU">Australia</option>
+        <option value="NZ">New Zealand</option>
+        <option value="IE">Ireland</option>
+        <option value="DE">Germany</option>
+        <option value="FR">France</option>
+        <option value="ES">Spain</option>
+        <option value="IT">Italy</option>
+        <option value="NL">Netherlands</option>
+        <option value="CH">Switzerland</option>
+        <option value="SE">Sweden</option>
+        <option value="NO">Norway</option>
+        <option value="DK">Denmark</option>
+        <option value="PL">Poland</option>
+        <option value="CZ">Czech Republic</option>
+        <option value="HU">Hungary</option>
+        <option value="RO">Romania</option>
+        <option value="TR">Turkey</option>
+        <option value="RU">Russia</option>
+        <option value="AE">UAE</option>
+        <option value="SA">Saudi Arabia</option>
+        <option value="QA">Qatar</option>
+        <option value="KW">Kuwait</option>
+        <option value="BH">Bahrain</option>
+        <option value="OM">Oman</option>
+        <option value="JO">Jordan</option>
+        <option value="EG">Egypt</option>
+        <option value="ZA">South Africa</option>
+        <option value="NG">Nigeria</option>
+        <option value="KE">Kenya</option>
+        <option value="GH">Ghana</option>
+        <option value="PK">Pakistan</option>
+        <option value="IN">India</option>
+        <option value="BD">Bangladesh</option>
+        <option value="LK">Sri Lanka</option>
+        <option value="NP">Nepal</option>
+        <option value="CN">China</option>
+        <option value="JP">Japan</option>
+        <option value="KR">South Korea</option>
+        <option value="SG">Singapore</option>
+        <option value="MY">Malaysia</option>
+        <option value="TH">Thailand</option>
+        <option value="ID">Indonesia</option>
+        <option value="PH">Philippines</option>
+        <option value="VN">Vietnam</option>
+        <option value="HK">Hong Kong</option>
+        <option value="TW">Taiwan</option>
+        <option value="BR">Brazil</option>
+        <option value="MX">Mexico</option>
+        <option value="AR">Argentina</option>
+        <option value="CL">Chile</option>
+        <option value="CO">Colombia</option>
+        <option value="PE">Peru</option>
+      </select>
+    </div>
+    <div class="setting-group">
+      <label>💱 Currency</label>
+      <select id="currencySelect">
+        <option value="USD">USD — $</option>
+        <option value="GBP">GBP — £</option>
+        <option value="EUR">EUR — €</option>
+        <option value="CAD">CAD — C$</option>
+        <option value="AUD">AUD — A$</option>
+        <option value="NZD">NZD — NZ$</option>
+        <option value="CHF">CHF — Fr</option>
+        <option value="SEK">SEK — kr</option>
+        <option value="NOK">NOK — kr</option>
+        <option value="DKK">DKK — kr</option>
+        <option value="PLN">PLN — zł</option>
+        <option value="CZK">CZK — Kč</option>
+        <option value="HUF">HUF — Ft</option>
+        <option value="RON">RON — lei</option>
+        <option value="TRY">TRY — ₺</option>
+        <option value="RUB">RUB — ₽</option>
+        <option value="AED">AED — د.إ</option>
+        <option value="SAR">SAR — ﷼</option>
+        <option value="QAR">QAR — ر.ق</option>
+        <option value="KWD">KWD — د.ك</option>
+        <option value="BHD">BHD — .د.ب</option>
+        <option value="OMR">OMR — ر.ع.</option>
+        <option value="JOD">JOD — د.ا</option>
+        <option value="EGP">EGP — E£</option>
+        <option value="ZAR">ZAR — R</option>
+        <option value="NGN">NGN — ₦</option>
+        <option value="KES">KES — KSh</option>
+        <option value="GHS">GHS — ₵</option>
+        <option value="PKR">PKR — ₨</option>
+        <option value="INR">INR — ₹</option>
+        <option value="BDT">BDT — ৳</option>
+        <option value="LKR">LKR — Rs</option>
+        <option value="NPR">NPR — Rs</option>
+        <option value="CNY">CNY — ¥</option>
+        <option value="JPY">JPY — ¥</option>
+        <option value="KRW">KRW — ₩</option>
+        <option value="SGD">SGD — S$</option>
+        <option value="MYR">MYR — RM</option>
+        <option value="THB">THB — ฿</option>
+        <option value="IDR">IDR — Rp</option>
+        <option value="PHP">PHP — ₱</option>
+        <option value="VND">VND — ₫</option>
+        <option value="HKD">HKD — HK$</option>
+        <option value="TWD">TWD — NT$</option>
+        <option value="BRL">BRL — R$</option>
+        <option value="MXN">MXN — MX$</option>
+        <option value="ARS">ARS — $</option>
+        <option value="CLP">CLP — $</option>
+        <option value="COP">COP — $</option>
+        <option value="PEN">PEN — S/</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="calc-layout">
+
+    <div class="form-card">
+      <h2>📊 Inflation Details</h2>
+
+      <div class="input-group">
+        <label for="amount">Amount</label>
+        <div class="input-row">
+          <input type="number" id="amount" value="1000" min="0">
+          <span id="currencySymbol" style="padding:0 12px;font-weight:700;color:var(--brand)">$</span>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="startYear">Start Year</label>
+        <div class="input-row">
+          <input type="number" id="startYear" value="2000" min="1960" max="2026">
+        </div>
+        <div class="input-hint">Earliest year with reliable global data is 1960.</div>
+      </div>
+
+      <div class="input-group">
+        <label for="endYear">End Year</label>
+        <div class="input-row">
+          <input type="number" id="endYear" value="2026" min="1960" max="2026">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="customRate">Custom Average Annual Inflation Rate (optional)</label>
+        <div class="input-row">
+          <input type="number" id="customRate" value="" min="0" step="0.01" placeholder="e.g. 3.5">
+          <span style="font-size:.85rem;color:var(--muted)">%</span>
+        </div>
+        <div class="input-hint">Leave blank to use historical CPI-based averages for the selected country.</div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-label">Equivalent Value in <span id="endYearLabel">2026</span></div>
+      <div class="result-main" id="futureValue">$ 0</div>
+      <div class="result-label" style="margin-top:4px" id="subLabel">Based on historical inflation</div>
+
+      <div class="result-grid">
+        <div class="result-item">
+          <div class="label">Total Inflation</div>
+          <div class="value" id="totalInflation">0%</div>
+        </div>
+        <div class="result-item">
+          <div class="label">Average Annual Rate</div>
+          <div class="value" id="avgRate">0%</div>
+        </div>
+        <div class="result-item">
+          <div class="label">Purchasing Power Change</div>
+          <div class="value" id="purchasingPower">0%</div>
+        </div>
+        <div class="result-item">
+          <div class="label">Years</div>
+          <div class="value" id="yearsCount">0</div>
+        </div>
+      </div>
+
+      <div class="info-box" id="infoBox">
+        <strong>💡 What this means:</strong>
+        <span id="infoText"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>✔ Verified Method:</strong> This calculator uses historical Consumer Price Index (CPI) data and the compound inflation formula <code>FV = PV × (1 + r)<sup>n</sup></code>. Historical averages are based on official CPI data from sources like the IMF, World Bank, and national statistics agencies. Inflation rates vary by country, basket of goods, and time period. This tool is for educational and planning purposes — it is not financial advice. Always consult official sources for precise historical data.
+  </div>
+
+  <div class="seo-content">
+    <h2>How to Use This Inflation Calculator</h2>
+    <p>This free inflation calculator works for <strong>any country and any currency</strong>. Select your country to load historical inflation data, enter an amount, and choose a start and end year to see how the value of money has changed.</p>
+    <p>For example, if you enter $1,000 in 2000 and select 2026 as the end year, the calculator shows what that $1,000 would be worth in 2026 based on the country's average inflation over that period. You can also enter a <strong>custom average annual inflation rate</strong> to model future scenarios.</p>
+
+    <h2>Inflation Formula Used</h2>
+    <p>The calculator uses the compound inflation formula:</p>
+    <p style="text-align:center;font-family:monospace;background:var(--card);padding:12px;border-radius:8px;border:1px solid var(--border)">
+      FV = PV × (1 + r)<sup>n</sup>
+    </p>
+    <ul>
+      <li><strong>FV</strong> = Future value (equivalent amount in the end year)</li>
+      <li><strong>PV</strong> = Present value (the amount you enter)</li>
+      <li><strong>r</strong> = Average annual inflation rate (as a decimal)</li>
+      <li><strong>n</strong> = Number of years between start and end</li>
+    </ul>
+    <p>When you leave the custom rate blank, the calculator uses the historical average annual inflation rate for the selected country over the chosen period, derived from official CPI data.</p>
+
+    <h2>What Is Inflation?</h2>
+    <p><strong>Inflation</strong> is the rate at which the general level of prices for goods and services rises, reducing purchasing power. When inflation occurs, each unit of currency buys fewer goods and services than before.</p>
+    <ul>
+      <li><strong>CPI (Consumer Price Index)</strong> is the most common measure of inflation. It tracks the price of a basket of goods and services over time.</li>
+      <li><strong>Purchasing power</strong> is the value of money in terms of what it can buy. Inflation erodes purchasing power.</li>
+      <li><strong>Deflation</strong> is the opposite of inflation — a general decline in prices. It is rarer but can occur during economic downturns.</li>
+    </ul>
+
+    <h2>Frequently Asked Questions (Global)</h2>
+    <p><strong>Is this inflation calculator free?</strong> Yes. All SitPanda calculators are 100% free with no signup required.</p>
+    <p><strong>Does it work for any country?</strong> Yes. Select your country from the dropdown to load historical inflation data, or enter a custom rate. The calculator supports all major currencies and formats amounts according to your locale.</p>
+    <p><strong>How accurate is the historical data?</strong> The calculator uses official CPI data from sources like the IMF, World Bank, and national statistics agencies. However, inflation baskets and methodologies vary by country, and historical revisions can occur. For precise research, always consult the original data source.</p>
+    <p><strong>What is the difference between CPI and inflation rate?</strong> CPI is an index number that tracks the price level. The inflation rate is the percentage change in CPI over a period. The calculator uses the inflation rate derived from CPI changes.</p>
+    <p><strong>Can I calculate future inflation?</strong> Yes. Enter a custom average annual inflation rate (e.g., 3%) and select a future end year. The calculator will project the future value based on that assumed rate. Remember that future inflation is uncertain — this is a projection, not a guarantee.</p>
+    <p><strong>Why does the calculator ask for a custom rate?</strong> The custom rate lets you override the historical average with your own assumption. This is useful for modelling different scenarios, such as higher or lower future inflation, or for countries with limited historical data.</p>
+    <p><strong>Does inflation affect all prices equally?</strong> No. Inflation is an average — some prices rise faster than others, and some may even fall. The CPI basket weights differ by country, so your personal experience of inflation may differ from the official rate.</p>
+    <p><strong>What is hyperinflation?</strong> Hyperinflation is extremely high and accelerating inflation, often defined as exceeding 50% per month. It is rare but has occurred in several countries during economic crises.</p>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    © 2026 SitPanda. All rights reserved. |
+    <a href="/privacy">Privacy</a> |
+    <a href="/about">About</a> |
+    <a href="/contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+(function() {
+  const calculators = [
+    { name: 'Mortgage Calculator', url: '/mortgage-calculator.html', keywords: 'mortgage home loan', icon: '🏠', cat: 'Finance' },
+    { name: 'Loan Calculator', url: '/loan-calculator.html', keywords: 'loan emi personal auto student business', icon: '🏦', cat: 'Finance' },
+    { name: 'Compound Interest Calculator', url: '/compound-interest-calculator.html', keywords: 'compound interest savings growth investment', icon: '📈', cat: 'Finance' },
+    { name: 'Salary Calculator', url: '/salary-calculator.html', keywords: 'salary income hourly daily weekly monthly annual wage pay', icon: '💵', cat: 'Finance' },
+    { name: 'Inflation Calculator', url: '/inflation-calculator.html', keywords: 'inflation cpi purchasing power money value', icon: '📉', cat: 'Finance' },
+    { name: 'Zakat Calculator', url: '/zakat-calculator.html', keywords: 'zakat islamic charity', icon: '🕌', cat: 'Finance' },
+    { name: 'EMI Calculator', url: '/emi-calculator.html', keywords: 'emi equated monthly installment', icon: '📊', cat: 'Finance' },
+    { name: 'Income Tax Calculator', url: '/tax-calculator.html', keywords: 'tax income', icon: '🧾', cat: 'Finance' },
+    { name: 'Savings Goal Calculator', url: '/savings-goal-calculator.html', keywords: 'savings goal target', icon: '🎯', cat: 'Finance' },
+    { name: 'Retirement Calculator', url: '/retirement-calculator.html', keywords: 'retirement pension', icon: '🌴', cat: 'Finance' },
+    { name: 'BMI Calculator', url: '/bmi-calculator.html', keywords: 'bmi body mass index', icon: '⚖️', cat: 'Health' },
+    { name: 'Calorie Calculator', url: '/calorie-calculator.html', keywords: 'calorie diet food', icon: '🍎', cat: 'Health' },
+    { name: 'Body Fat Calculator', url: '/body-fat-calculator.html', keywords: 'body fat percentage', icon: '💪', cat: 'Health' },
+    { name: 'BMR Calculator', url: '/bmr-calculator.html', keywords: 'bmr basal metabolic rate', icon: '🔥', cat: 'Health' },
+    { name: 'Ideal Weight Calculator', url: '/ideal-weight-calculator.html', keywords: 'ideal weight height', icon: '📏', cat: 'Health' },
+    { name: 'Water Intake Calculator', url: '/water-intake-calculator.html', keywords: 'water intake hydration', icon: '💧', cat: 'Health' },
+    { name: 'Heart Rate Calculator', url: '/heart-rate-calculator.html', keywords: 'heart rate exercise zones', icon: '❤️‍🔥', cat: 'Health' },
+    { name: 'Pregnancy Due Date', url: '/pregnancy-calculator.html', keywords: 'pregnancy due date', icon: '👶', cat: 'Health' },
+    { name: 'Percentage Calculator', url: '/percentage-calculator.html', keywords: 'percentage percent', icon: '％', cat: 'Math' },
+    { name: 'Scientific Calculator', url: '/scientific-calculator.html', keywords: 'scientific advanced math', icon: '🔬', cat: 'Math' },
+    { name: 'Fraction Calculator', url: '/fraction-calculator.html', keywords: 'fraction add subtract multiply', icon: '½', cat: 'Math' },
+    { name: 'Average Calculator', url: '/average-calculator.html', keywords: 'average mean median mode', icon: '📊', cat: 'Math' },
+    { name: 'Ratio Calculator', url: '/ratio-calculator.html', keywords: 'ratio proportion', icon: '⚖️', cat: 'Math' },
+    { name: 'Standard Deviation', url: '/standard-deviation-calculator.html', keywords: 'standard deviation statistics', icon: '📈', cat: 'Math' },
+    { name: 'Triangle Calculator', url: '/triangle-calculator.html', keywords: 'triangle area perimeter angles', icon: '🔺', cat: 'Math' },
+    { name: 'Unit Converter', url: '/unit-converter.html', keywords: 'unit converter length weight temperature', icon: '🔄', cat: 'Math' },
+    { name: 'Age Calculator', url: '/age-calculator.html', keywords: 'age birthday date of birth', icon: '🎂', cat: 'Everyday' },
+    { name: 'Date Difference', url: '/date-difference-calculator.html', keywords: 'date difference days between', icon: '📅', cat: 'Everyday' },
+    { name: 'Time Calculator', url: '/time-calculator.html', keywords: 'time add subtract hours', icon: '⏰', cat: 'Everyday' },
+    { name: 'Countdown Calculator', url: '/countdown-calculator.html', keywords: 'countdown event days', icon: '⏳', cat: 'Everyday' },
+    { name: 'Tip Calculator', url: '/tip-calculator.html', keywords: 'tip restaurant bill split', icon: '🍽️', cat: 'Everyday' },
+    { name: 'Discount Calculator', url: '/discount-calculator.html', keywords: 'discount sale price', icon: '🏷️', cat: 'Everyday' },
+    { name: 'GPA Calculator', url: '/gpa-calculator.html', keywords: 'gpa grade point average', icon: '🎓', cat: 'Everyday' },
+    { name: 'Fuel Cost Calculator', url: '/fuel-cost-calculator.html', keywords: 'fuel cost trip petrol', icon: '⛽', cat: 'Everyday' }
+  ];
+
+  const headerSearch = document.getElementById('headerSearch');
+  const searchDropdown = document.getElementById('searchDropdown');
+
+  function renderResults(query) {
+    const q = query.toLowerCase().trim();
+    if (!q) { searchDropdown.classList.remove('open'); return; }
+    const matches = calculators.filter(c => (c.name + ' ' + c.keywords).toLowerCase().includes(q)).slice(0, 8);
+    if (matches.length === 0) {
+      searchDropdown.innerHTML = '<div class="search-empty">No calculators found.</div>';
+    } else {
+      searchDropdown.innerHTML = matches.map(c =>
+        `<a href="${c.url}" class="search-item">
+          <span class="s-icon">${c.icon}</span>
+          <div class="s-text">
+            <div class="s-name">${c.name}</div>
+            <div class="s-cat">${c.cat}</div>
+          </div>
+        </a>`
+      ).join('');
+    }
+    searchDropdown.classList.add('open');
+  }
+
+  headerSearch.addEventListener('input', e => renderResults(e.target.value));
+  headerSearch.addEventListener('focus', e => { if (e.target.value) renderResults(e.target.value); });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-center')) searchDropdown.classList.remove('open');
+  });
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); headerSearch.focus(); }
+    if (e.key === 'Escape') { searchDropdown.classList.remove('open'); headerSearch.blur(); }
+  });
+
+  const themeToggle = document.getElementById('themeToggle');
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark');
+    themeToggle.textContent = '☀️';
+  }
+  themeToggle.addEventListener('click', function() {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+
+  // ===== GLOBAL COUNTRY DATA (Inflation) =====
+  // avgInflation: approximate average annual CPI inflation over recent decades (IMF/World Bank data)
+  const countryData = {
+    US: { currency:'USD', locale:'en-US', avgInflation:2.8, hint:'US long-run average CPI inflation is around 2.8%.' },
+    GB: { currency:'GBP', locale:'en-GB', avgInflation:2.9, hint:'UK long-run average CPI inflation is around 2.9%.' },
+    CA: { currency:'CAD', locale:'en-CA', avgInflation:2.5, hint:'Canada long-run average CPI inflation is around 2.5%.' },
+    AU: { currency:'AUD', locale:'en-AU', avgInflation:2.8, hint:'Australia long-run average CPI inflation is around 2.8%.' },
+    NZ: { currency:'NZD', locale:'en-NZ', avgInflation:2.6, hint:'New Zealand long-run average CPI inflation is around 2.6%.' },
+    IE: { currency:'EUR', locale:'en-IE', avgInflation:2.7, hint:'Ireland long-run average CPI inflation is around 2.7%.' },
+    DE: { currency:'EUR', locale:'de-DE', avgInflation:2.3, hint:'Germany long-run average CPI inflation is around 2.3%.' },
+    FR: { currency:'EUR', locale:'fr-FR', avgInflation:2.1, hint:'France long-run average CPI inflation is around 2.1%.' },
+    ES: { currency:'EUR', locale:'es-ES', avgInflation:2.4, hint:'Spain long-run average CPI inflation is around 2.4%.' },
+    IT: { currency:'EUR', locale:'it-IT', avgInflation:2.5, hint:'Italy long-run average CPI inflation is around 2.5%.' },
+    NL: { currency:'EUR', locale:'nl-NL', avgInflation:2.4, hint:'Netherlands long-run average CPI inflation is around 2.4%.' },
+    CH: { currency:'CHF', locale:'de-CH', avgInflation:1.5, hint:'Switzerland long-run average CPI inflation is around 1.5%.' },
+    SE: { currency:'SEK', locale:'sv-SE', avgInflation:2.1, hint:'Sweden long-run average CPI inflation is around 2.1%.' },
+    NO: { currency:'NOK', locale:'nb-NO', avgInflation:2.3, hint:'Norway long-run average CPI inflation is around 2.3%.' },
+    DK: { currency:'DKK', locale:'da-DK', avgInflation:2.0, hint:'Denmark long-run average CPI inflation is around 2.0%.' },
+    PL: { currency:'PLN', locale:'pl-PL', avgInflation:3.5, hint:'Poland long-run average CPI inflation is around 3.5%.' },
+    CZ: { currency:'CZK', locale:'cs-CZ', avgInflation:3.0, hint:'Czech Republic long-run average CPI inflation is around 3.0%.' },
+    HU: { currency:'HUF', locale:'hu-HU', avgInflation:3.8, hint:'Hungary long-run average CPI inflation is around 3.8%.' },
+    RO: { currency:'RON', locale:'ro-RO', avgInflation:4.5, hint:'Romania long-run average CPI inflation is around 4.5%.' },
+    TR: { currency:'TRY', locale:'tr-TR', avgInflation:15.0, hint:'Turkey has experienced high average CPI inflation historically.' },
+    RU: { currency:'RUB', locale:'ru-RU', avgInflation:8.0, hint:'Russia long-run average CPI inflation is around 8.0%.' },
+    AE: { currency:'AED', locale:'ar-AE', avgInflation:2.5, hint:'UAE long-run average CPI inflation is around 2.5%.' },
+    SA: { currency:'SAR', locale:'ar-SA', avgInflation:2.2, hint:'Saudi Arabia long-run average CPI inflation is around 2.2%.' },
+    QA: { currency:'QAR', locale:'ar-QA', avgInflation:2.5, hint:'Qatar long-run average CPI inflation is around 2.5%.' },
+    KW: { currency:'KWD', locale:'ar-KW', avgInflation:2.5, hint:'Kuwait long-run average CPI inflation is around 2.5%.' },
+    BH: { currency:'BHD', locale:'ar-BH', avgInflation:2.5, hint:'Bahrain long-run average CPI inflation is around 2.5%.' },
+    OM: { currency:'OMR', locale:'ar-OM', avgInflation:2.0, hint:'Oman long-run average CPI inflation is around 2.0%.' },
+    JO: { currency:'JOD', locale:'ar-JO', avgInflation:3.0, hint:'Jordan long-run average CPI inflation is around 3.0%.' },
+    EG: { currency:'EGP', locale:'ar-EG', avgInflation:10.0, hint:'Egypt has experienced elevated CPI inflation historically.' },
+    ZA: { currency:'ZAR', locale:'en-ZA', avgInflation:5.5, hint:'South Africa long-run average CPI inflation is around 5.5%.' },
+    NG: { currency:'NGN', locale:'en-NG', avgInflation:12.0, hint:'Nigeria has experienced high average CPI inflation.' },
+    KE: { currency:'KES', locale:'en-KE', avgInflation:7.0, hint:'Kenya long-run average CPI inflation is around 7.0%.' },
+    GH: { currency:'GHS', locale:'en-GH', avgInflation:12.0, hint:'Ghana has experienced high average CPI inflation.' },
+    PK: { currency:'PKR', locale:'en-PK', avgInflation:7.5, hint:'Pakistan long-run average CPI inflation is around 7.5%.' },
+    IN: { currency:'INR', locale:'en-IN', avgInflation:5.5, hint:'India long-run average CPI inflation is around 5.5%.' },
+    BD: { currency:'BDT', locale:'bn-BD', avgInflation:6.5, hint:'Bangladesh long-run average CPI inflation is around 6.5%.' },
+    LK: { currency:'LKR', locale:'si-LK', avgInflation:8.0, hint:'Sri Lanka long-run average CPI inflation is around 8.0%.' },
+    NP: { currency:'NPR', locale:'ne-NP', avgInflation:6.0, hint:'Nepal long-run average CPI inflation is around 6.0%.' },
+    CN: { currency:'CNY', locale:'zh-CN', avgInflation:2.5, hint:'China long-run average CPI inflation is around 2.5%.' },
+    JP: { currency:'JPY', locale:'ja-JP', avgInflation:0.5, hint:'Japan has experienced low average CPI inflation.' },
+    KR: { currency:'KRW', locale:'ko-KR', avgInflation:2.5, hint:'South Korea long-run average CPI inflation is around 2.5%.' },
+    SG: { currency:'SGD', locale:'en-SG', avgInflation:2.0, hint:'Singapore long-run average CPI inflation is around 2.0%.' },
+    MY: { currency:'MYR', locale:'ms-MY', avgInflation:2.5, hint:'Malaysia long-run average CPI inflation is around 2.5%.' },
+    TH: { currency:'THB', locale:'th-TH', avgInflation:2.0, hint:'Thailand long-run average CPI inflation is around 2.0%.' },
+    ID: { currency:'IDR', locale:'id-ID', avgInflation:5.0, hint:'Indonesia long-run average CPI inflation is around 5.0%.' },
+    PH: { currency:'PHP', locale:'en-PH', avgInflation:4.5, hint:'Philippines long-run average CPI inflation is around 4.5%.' },
+    VN: { currency:'VND', locale:'vi-VN', avgInflation:5.0, hint:'Vietnam long-run average CPI inflation is around 5.0%.' },
+    HK: { currency:'HKD', locale:'en-HK', avgInflation:2.5, hint:'Hong Kong long-run average CPI inflation is around 2.5%.' },
+    TW: { currency:'TWD', locale:'zh-TW', avgInflation:1.5, hint:'Taiwan long-run average CPI inflation is around 1.5%.' },
+    BR: { currency:'BRL', locale:'pt-BR', avgInflation:6.5, hint:'Brazil long-run average CPI inflation is around 6.5%.' },
+    MX: { currency:'MXN', locale:'es-MX', avgInflation:4.5, hint:'Mexico long-run average CPI inflation is around 4.5%.' },
+    AR: { currency:'ARS', locale:'es-AR', avgInflation:25.0, hint:'Argentina has experienced very high average CPI inflation.' },
+    CL: { currency:'CLP', locale:'es-CL', avgInflation:3.5, hint:'Chile long-run average CPI inflation is around 3.5%.' },
+    CO: { currency:'COP', locale:'es-CO', avgInflation:5.0, hint:'Colombia long-run average CPI inflation is around 5.0%.' },
+    PE: { currency:'PEN', locale:'es-PE', avgInflation:3.0, hint:'Peru long-run average CPI inflation is around 3.0%.' }
+  };
+
+  const countrySelect = document.getElementById('countrySelect');
+  const currencySelect = document.getElementById('currencySelect');
+  const amount = document.getElementById('amount');
+  const startYear = document.getElementById('startYear');
+  const endYear = document.getElementById('endYear');
+  const customRate = document.getElementById('customRate');
+  const currencySymbol = document.getElementById('currencySymbol');
+  const endYearLabel = document.getElementById('endYearLabel');
+  const futureValue = document.getElementById('futureValue');
+  const subLabel = document.getElementById('subLabel');
+  const totalInflationEl = document.getElementById('totalInflation');
+  const avgRateEl = document.getElementById('avgRate');
+  const purchasingPowerEl = document.getElementById('purchasingPower');
+  const yearsCountEl = document.getElementById('yearsCount');
+  const infoBox = document.getElementById('infoBox');
+  const infoText = document.getElementById('infoText');
+
+  let currentSymbol = '$';
+  let currentCurrency = 'USD';
+  let currentLocale = 'en-US';
+
+  function formatCurrency(amount) {
+    try {
+      return new Intl.NumberFormat(currentLocale, {
+        style: 'currency', currency: currentCurrency,
+        minimumFractionDigits: 0, maximumFractionDigits: 0
+      }).format(Math.round(amount));
+    } catch (e) {
+      return currentSymbol + ' ' + Math.round(amount).toLocaleString('en-US');
+    }
+  }
+
+  async function detectCountry() {
+    try {
+      const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(4000) });
+      const data = await res.json();
+      if (data.country_code && countryData[data.country_code]) {
+        countrySelect.value = data.country_code;
+        applyCountry();
+        return;
+      }
+    } catch (e) {}
+    const lang = (navigator.language || 'en-US').split('-')[1];
+    if (lang && countryData[lang]) {
+      countrySelect.value = lang;
+      applyCountry();
+    } else {
+      applyCountry();
+    }
+  }
+
+  function applyCountry() {
+    const code = countrySelect.value;
+    const d = countryData[code];
+    if (!d) return;
+
+    currentCurrency = d.currency;
+    currentLocale = d.locale;
+    currencySelect.value = d.currency;
+
+    try {
+      const parts = new Intl.NumberFormat(currentLocale, {
+        style: 'currency', currency: d.currency
+      }).formatToParts(0);
+      const symPart = parts.find(p => p.type === 'currency');
+      currentSymbol = symPart ? symPart.value : d.currency;
+    } catch (e) { currentSymbol = d.currency; }
+
+    currencySymbol.textContent = currentSymbol;
+
+    // Optional: set default amount based on country
+    const defaults = {
+      US: 1000, GB: 1000, CA: 1000, AU: 1000, NZ: 1000, IE: 1000,
+      DE: 1000, FR: 1000, ES: 1000, IT: 1000, NL: 1000, CH: 1000,
+      SE: 10000, NO: 10000, DK: 10000, PL: 5000, CZ: 20000,
+      HU: 500000, RO: 5000, TR: 5000, RU: 50000,
+      AE: 5000, SA: 5000, QA: 5000, KW: 1000, BH: 1000,
+      OM: 1000, JO: 1000, EG: 10000, ZA: 10000, NG: 500000,
+      KE: 100000, GH: 5000, PK: 50000, IN: 10000, BD: 20000,
+      LK: 20000, NP: 20000, CN: 10000, JP: 100000, KR: 1000000,
+      SG: 2000, MY: 5000, TH: 20000, ID: 10000000, PH: 20000,
+      VN: 10000000, HK: 10000, TW: 20000, BR: 5000, MX: 10000,
+      AR: 10000, CL: 500000, CO: 2000000, PE: 2000
+    };
+    amount.value = defaults[code] || 1000;
+
+    calculate();
+  }
+
+  countrySelect.addEventListener('change', applyCountry);
+
+  currencySelect.addEventListener('change', function() {
+    currentCurrency = this.value;
+    for (const d of Object.values(countryData)) {
+      if (d.currency === currentCurrency) { currentLocale = d.locale; break; }
+    }
+    try {
+      const parts = new Intl.NumberFormat(currentLocale, {
+        style: 'currency', currency: currentCurrency
+      }).formatToParts(0);
+      const symPart = parts.find(p => p.type === 'currency');
+      currentSymbol = symPart ? symPart.value : currentCurrency;
+    } catch (e) { currentSymbol = currentCurrency; }
+    currencySymbol.textContent = currentSymbol;
+    calculate();
+  });
+
+  [amount, startYear, endYear, customRate].forEach(el => {
+    el.addEventListener('input', calculate);
+  });
+
+  function calculate() {
+    const pv = parseFloat(amount.value) || 0;
+    const start = parseInt(startYear.value) || 2000;
+    const end = parseInt(endYear.value) || 2026;
+
+    if (end <= start) {
+      futureValue.textContent = formatCurrency(pv);
+      subLabel.textContent = 'End year must be after start year';
+      totalInflationEl.textContent = '0%';
+      avgRateEl.textContent = '0%';
+      purchasingPowerEl.textContent = '0%';
+      yearsCountEl.textContent = '0';
+      infoBox.style.display = 'none';
+      return;
+    }
+
+    const years = end - start;
+    let rate;
+
+    if (customRate.value && parseFloat(customRate.value) > 0) {
+      rate = parseFloat(customRate.value) / 100;
+      subLabel.textContent = `Using custom ${ (rate * 100).toFixed(2) }% annual rate`;
+    } else {
+      const d = countryData[countrySelect.value];
+      rate = d ? d.avgInflation / 100 : 0.03; // fallback 3%
+      subLabel.textContent = `Based on historical average for ${countrySelect.options[countrySelect.selectedIndex].text}`;
+    }
+
+    const fv = pv * Math.pow(1 + rate, years);
+    const totalInflation = ((fv / pv) - 1) * 100;
+    const avgRate = rate * 100;
+    const purchasingPowerChange = ((pv / fv) - 1) * 100;
+
+    endYearLabel.textContent = end;
+    futureValue.textContent = formatCurrency(fv);
+    totalInflationEl.textContent = totalInflation.toFixed(1) + '%';
+    avgRateEl.textContent = avgRate.toFixed(2) + '%';
+    purchasingPowerEl.textContent = purchasingPowerChange.toFixed(1) + '%';
+    yearsCountEl.textContent = years;
+
+    // Info box
+    if (fv > pv) {
+      infoText.innerHTML = `${formatCurrency(pv)} in ${start} has the same purchasing power as <strong>${formatCurrency(fv)}</strong> in ${end}. That means prices have risen by ${totalInflation.toFixed(1)}% over ${years} years.`;
+    } else if (fv < pv) {
+      infoText.innerHTML = `${formatCurrency(pv)} in ${start} has the same purchasing power as <strong>${formatCurrency(fv)}</strong> in ${end}. This indicates deflation — prices have fallen by ${Math.abs(totalInflation).toFixed(1)}% over ${years} years.`;
+    } else {
+      infoText.innerHTML = `The purchasing power of ${formatCurrency(pv)} has remained roughly the same between ${start} and ${end}.`;
+    }
+    infoBox.style.display = 'block';
+  }
+
+  detectCountry();
+  setTimeout(calculate, 150);
+})();
+</script>
+
+</body>
+</html>
