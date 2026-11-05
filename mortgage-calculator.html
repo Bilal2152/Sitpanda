@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mortgage Calculator — Free Home Loan EMI &amp; Payment Estimator | SitPanda</title>
-  <meta name="description" content="Free mortgage calculator for Pakistan, India, US, UK &amp; more. Calculate monthly EMI, total interest, and full home loan cost. Supports PKR, INR, USD, GBP. Auto-detects your country. No signup.">
+  <title>Mortgage Calculator — Free Home Loan Payment &amp; Interest Estimator | SitPanda</title>
+  <meta name="description" content="Free mortgage calculator for home loans worldwide. Estimate monthly payments, total interest, and full repayment cost in any currency. Auto-detects your country. No signup required.">
   <style>
-    /* ===== DESIGN TOKENS (EXACTLY MATCHING HOMEPAGE) ===== */
     :root {
       --brand: #0F766E;
       --brand-hover: #0D9488;
@@ -16,29 +15,22 @@
       --card: #FFFFFF;
       --ink: #0F172A;
       --ink-secondary: #475569;
-      --ink2: #475569;
       --muted: #94A3B8;
       --border: #E2E8F0;
-      --border-hover: #CBD5E1;
-      --radius-sm: 10px;
       --radius: 16px;
-      --radius-lg: 24px;
       --shadow-sm: 0 1px 3px rgba(15,23,42,0.06);
       --shadow: 0 4px 16px rgba(15,23,42,0.08);
       --shadow-lg: 0 12px 40px rgba(15,23,42,0.12);
       --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
     body.dark {
       --bg: #0B1120;
       --bg-elevated: #111827;
       --card: #1E293B;
       --ink: #F1F5F9;
       --ink-secondary: #CBD5E1;
-      --ink2: #CBD5E1;
       --muted: #64748B;
-      --border: #1E293B;
-      --border-hover: #334155;
+      --border: #334155;
       --brand: #2DD4BF;
       --brand-hover: #5EEAD4;
       --brand-glow: rgba(45, 212, 191, 0.12);
@@ -46,8 +38,6 @@
       --shadow: 0 4px 16px rgba(0,0,0,0.4);
       --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
     }
-
-    /* ===== RESET ===== */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
@@ -62,7 +52,6 @@
     input, select { font-family: inherit; }
     .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-    /* ===== HEADER (IDENTICAL SIZES TO HOMEPAGE) ===== */
     .site-header {
       position: sticky; top: 0; z-index: 100;
       background: var(--bg);
@@ -86,13 +75,7 @@
       font-size: 1.15rem;
       box-shadow: 0 4px 12px var(--brand-glow);
     }
-
-    /* HEADER CENTER = SEARCH */
-    .header-center {
-      flex: 1;
-      max-width: 440px;
-      position: relative;
-    }
+    .header-center { flex: 1; max-width: 440px; position: relative; }
     .header-search-box {
       display: flex; align-items: center;
       background: var(--card);
@@ -124,8 +107,6 @@
       margin-right: 8px;
     }
     @media (min-width: 640px) { .header-search-box kbd { display: inline-block; } }
-
-    /* SEARCH DROPDOWN */
     .search-dropdown {
       position: absolute;
       top: calc(100% + 8px);
@@ -142,8 +123,7 @@
     .search-dropdown.open { display: block; }
     .search-item {
       display: flex; align-items: center; gap: 12px;
-      padding: 10px 14px;
-      cursor: pointer;
+      padding: 10px 14px; cursor: pointer;
       transition: background .15s;
       border-bottom: 1px solid var(--border);
     }
@@ -153,16 +133,9 @@
     .search-item .s-text { flex: 1; }
     .search-item .s-name { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
     .search-item .s-cat { font-size: 0.72rem; color: var(--muted); }
-    .search-empty {
-      padding: 20px; text-align: center;
-      color: var(--muted); font-size: 0.85rem;
-    }
+    .search-empty { padding: 20px; text-align: center; color: var(--muted); font-size: 0.85rem; }
 
-    /* HEADER ACTIONS */
-    .header-actions {
-      display: flex; align-items: center; gap: 10px;
-      flex-shrink: 0;
-    }
+    .header-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
     .back-btn {
       padding: 9px 16px;
       border-radius: 999px;
@@ -197,7 +170,6 @@
       transform: rotate(15deg);
     }
 
-    /* ===== MAIN TITLE ===== */
     .page-title {
       font-size: clamp(1.7rem, 3.5vw, 2.3rem);
       font-weight: 800;
@@ -206,18 +178,11 @@
       line-height: 1.15;
     }
     .page-title .highlight { color: var(--brand); }
-    .page-sub {
-      color: var(--ink-secondary);
-      font-size: 1rem;
-      margin-bottom: 22px;
-      max-width: 720px;
-    }
+    .page-sub { color: var(--ink-secondary); font-size: 1rem; margin-bottom: 22px; max-width: 720px; }
 
-    /* ===== SETTINGS BAR ===== */
     .settings-bar {
       display: flex; flex-wrap: wrap; gap: 10px;
-      margin: 20px 0;
-      padding: 14px;
+      margin: 20px 0; padding: 14px;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -236,11 +201,11 @@
       cursor: pointer;
       outline: none;
       transition: border .15s;
+      max-width: 200px;
     }
     .settings-bar select:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); }
     .setting-group { display: flex; align-items: center; gap: 6px; }
 
-    /* ===== CALCULATOR LAYOUT ===== */
     .calc-layout {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -313,7 +278,6 @@
     .toggle-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
     .toggle-btn:hover:not(.active) { border-color: var(--brand); }
 
-    /* ===== RESULT CARD ===== */
     .result-card {
       background: linear-gradient(160deg, var(--brand-glow), var(--card) 60%);
       border-color: var(--brand);
@@ -343,7 +307,6 @@
     .result-item .label { font-size: 0.8rem; color: var(--muted); }
     .result-item .value { font-size: 1.1rem; font-weight: 700; color: var(--ink); }
 
-    /* ===== AMORTIZATION ===== */
     .amort-section { margin-top: 24px; }
     .amort-toggle {
       width: 100%;
@@ -365,16 +328,9 @@
     .amort-table-wrap.open { display: block; }
     table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
     th, td { padding: 10px 12px; text-align: right; border-bottom: 1px solid var(--border); }
-    th {
-      font-weight: 700;
-      color: var(--muted);
-      text-transform: uppercase;
-      font-size: 0.72rem;
-      letter-spacing: 0.5px;
-    }
+    th { font-weight: 700; color: var(--muted); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.5px; }
     td:first-child, th:first-child { text-align: left; }
 
-    /* ===== DISCLAIMER ===== */
     .disclaimer {
       margin-top: 24px;
       padding: 16px;
@@ -387,14 +343,12 @@
     }
     .disclaimer strong { color: var(--brand); }
 
-    /* ===== SEO CONTENT ===== */
     .seo-content { margin: 40px 0; max-width: 800px; }
     .seo-content h2 { font-size: 1.3rem; margin: 28px 0 10px; letter-spacing: -0.3px; }
     .seo-content p { color: var(--ink-secondary); font-size: 0.95rem; margin-bottom: 12px; }
     .seo-content ul { margin: 0 0 16px 20px; color: var(--ink-secondary); font-size: 0.95rem; }
     .seo-content li { margin-bottom: 6px; }
 
-    /* ===== FOOTER ===== */
     .site-footer {
       background: var(--card);
       border-top: 1px solid var(--border);
@@ -407,7 +361,6 @@
     .site-footer a { color: var(--ink-secondary); margin: 0 6px; transition: color .15s; }
     .site-footer a:hover { color: var(--brand); }
 
-    /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .container { padding: 0 16px; }
       .header-inner { gap: 10px; flex-wrap: wrap; padding: 12px 0; }
@@ -424,14 +377,12 @@
 </head>
 <body>
 
-<!-- ===== HEADER (MATCHES HOMEPAGE EXACTLY) ===== -->
 <header class="site-header">
   <div class="container header-inner">
     <a href="/" class="logo">
       <span class="logo-icon">🐼</span>
       <span>SitPanda</span>
     </a>
-
     <div class="header-center">
       <div class="header-search-box">
         <span class="icon">🔍</span>
@@ -440,7 +391,6 @@
       </div>
       <div class="search-dropdown" id="searchDropdown"></div>
     </div>
-
     <div class="header-actions">
       <a href="/" class="back-btn">← <span class="back-text">Back</span></a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
@@ -450,66 +400,147 @@
 
 <main class="container">
 
-  <!-- ===== TITLE ===== -->
   <h1 class="page-title">
-    Mortgage Calculator — <span class="highlight">Estimate Your Monthly Payment</span>
+    Mortgage Calculator — <span class="highlight">Estimate Your Home Loan</span>
   </h1>
   <p class="page-sub">
-    Free home loan calculator for Pakistan, India, US, UK &amp; more. Enter your loan details below to see monthly EMI, total interest, and full cost.
+    Free mortgage calculator for home loans worldwide. Estimate monthly payments, total interest, and full repayment cost in any currency — with optional property tax, insurance, and mortgage insurance.
   </p>
 
-  <!-- ===== SETTINGS BAR ===== -->
   <div class="settings-bar">
     <div class="setting-group">
-      <label>🌍 Country</label>
+      <label>🌍 Country / Region</label>
       <select id="countrySelect">
-        <option value="PK">Pakistan</option>
-        <option value="IN">India</option>
         <option value="US">United States</option>
         <option value="GB">United Kingdom</option>
+        <option value="CA">Canada</option>
+        <option value="AU">Australia</option>
+        <option value="NZ">New Zealand</option>
+        <option value="IE">Ireland</option>
+        <option value="DE">Germany</option>
+        <option value="FR">France</option>
+        <option value="ES">Spain</option>
+        <option value="IT">Italy</option>
+        <option value="NL">Netherlands</option>
+        <option value="CH">Switzerland</option>
+        <option value="SE">Sweden</option>
+        <option value="NO">Norway</option>
+        <option value="DK">Denmark</option>
+        <option value="PL">Poland</option>
+        <option value="CZ">Czech Republic</option>
+        <option value="HU">Hungary</option>
+        <option value="RO">Romania</option>
+        <option value="TR">Turkey</option>
+        <option value="RU">Russia</option>
         <option value="AE">UAE</option>
         <option value="SA">Saudi Arabia</option>
+        <option value="QA">Qatar</option>
+        <option value="KW">Kuwait</option>
+        <option value="BH">Bahrain</option>
+        <option value="OM">Oman</option>
+        <option value="JO">Jordan</option>
+        <option value="EG">Egypt</option>
+        <option value="ZA">South Africa</option>
+        <option value="NG">Nigeria</option>
+        <option value="KE">Kenya</option>
+        <option value="GH">Ghana</option>
+        <option value="PK">Pakistan</option>
+        <option value="IN">India</option>
+        <option value="BD">Bangladesh</option>
+        <option value="LK">Sri Lanka</option>
+        <option value="NP">Nepal</option>
+        <option value="CN">China</option>
+        <option value="JP">Japan</option>
+        <option value="KR">South Korea</option>
+        <option value="SG">Singapore</option>
+        <option value="MY">Malaysia</option>
+        <option value="TH">Thailand</option>
+        <option value="ID">Indonesia</option>
+        <option value="PH">Philippines</option>
+        <option value="VN">Vietnam</option>
+        <option value="HK">Hong Kong</option>
+        <option value="TW">Taiwan</option>
+        <option value="BR">Brazil</option>
+        <option value="MX">Mexico</option>
+        <option value="AR">Argentina</option>
+        <option value="CL">Chile</option>
+        <option value="CO">Colombia</option>
+        <option value="PE">Peru</option>
       </select>
     </div>
     <div class="setting-group">
       <label>💱 Currency</label>
       <select id="currencySelect">
-        <option value="PKR">PKR — ₨</option>
-        <option value="INR">INR — ₹</option>
         <option value="USD">USD — $</option>
         <option value="GBP">GBP — £</option>
+        <option value="EUR">EUR — €</option>
+        <option value="CAD">CAD — C$</option>
+        <option value="AUD">AUD — A$</option>
+        <option value="NZD">NZD — NZ$</option>
+        <option value="CHF">CHF — Fr</option>
+        <option value="SEK">SEK — kr</option>
+        <option value="NOK">NOK — kr</option>
+        <option value="DKK">DKK — kr</option>
+        <option value="PLN">PLN — zł</option>
+        <option value="CZK">CZK — Kč</option>
+        <option value="HUF">HUF — Ft</option>
+        <option value="RON">RON — lei</option>
+        <option value="TRY">TRY — ₺</option>
+        <option value="RUB">RUB — ₽</option>
         <option value="AED">AED — د.إ</option>
         <option value="SAR">SAR — ﷼</option>
-      </select>
-    </div>
-    <div class="setting-group">
-      <label>📏 Units</label>
-      <select id="unitSelect">
-        <option value="metric">Metric</option>
-        <option value="imperial">Imperial</option>
+        <option value="QAR">QAR — ر.ق</option>
+        <option value="KWD">KWD — د.ك</option>
+        <option value="BHD">BHD — .د.ب</option>
+        <option value="OMR">OMR — ر.ع.</option>
+        <option value="JOD">JOD — د.ا</option>
+        <option value="EGP">EGP — E£</option>
+        <option value="ZAR">ZAR — R</option>
+        <option value="NGN">NGN — ₦</option>
+        <option value="KES">KES — KSh</option>
+        <option value="GHS">GHS — ₵</option>
+        <option value="PKR">PKR — ₨</option>
+        <option value="INR">INR — ₹</option>
+        <option value="BDT">BDT — ৳</option>
+        <option value="LKR">LKR — Rs</option>
+        <option value="NPR">NPR — Rs</option>
+        <option value="CNY">CNY — ¥</option>
+        <option value="JPY">JPY — ¥</option>
+        <option value="KRW">KRW — ₩</option>
+        <option value="SGD">SGD — S$</option>
+        <option value="MYR">MYR — RM</option>
+        <option value="THB">THB — ฿</option>
+        <option value="IDR">IDR — Rp</option>
+        <option value="PHP">PHP — ₱</option>
+        <option value="VND">VND — ₫</option>
+        <option value="HKD">HKD — HK$</option>
+        <option value="TWD">TWD — NT$</option>
+        <option value="BRL">BRL — R$</option>
+        <option value="MXN">MXN — MX$</option>
+        <option value="ARS">ARS — $</option>
+        <option value="CLP">CLP — $</option>
+        <option value="COP">COP — $</option>
+        <option value="PEN">PEN — S/</option>
       </select>
     </div>
   </div>
 
-  <!-- ===== CALCULATOR ===== -->
   <div class="calc-layout">
-
-    <!-- LEFT: FORM -->
     <div class="form-card">
       <h2>🏠 Loan Details</h2>
 
       <div class="input-group">
         <label for="homePrice">Home Price</label>
         <div class="input-row">
-          <input type="number" id="homePrice" value="10000000" min="0">
-          <span id="currencySymbol1" style="padding:0 12px;font-weight:700;color:var(--brand)">₨</span>
+          <input type="number" id="homePrice" value="350000" min="0">
+          <span id="currencySymbol1" style="padding:0 12px;font-weight:700;color:var(--brand)">$</span>
         </div>
       </div>
 
       <div class="input-group">
         <label for="downPayment">Down Payment</label>
         <div class="input-row">
-          <input type="number" id="downPayment" value="2000000" min="0">
+          <input type="number" id="downPayment" value="70000" min="0">
           <input type="number" id="downPercent" value="20" min="0" max="100" style="max-width:80px">
           <span style="font-size:.85rem;color:var(--muted)">%</span>
         </div>
@@ -519,16 +550,16 @@
       <div class="input-group">
         <label for="interestRate">Annual Interest Rate (%)</label>
         <div class="input-row">
-          <input type="number" id="interestRate" value="15" min="0" step="0.01">
+          <input type="number" id="interestRate" value="6.5" min="0" step="0.01">
           <span style="font-size:.85rem;color:var(--muted)">%</span>
         </div>
-        <div class="input-hint" id="rateHint">Typical rate: ~15% (KIBOR + 3%)</div>
+        <div class="input-hint" id="rateHint">Typical mortgage rate: 6–7%</div>
       </div>
 
       <div class="input-group">
         <label for="loanTerm">Loan Term</label>
         <div class="input-row">
-          <input type="number" id="loanTerm" value="20" min="1" max="50">
+          <input type="number" id="loanTerm" value="30" min="1" max="50">
           <select id="termUnit">
             <option value="years">Years</option>
             <option value="months">Months</option>
@@ -537,51 +568,51 @@
       </div>
 
       <div class="toggle-group">
-        <button class="toggle-btn active" data-extra="none">P&amp;I Only</button>
-        <button class="toggle-btn" data-extra="tax">+ Tax &amp; Insurance</button>
+        <button class="toggle-btn active" data-extra="none">Principal &amp; Interest</button>
+        <button class="toggle-btn" data-extra="full">Full Monthly Cost</button>
       </div>
 
       <div id="extraFields" style="display:none">
         <div class="input-group">
-          <label for="propertyTax">Annual Property Tax (%)</label>
-          <input type="number" id="propertyTax" value="0" min="0" step="0.01" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink);outline:none">
+          <label for="propertyTax">Annual Property Tax (% of home value)</label>
+          <input type="number" id="propertyTax" value="1.1" min="0" step="0.01" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink);outline:none">
         </div>
         <div class="input-group">
           <label for="insurance">Annual Home Insurance</label>
           <div class="input-row">
-            <input type="number" id="insurance" value="0" min="0">
-            <span id="currencySymbol2" style="padding:0 12px;font-weight:700;color:var(--brand)">₨</span>
+            <input type="number" id="insurance" value="1500" min="0">
+            <span id="currencySymbol2" style="padding:0 12px;font-weight:700;color:var(--brand)">$</span>
           </div>
         </div>
         <div class="input-group">
-          <label for="pmiRate">PMI (% of loan/year, if down payment &lt; 20%)</label>
-          <input type="number" id="pmiRate" value="0" min="0" step="0.01" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink);outline:none">
+          <label for="mortgageInsurance">Mortgage Insurance (% of loan/year, if down payment is low)</label>
+          <input type="number" id="mortgageInsurance" value="0.5" min="0" step="0.01" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink);outline:none">
+          <div class="input-hint">Known as PMI (US), CMHC (Canada), LMI (Australia) — varies by country and lender.</div>
         </div>
       </div>
     </div>
 
-    <!-- RIGHT: RESULT -->
     <div class="result-card">
-      <div class="result-label">Monthly Payment (Principal + Interest)</div>
-      <div class="result-main" id="monthlyPI">₨ 0</div>
-      <div class="result-label" style="margin-top:4px" id="monthlyTotalLabel">P&amp;I only</div>
+      <div class="result-label" id="mainResultLabel">Monthly Payment (Principal + Interest)</div>
+      <div class="result-main" id="monthlyPayment">$ 0</div>
+      <div class="result-label" style="margin-top:4px" id="monthlySubLabel">Principal &amp; interest only</div>
 
       <div class="result-grid">
         <div class="result-item">
           <div class="label">Total Interest</div>
-          <div class="value" id="totalInterest">₨ 0</div>
+          <div class="value" id="totalInterest">$ 0</div>
         </div>
         <div class="result-item">
           <div class="label">Total Cost</div>
-          <div class="value" id="totalCost">₨ 0</div>
+          <div class="value" id="totalCost">$ 0</div>
         </div>
         <div class="result-item">
           <div class="label">Loan Amount</div>
-          <div class="value" id="loanAmount">₨ 0</div>
+          <div class="value" id="loanAmountDisplay">$ 0</div>
         </div>
         <div class="result-item">
           <div class="label">Down Payment</div>
-          <div class="value" id="downPaymentDisplay">₨ 0</div>
+          <div class="value" id="downPaymentDisplay">$ 0</div>
         </div>
       </div>
 
@@ -602,44 +633,50 @@
     </div>
   </div>
 
-  <!-- ===== DISCLAIMER ===== -->
   <div class="disclaimer">
-    <strong>✔ Verified Formula:</strong> This calculator uses the standard reducing-balance EMI formula: <code>EMI = P × r × (1+r)<sup>n</sup> ÷ ((1+r)<sup>n</sup> − 1)</code>. Rates and defaults are indicative only. Actual bank rates, fees, and eligibility vary. This tool is for planning and educational purposes — it is not a loan offer or financial advice. Always confirm final terms with your bank or a licensed financial advisor.
+    <strong>✔ Verified Formula:</strong> This calculator uses the standard reducing-balance mortgage formula <code>M = P × r × (1+r)<sup>n</sup> ÷ ((1+r)<sup>n</sup> − 1)</code> — the method used by lenders worldwide. Rates and defaults are indicative and vary by country, lender, and credit profile. Mortgage insurance requirements, tax rules, and eligibility differ by country — this tool provides a standard estimate only. It is for planning and educational purposes and is not financial advice. Always confirm terms with your lender or a licensed mortgage advisor.
   </div>
 
-  <!-- ===== SEO CONTENT ===== -->
   <div class="seo-content">
     <h2>How to Use This Mortgage Calculator</h2>
-    <p>This free mortgage calculator works for home loans in <strong>Pakistan (PKR), India (INR), the United States (USD), the United Kingdom (GBP), the UAE (AED), and Saudi Arabia (SAR)</strong>. Simply enter your <strong>home price</strong>, <strong>down payment</strong>, <strong>annual interest rate</strong>, and <strong>loan term</strong> to instantly see your monthly payment.</p>
-    <p>For a more complete estimate, switch to <strong>"+ Tax &amp; Insurance"</strong> to include annual property tax, home insurance, and PMI (private mortgage insurance) if your down payment is below 20%.</p>
+    <p>This free mortgage calculator works for home loans in <strong>any country and any currency</strong>. Select your country to load typical interest rates and loan terms, or enter your own numbers manually.</p>
+    <p>Enter your <strong>home price</strong>, <strong>down payment</strong>, <strong>annual interest rate</strong>, and <strong>loan term</strong> to instantly see your monthly payment, total interest, and full repayment cost. Switch to <strong>"Full Monthly Cost"</strong> to include property tax, home insurance, and mortgage insurance (if applicable) for a complete picture.</p>
 
     <h2>Mortgage Formula Used</h2>
-    <p>The calculator uses the standard reducing-balance formula:</p>
+    <p>The calculator uses the standard reducing-balance formula used by lenders worldwide:</p>
     <p style="text-align:center;font-family:monospace;background:var(--card);padding:12px;border-radius:8px;border:1px solid var(--border)">
-      EMI = P × r × (1 + r)<sup>n</sup> ÷ ((1 + r)<sup>n</sup> − 1)
+      M = P × r × (1 + r)<sup>n</sup> ÷ ((1 + r)<sup>n</sup> − 1)
     </p>
     <ul>
+      <li><strong>M</strong> = Monthly payment (principal + interest)</li>
       <li><strong>P</strong> = Loan amount (home price − down payment)</li>
       <li><strong>r</strong> = Monthly interest rate (annual rate ÷ 12 ÷ 100)</li>
-      <li><strong>n</strong> = Number of monthly instalments (years × 12)</li>
+      <li><strong>n</strong> = Number of monthly payments (years × 12)</li>
     </ul>
 
-    <h2>Country-Specific Notes</h2>
+    <h2>What's Included in a Monthly Mortgage Payment?</h2>
+    <p>A typical monthly mortgage payment includes <strong>principal</strong> (repaying the amount you borrowed) and <strong>interest</strong> (the cost of borrowing). In many countries, lenders also collect additional amounts for:</p>
     <ul>
-      <li><strong>Pakistan:</strong> Home finance is typically priced at <strong>KIBOR + bank spread</strong>. As of October 2026, the SBP policy rate is <strong>11.5%</strong> and 1-year KIBOR is around <strong>12.3%</strong>, with typical bank home-finance rates around <strong>15.3%</strong>. The State Bank caps total loan repayments at <strong>50% of net monthly income</strong> (Debt Burden Ratio).</li>
-      <li><strong>India:</strong> Under the <strong>old tax regime</strong>, home loan interest is deductible up to <strong>₹2,00,000</strong> under <strong>Section 24(b)</strong>, and principal repayment up to <strong>₹1,50,000</strong> under <strong>Section 80C</strong>. These deductions are <strong>not available</strong> under the new tax regime.</li>
-      <li><strong>United States:</strong> The full monthly payment is often called <strong>PITI</strong> — Principal, Interest, Taxes, and Insurance. If your down payment is below 20%, lenders typically require <strong>PMI</strong>, which is usually <strong>0.3%–1.5%</strong> of the loan amount annually.</li>
+      <li><strong>Property tax</strong> — usually calculated as a percentage of the home's assessed value</li>
+      <li><strong>Home insurance</strong> — protects against fire, theft, and natural disasters</li>
+      <li><strong>Mortgage insurance</strong> — required in some countries when the down payment is below a certain threshold (known as PMI in the US, CMHC insurance in Canada, LMI in Australia)</li>
     </ul>
 
-    <h2>Frequently Asked Questions</h2>
+    <h2>Fixed vs Variable Interest Rates</h2>
+    <p><strong>Fixed-rate mortgages</strong> lock in your interest rate for the entire term, giving predictable payments. <strong>Variable-rate mortgages</strong> move with market benchmarks (like KIBOR, SOFR, EURIBOR, or a central bank base rate), so payments can rise or fall. Many countries offer hybrid products that are fixed for an initial period and variable afterward.</p>
+
+    <h2>Frequently Asked Questions (Global)</h2>
     <p><strong>Is this mortgage calculator free?</strong> Yes. All SitPanda calculators are 100% free with no signup required.</p>
-    <p><strong>Does it work for Pakistan and India?</strong> Yes. The calculator supports PKR and INR, and defaults adjust based on your detected country. You can also change the currency manually.</p>
-    <p><strong>What is the difference between P&amp;I and total monthly payment?</strong> P&amp;I is principal and interest only. The total monthly payment also includes property tax, home insurance, and PMI (if applicable).</p>
+    <p><strong>Does it work for any country?</strong> Yes. Select your country from the dropdown to load typical local rates and loan terms, or enter your own numbers. The calculator supports all major currencies and formats amounts according to your locale.</p>
+    <p><strong>What is the difference between principal &amp; interest and total monthly cost?</strong> Principal and interest is the core loan repayment. The total monthly cost adds property tax, home insurance, and mortgage insurance (if applicable), giving a more complete picture of what you'll pay each month.</p>
+    <p><strong>How much down payment do I need?</strong> Down payment requirements vary widely by country and lender — commonly 5–20% of the home price. A larger down payment reduces your loan amount, monthly payment, and total interest, and may help you avoid mortgage insurance.</p>
+    <p><strong>How does the loan term affect my payment?</strong> A longer term lowers your monthly payment but increases total interest paid. A shorter term raises the monthly payment but saves interest over the life of the loan.</p>
+    <p><strong>Can I pay off my mortgage early?</strong> Many lenders allow early repayment, but some charge prepayment penalties. Check your loan agreement — early repayment can save significant interest.</p>
+    <p><strong>What is amortization?</strong> Amortization is the process of paying off a loan over time. In the early years, most of your payment goes to interest; in later years, more goes to principal. The amortization schedule shows this breakdown month by month.</p>
   </div>
 
 </main>
 
-<!-- ===== FOOTER ===== -->
 <footer class="site-footer">
   <div class="container">
     © 2026 SitPanda. All rights reserved. |
@@ -651,16 +688,15 @@
 
 <script>
 (function() {
-  // ===== CALCULATOR DATABASE (34 tools, same as homepage) =====
   const calculators = [
-    { name: 'Mortgage Calculator', url: '/mortgage-calculator.html', keywords: 'mortgage home loan emi', icon: '🏠', cat: 'Finance' },
-    { name: 'Loan Calculator', url: '/loan-calculator.html', keywords: 'loan emi personal auto student', icon: '🏦', cat: 'Finance' },
-    { name: 'Compound Interest Calculator', url: '/compound-interest-calculator.html', keywords: 'compound interest savings growth', icon: '📈', cat: 'Finance' },
+    { name: 'Mortgage Calculator', url: '/mortgage-calculator.html', keywords: 'mortgage home loan', icon: '🏠', cat: 'Finance' },
+    { name: 'Loan Calculator', url: '/loan-calculator.html', keywords: 'loan emi personal auto student business', icon: '🏦', cat: 'Finance' },
+    { name: 'Compound Interest Calculator', url: '/compound-interest-calculator.html', keywords: 'compound interest savings growth investment', icon: '📈', cat: 'Finance' },
     { name: 'Salary Calculator', url: '/salary-calculator.html', keywords: 'salary income hourly annual', icon: '💵', cat: 'Finance' },
     { name: 'Inflation Calculator', url: '/inflation-calculator.html', keywords: 'inflation money value', icon: '📉', cat: 'Finance' },
     { name: 'Zakat Calculator', url: '/zakat-calculator.html', keywords: 'zakat islamic charity', icon: '🕌', cat: 'Finance' },
     { name: 'EMI Calculator', url: '/emi-calculator.html', keywords: 'emi equated monthly installment', icon: '📊', cat: 'Finance' },
-    { name: 'Income Tax Calculator', url: '/tax-calculator.html', keywords: 'tax income pakistan india', icon: '🧾', cat: 'Finance' },
+    { name: 'Income Tax Calculator', url: '/tax-calculator.html', keywords: 'tax income', icon: '🧾', cat: 'Finance' },
     { name: 'Savings Goal Calculator', url: '/savings-goal-calculator.html', keywords: 'savings goal target', icon: '🎯', cat: 'Finance' },
     { name: 'Retirement Calculator', url: '/retirement-calculator.html', keywords: 'retirement pension', icon: '🌴', cat: 'Finance' },
     { name: 'BMI Calculator', url: '/bmi-calculator.html', keywords: 'bmi body mass index', icon: '⚖️', cat: 'Health' },
@@ -689,20 +725,15 @@
     { name: 'Fuel Cost Calculator', url: '/fuel-cost-calculator.html', keywords: 'fuel cost trip petrol', icon: '⛽', cat: 'Everyday' }
   ];
 
-  // ===== HEADER SEARCH =====
   const headerSearch = document.getElementById('headerSearch');
   const searchDropdown = document.getElementById('searchDropdown');
 
   function renderResults(query) {
     const q = query.toLowerCase().trim();
     if (!q) { searchDropdown.classList.remove('open'); return; }
-
-    const matches = calculators.filter(c =>
-      (c.name + ' ' + c.keywords).toLowerCase().includes(q)
-    ).slice(0, 8);
-
+    const matches = calculators.filter(c => (c.name + ' ' + c.keywords).toLowerCase().includes(q)).slice(0, 8);
     if (matches.length === 0) {
-      searchDropdown.innerHTML = '<div class="search-empty">No calculators found. Try “BMI”, “loan”, “age”...</div>';
+      searchDropdown.innerHTML = '<div class="search-empty">No calculators found.</div>';
     } else {
       searchDropdown.innerHTML = matches.map(c =>
         `<a href="${c.url}" class="search-item">
@@ -719,23 +750,14 @@
 
   headerSearch.addEventListener('input', e => renderResults(e.target.value));
   headerSearch.addEventListener('focus', e => { if (e.target.value) renderResults(e.target.value); });
-
   document.addEventListener('click', e => {
     if (!e.target.closest('.header-center')) searchDropdown.classList.remove('open');
   });
-
   document.addEventListener('keydown', e => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-      e.preventDefault();
-      headerSearch.focus();
-    }
-    if (e.key === 'Escape') {
-      searchDropdown.classList.remove('open');
-      headerSearch.blur();
-    }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); headerSearch.focus(); }
+    if (e.key === 'Escape') { searchDropdown.classList.remove('open'); headerSearch.blur(); }
   });
 
-  // ===== THEME TOGGLE =====
   const themeToggle = document.getElementById('themeToggle');
   if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark');
@@ -748,19 +770,67 @@
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
   });
 
-  // ===== COUNTRY-CURRENCY MAP =====
+  // ===== GLOBAL COUNTRY DATA (Mortgage) =====
   const countryData = {
-    PK: { currency: 'PKR', symbol: '₨', rate: 15, label: 'Typical rate: ~15% (KIBOR + 3%)' },
-    IN: { currency: 'INR', symbol: '₹', rate: 8.5, label: 'Typical rate: ~8.5%' },
-    US: { currency: 'USD', symbol: '$', rate: 6.5, label: 'Typical rate: ~6.5%' },
-    GB: { currency: 'GBP', symbol: '£', rate: 5.5, label: 'Typical rate: ~5.5%' },
-    AE: { currency: 'AED', symbol: 'د.إ', rate: 4.5, label: 'Typical rate: ~4.5%' },
-    SA: { currency: 'SAR', symbol: '﷼', rate: 5.0, label: 'Typical rate: ~5.0%' }
+    US: { currency: 'USD', locale: 'en-US', rate: 6.5, term: 30, hint: 'Typical mortgage rate: 6–7%', price: 350000 },
+    GB: { currency: 'GBP', locale: 'en-GB', rate: 5.5, term: 25, hint: 'Typical mortgage rate: 5–6%', price: 250000 },
+    CA: { currency: 'CAD', locale: 'en-CA', rate: 5.5, term: 25, hint: 'Typical mortgage rate: 5–6%', price: 500000 },
+    AU: { currency: 'AUD', locale: 'en-AU', rate: 6.0, term: 30, hint: 'Typical mortgage rate: 5.5–6.5%', price: 600000 },
+    NZ: { currency: 'NZD', locale: 'en-NZ', rate: 6.0, term: 30, hint: 'Typical mortgage rate: 5.5–6.5%', price: 500000 },
+    IE: { currency: 'EUR', locale: 'en-IE', rate: 4.0, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 300000 },
+    DE: { currency: 'EUR', locale: 'de-DE', rate: 3.8, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 300000 },
+    FR: { currency: 'EUR', locale: 'fr-FR', rate: 3.5, term: 25, hint: 'Typical mortgage rate: 3–4%', price: 250000 },
+    ES: { currency: 'EUR', locale: 'es-ES', rate: 3.3, term: 30, hint: 'Typical mortgage rate: 3–4%', price: 200000 },
+    IT: { currency: 'EUR', locale: 'it-IT', rate: 3.5, term: 30, hint: 'Typical mortgage rate: 3–4%', price: 200000 },
+    NL: { currency: 'EUR', locale: 'nl-NL', rate: 3.8, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 350000 },
+    CH: { currency: 'CHF', locale: 'de-CH', rate: 2.5, term: 25, hint: 'Typical mortgage rate: 2–3%', price: 600000 },
+    SE: { currency: 'SEK', locale: 'sv-SE', rate: 4.0, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 3500000 },
+    NO: { currency: 'NOK', locale: 'nb-NO', rate: 5.0, term: 25, hint: 'Typical mortgage rate: 4.5–5.5%', price: 4000000 },
+    DK: { currency: 'DKK', locale: 'da-DK', rate: 4.0, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 2500000 },
+    PL: { currency: 'PLN', locale: 'pl-PL', rate: 7.5, term: 25, hint: 'Typical mortgage rate: 7–8%', price: 400000 },
+    CZ: { currency: 'CZK', locale: 'cs-CZ', rate: 5.5, term: 25, hint: 'Typical mortgage rate: 5–6%', price: 5000000 },
+    HU: { currency: 'HUF', locale: 'hu-HU', rate: 7.0, term: 20, hint: 'Typical mortgage rate: 6.5–7.5%', price: 40000000 },
+    RO: { currency: 'RON', locale: 'ro-RO', rate: 6.5, term: 30, hint: 'Typical mortgage rate: 6–7%', price: 500000 },
+    TR: { currency: 'TRY', locale: 'tr-TR', rate: 40.0, term: 10, hint: 'Typical mortgage rate: 35–45%', price: 2000000 },
+    RU: { currency: 'RUB', locale: 'ru-RU', rate: 15.0, term: 20, hint: 'Typical mortgage rate: 12–18%', price: 5000000 },
+    AE: { currency: 'AED', locale: 'ar-AE', rate: 4.5, term: 25, hint: 'Typical mortgage rate: 4–5%', price: 1500000 },
+    SA: { currency: 'SAR', locale: 'ar-SA', rate: 5.0, term: 25, hint: 'Typical mortgage rate: 4.5–5.5%', price: 1200000 },
+    QA: { currency: 'QAR', locale: 'ar-QA', rate: 4.5, term: 25, hint: 'Typical mortgage rate: 4–5%', price: 1500000 },
+    KW: { currency: 'KWD', locale: 'ar-KW', rate: 4.0, term: 25, hint: 'Typical mortgage rate: 3.5–4.5%', price: 120000 },
+    BH: { currency: 'BHD', locale: 'ar-BH', rate: 5.0, term: 25, hint: 'Typical mortgage rate: 4.5–5.5%', price: 120000 },
+    OM: { currency: 'OMR', locale: 'ar-OM', rate: 4.5, term: 25, hint: 'Typical mortgage rate: 4–5%', price: 100000 },
+    JO: { currency: 'JOD', locale: 'ar-JO', rate: 6.0, term: 25, hint: 'Typical mortgage rate: 5.5–6.5%', price: 150000 },
+    EG: { currency: 'EGP', locale: 'ar-EG', rate: 20.0, term: 20, hint: 'Typical mortgage rate: 18–22%', price: 2000000 },
+    ZA: { currency: 'ZAR', locale: 'en-ZA', rate: 11.0, term: 20, hint: 'Typical mortgage rate: 10–12%', price: 1500000 },
+    NG: { currency: 'NGN', locale: 'en-NG', rate: 20.0, term: 20, hint: 'Typical mortgage rate: 18–22%', price: 30000000 },
+    KE: { currency: 'KES', locale: 'en-KE', rate: 13.0, term: 20, hint: 'Typical mortgage rate: 12–14%', price: 8000000 },
+    GH: { currency: 'GHS', locale: 'en-GH', rate: 25.0, term: 20, hint: 'Typical mortgage rate: 22–28%', price: 500000 },
+    PK: { currency: 'PKR', locale: 'en-PK', rate: 15.0, term: 20, hint: 'Typical mortgage rate: 14–16%', price: 15000000 },
+    IN: { currency: 'INR', locale: 'en-IN', rate: 8.5, term: 20, hint: 'Typical mortgage rate: 8–9%', price: 5000000 },
+    BD: { currency: 'BDT', locale: 'bn-BD', rate: 10.0, term: 20, hint: 'Typical mortgage rate: 9–11%', price: 5000000 },
+    LK: { currency: 'LKR', locale: 'si-LK', rate: 12.0, term: 20, hint: 'Typical mortgage rate: 11–13%', price: 10000000 },
+    NP: { currency: 'NPR', locale: 'ne-NP', rate: 10.0, term: 20, hint: 'Typical mortgage rate: 9–11%', price: 5000000 },
+    CN: { currency: 'CNY', locale: 'zh-CN', rate: 3.5, term: 30, hint: 'Typical mortgage rate: 3–4%', price: 1500000 },
+    JP: { currency: 'JPY', locale: 'ja-JP', rate: 1.5, term: 35, hint: 'Typical mortgage rate: 1–2%', price: 30000000 },
+    KR: { currency: 'KRW', locale: 'ko-KR', rate: 4.0, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 400000000 },
+    SG: { currency: 'SGD', locale: 'en-SG', rate: 3.0, term: 25, hint: 'Typical mortgage rate: 2.5–3.5%', price: 800000 },
+    MY: { currency: 'MYR', locale: 'ms-MY', rate: 4.0, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 500000 },
+    TH: { currency: 'THB', locale: 'th-TH', rate: 5.0, term: 30, hint: 'Typical mortgage rate: 4.5–5.5%', price: 3000000 },
+    ID: { currency: 'IDR', locale: 'id-ID', rate: 8.5, term: 20, hint: 'Typical mortgage rate: 8–9%', price: 1500000000 },
+    PH: { currency: 'PHP', locale: 'en-PH', rate: 6.5, term: 20, hint: 'Typical mortgage rate: 6–7%', price: 3000000 },
+    VN: { currency: 'VND', locale: 'vi-VN', rate: 9.0, term: 20, hint: 'Typical mortgage rate: 8–10%', price: 2000000000 },
+    HK: { currency: 'HKD', locale: 'en-HK', rate: 4.0, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 5000000 },
+    TW: { currency: 'TWD', locale: 'zh-TW', rate: 2.0, term: 30, hint: 'Typical mortgage rate: 1.5–2.5%', price: 8000000 },
+    BR: { currency: 'BRL', locale: 'pt-BR', rate: 11.0, term: 30, hint: 'Typical mortgage rate: 10–12%', price: 400000 },
+    MX: { currency: 'MXN', locale: 'es-MX', rate: 10.0, term: 20, hint: 'Typical mortgage rate: 9–11%', price: 2000000 },
+    AR: { currency: 'ARS', locale: 'es-AR', rate: 50.0, term: 20, hint: 'Typical mortgage rate: 45–55%', price: 50000000 },
+    CL: { currency: 'CLP', locale: 'es-CL', rate: 5.0, term: 25, hint: 'Typical mortgage rate: 4.5–5.5%', price: 100000000 },
+    CO: { currency: 'COP', locale: 'es-CO', rate: 10.0, term: 20, hint: 'Typical mortgage rate: 9–11%', price: 300000000 },
+    PE: { currency: 'PEN', locale: 'es-PE', rate: 8.0, term: 25, hint: 'Typical mortgage rate: 7–9%', price: 300000 }
   };
 
   const countrySelect = document.getElementById('countrySelect');
   const currencySelect = document.getElementById('currencySelect');
-  const unitSelect = document.getElementById('unitSelect');
   const homePrice = document.getElementById('homePrice');
   const downPayment = document.getElementById('downPayment');
   const downPercent = document.getElementById('downPercent');
@@ -769,14 +839,15 @@
   const termUnit = document.getElementById('termUnit');
   const propertyTax = document.getElementById('propertyTax');
   const insurance = document.getElementById('insurance');
-  const pmiRate = document.getElementById('pmiRate');
+  const mortgageInsurance = document.getElementById('mortgageInsurance');
   const currencySymbol1 = document.getElementById('currencySymbol1');
   const currencySymbol2 = document.getElementById('currencySymbol2');
-  const monthlyPI = document.getElementById('monthlyPI');
-  const monthlyTotalLabel = document.getElementById('monthlyTotalLabel');
+  const monthlyPayment = document.getElementById('monthlyPayment');
+  const mainResultLabel = document.getElementById('mainResultLabel');
+  const monthlySubLabel = document.getElementById('monthlySubLabel');
   const totalInterestEl = document.getElementById('totalInterest');
   const totalCostEl = document.getElementById('totalCost');
-  const loanAmountEl = document.getElementById('loanAmount');
+  const loanAmountDisplay = document.getElementById('loanAmountDisplay');
   const downPaymentDisplay = document.getElementById('downPaymentDisplay');
   const rateHint = document.getElementById('rateHint');
   const downHint = document.getElementById('downHint');
@@ -786,12 +857,20 @@
   const amortBody = document.getElementById('amortBody');
   const amortArrow = document.getElementById('amortArrow');
 
-  let currentSymbol = '₨';
+  let currentSymbol = '$';
+  let currentCurrency = 'USD';
+  let currentLocale = 'en-US';
   let includeExtras = false;
 
-  function fmt(n) {
-    if (!isFinite(n) || isNaN(n)) return '0';
-    return Math.round(n).toLocaleString('en-US');
+  function formatCurrency(amount) {
+    try {
+      return new Intl.NumberFormat(currentLocale, {
+        style: 'currency', currency: currentCurrency,
+        minimumFractionDigits: 0, maximumFractionDigits: 0
+      }).format(Math.round(amount));
+    } catch (e) {
+      return currentSymbol + ' ' + Math.round(amount).toLocaleString('en-US');
+    }
   }
 
   async function detectCountry() {
@@ -804,8 +883,7 @@
         return;
       }
     } catch (e) {}
-    // fallback
-    const lang = (navigator.language || 'en-PK').split('-')[1];
+    const lang = (navigator.language || 'en-US').split('-')[1];
     if (lang && countryData[lang]) {
       countrySelect.value = lang;
       applyCountry();
@@ -819,33 +897,31 @@
     const d = countryData[code];
     if (!d) return;
 
+    currentCurrency = d.currency;
+    currentLocale = d.locale;
     currencySelect.value = d.currency;
-    currentSymbol = d.symbol;
-    currencySymbol1.textContent = d.symbol;
-    currencySymbol2.textContent = d.symbol;
-    interestRate.value = d.rate;
-    rateHint.textContent = d.label;
 
-    if (code === 'PK') { homePrice.value = 10000000; downPayment.value = 2000000; }
-    else if (code === 'IN') { homePrice.value = 5000000; downPayment.value = 1000000; }
-    else if (code === 'US') { homePrice.value = 350000; downPayment.value = 70000; }
-    else if (code === 'GB') { homePrice.value = 250000; downPayment.value = 50000; }
-    else if (code === 'AE') { homePrice.value = 1500000; downPayment.value = 300000; }
-    else if (code === 'SA') { homePrice.value = 1200000; downPayment.value = 240000; }
+    try {
+      const parts = new Intl.NumberFormat(currentLocale, {
+        style: 'currency', currency: d.currency
+      }).formatToParts(0);
+      const symPart = parts.find(p => p.type === 'currency');
+      currentSymbol = symPart ? symPart.value : d.currency;
+    } catch (e) { currentSymbol = d.currency; }
+
+    currencySymbol1.textContent = currentSymbol;
+    currencySymbol2.textContent = currentSymbol;
+
+    interestRate.value = d.rate;
+    loanTerm.value = d.term;
+    rateHint.textContent = d.hint;
+
+    homePrice.value = d.price;
+    downPayment.value = Math.round(d.price * 0.2);
 
     syncDownPercent();
     calculate();
   }
-
-  currencySelect.addEventListener('change', function() {
-    const map = { PKR:'₨', INR:'₹', USD:'$', GBP:'£', AED:'د.إ', SAR:'﷼' };
-    currentSymbol = map[this.value] || '$';
-    currencySymbol1.textContent = currentSymbol;
-    currencySymbol2.textContent = currentSymbol;
-    calculate();
-  });
-
-  countrySelect.addEventListener('change', applyCountry);
 
   function syncDownPercent() {
     const price = parseFloat(homePrice.value) || 0;
@@ -855,6 +931,24 @@
       downHint.textContent = `${((down/price)*100).toFixed(1)}% of home price`;
     }
   }
+
+  countrySelect.addEventListener('change', applyCountry);
+  currencySelect.addEventListener('change', function() {
+    currentCurrency = this.value;
+    for (const d of Object.values(countryData)) {
+      if (d.currency === currentCurrency) { currentLocale = d.locale; break; }
+    }
+    try {
+      const parts = new Intl.NumberFormat(currentLocale, {
+        style: 'currency', currency: currentCurrency
+      }).formatToParts(0);
+      const symPart = parts.find(p => p.type === 'currency');
+      currentSymbol = symPart ? symPart.value : currentCurrency;
+    } catch (e) { currentSymbol = currentCurrency; }
+    currencySymbol1.textContent = currentSymbol;
+    currencySymbol2.textContent = currentSymbol;
+    calculate();
+  });
 
   homePrice.addEventListener('input', function() { syncDownPercent(); calculate(); });
   downPayment.addEventListener('input', function() { syncDownPercent(); calculate(); });
@@ -870,7 +964,7 @@
     btn.addEventListener('click', function() {
       document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
-      includeExtras = this.dataset.extra === 'tax';
+      includeExtras = this.dataset.extra === 'full';
       extraFields.style.display = includeExtras ? 'block' : 'none';
       calculate();
     });
@@ -888,16 +982,17 @@
     const termVal = parseFloat(loanTerm.value) || 1;
     const termInYears = termUnit.value === 'years' ? termVal : termVal / 12;
 
-    const P = price - down;
+    const P = Math.max(0, price - down);
     const n = termInYears * 12;
     const r = annualRate / 12 / 100;
 
     if (P <= 0 || n <= 0) {
-      monthlyPI.textContent = currentSymbol + ' 0';
-      totalInterestEl.textContent = currentSymbol + ' 0';
-      totalCostEl.textContent = currentSymbol + ' 0';
-      loanAmountEl.textContent = currentSymbol + ' 0';
-      downPaymentDisplay.textContent = currentSymbol + ' 0';
+      monthlyPayment.textContent = formatCurrency(0);
+      totalInterestEl.textContent = formatCurrency(0);
+      totalCostEl.textContent = formatCurrency(0);
+      loanAmountDisplay.textContent = formatCurrency(0);
+      downPaymentDisplay.textContent = formatCurrency(0);
+      amortBody.innerHTML = '';
       return;
     }
 
@@ -912,27 +1007,28 @@
     if (includeExtras) {
       const taxRate = parseFloat(propertyTax.value) || 0;
       const ins = parseFloat(insurance.value) || 0;
-      const pmiPct = parseFloat(pmiRate.value) || 0;
+      const miPct = parseFloat(mortgageInsurance.value) || 0;
 
       const monthlyTax = (price * taxRate / 100) / 12;
       const monthlyIns = ins / 12;
-      let monthlyPMI = 0;
-      if (down / price < 0.2 && pmiPct > 0) {
-        monthlyPMI = (P * pmiPct / 100) / 12;
+      let monthlyMI = 0;
+      if (down / price < 0.2 && miPct > 0) {
+        monthlyMI = (P * miPct / 100) / 12;
       }
-      monthlyExtra = monthlyTax + monthlyIns + monthlyPMI;
+      monthlyExtra = monthlyTax + monthlyIns + monthlyMI;
     }
 
     const totalMonthly = emi + monthlyExtra;
 
-    monthlyPI.textContent = currentSymbol + ' ' + fmt(totalMonthly);
-    monthlyTotalLabel.textContent = includeExtras
-      ? `Includes P&I (${currentSymbol} ${fmt(emi)}) + tax, insurance${parseFloat(pmiRate.value) > 0 ? ' & PMI' : ''}`
-      : 'P&I only';
-    totalInterestEl.textContent = currentSymbol + ' ' + fmt(totalInterest);
-    totalCostEl.textContent = currentSymbol + ' ' + fmt(totalPayable + (includeExtras ? monthlyExtra * n : 0));
-    loanAmountEl.textContent = currentSymbol + ' ' + fmt(P);
-    downPaymentDisplay.textContent = currentSymbol + ' ' + fmt(down);
+    mainResultLabel.textContent = includeExtras ? 'Total Monthly Payment' : 'Monthly Payment (Principal + Interest)';
+    monthlyPayment.textContent = formatCurrency(totalMonthly);
+    monthlySubLabel.textContent = includeExtras
+      ? `Principal & interest: ${formatCurrency(emi)} + extras`
+      : 'Principal & interest only';
+    totalInterestEl.textContent = formatCurrency(totalInterest);
+    totalCostEl.textContent = formatCurrency(totalPayable + (includeExtras ? monthlyExtra * n : 0));
+    loanAmountDisplay.textContent = formatCurrency(P);
+    downPaymentDisplay.textContent = formatCurrency(down);
 
     buildAmort(P, r, n, emi);
   }
@@ -947,21 +1043,19 @@
       balance -= principal;
       html += `<tr>
         <td>${m}</td>
-        <td>${currentSymbol} ${fmt(principal)}</td>
-        <td>${currentSymbol} ${fmt(interest)}</td>
-        <td>${currentSymbol} ${fmt(Math.max(0, balance))}</td>
+        <td>${formatCurrency(principal)}</td>
+        <td>${formatCurrency(interest)}</td>
+        <td>${formatCurrency(Math.max(0, balance))}</td>
       </tr>`;
     }
     amortBody.innerHTML = html;
   }
 
-  [interestRate, loanTerm, propertyTax, insurance, pmiRate].forEach(el => {
+  [interestRate, loanTerm, propertyTax, insurance, mortgageInsurance].forEach(el => {
     el.addEventListener('input', calculate);
   });
   termUnit.addEventListener('change', calculate);
-  unitSelect.addEventListener('change', calculate);
 
-  // INIT
   detectCountry();
   setTimeout(calculate, 150);
 })();
