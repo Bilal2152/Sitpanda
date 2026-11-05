@@ -6,109 +6,459 @@
   <title>Mortgage Calculator — Free Home Loan EMI &amp; Payment Estimator | SitPanda</title>
   <meta name="description" content="Free mortgage calculator for Pakistan, India, US, UK &amp; more. Calculate monthly EMI, total interest, and full home loan cost. Supports PKR, INR, USD, GBP. Auto-detects your country. No signup.">
   <style>
-    /* ===== REUSE HOMEPAGE DESIGN TOKENS ===== */
+    /* ===== DESIGN TOKENS (EXACTLY MATCHING HOMEPAGE) ===== */
     :root {
-      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15,118,110,0.12);
-      --bg: #F8FAFC; --card: #FFFFFF; --ink: #0F172A; --ink2: #475569;
-      --muted: #94A3B8; --border: #E2E8F0; --radius: 16px;
+      --brand: #0F766E;
+      --brand-hover: #0D9488;
+      --brand-glow: rgba(15, 118, 110, 0.15);
+      --bg: #F8FAFC;
+      --bg-elevated: #FFFFFF;
+      --card: #FFFFFF;
+      --ink: #0F172A;
+      --ink-secondary: #475569;
+      --ink2: #475569;
+      --muted: #94A3B8;
+      --border: #E2E8F0;
+      --border-hover: #CBD5E1;
+      --radius-sm: 10px;
+      --radius: 16px;
+      --radius-lg: 24px;
+      --shadow-sm: 0 1px 3px rgba(15,23,42,0.06);
       --shadow: 0 4px 16px rgba(15,23,42,0.08);
+      --shadow-lg: 0 12px 40px rgba(15,23,42,0.12);
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     body.dark {
-      --bg: #0B1120; --card: #1E293B; --ink: #F1F5F9; --ink2: #CBD5E1;
-      --muted: #64748B; --border: #334155; --brand: #2DD4BF;
-      --brand-glow: rgba(45,212,191,0.1);
+      --bg: #0B1120;
+      --bg-elevated: #111827;
+      --card: #1E293B;
+      --ink: #F1F5F9;
+      --ink-secondary: #CBD5E1;
+      --ink2: #CBD5E1;
+      --muted: #64748B;
+      --border: #1E293B;
+      --border-hover: #334155;
+      --brand: #2DD4BF;
+      --brand-hover: #5EEAD4;
+      --brand-glow: rgba(45, 212, 191, 0.12);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+      --shadow: 0 4px 16px rgba(0,0,0,0.4);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
     }
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:"Inter",-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;transition:background .2s,color .2s}
-    a{text-decoration:none;color:inherit}
-    .container{max-width:1120px;margin:0 auto;padding:0 20px}
-    .calc-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
-    @media(max-width:860px){.calc-layout{grid-template-columns:1fr}}
 
-    /* HEADER */
-    .site-header{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);backdrop-filter:blur(10px)}
-    .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px;flex-wrap:wrap}
-    .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.25rem}
-    .logo-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-hover));display:grid;place-items:center;font-size:1.1rem}
-    .theme-toggle{width:40px;height:40px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:grid;place-items:center;font-size:1.1rem;cursor:pointer;transition:all .2s}
-    .theme-toggle:hover{border-color:var(--brand)}
+    /* ===== RESET ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg); color: var(--ink); line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background var(--transition), color var(--transition);
+      min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input, select { font-family: inherit; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-    /* SETTINGS BAR */
-    .settings-bar{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;align-items:center;font-size:.85rem}
-    .settings-bar label{font-weight:600;color:var(--ink2);margin-right:4px}
-    .settings-bar select{padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;cursor:pointer;outline:none}
-    .settings-bar select:focus{border-color:var(--brand)}
-    .setting-group{display:flex;align-items:center;gap:6px}
+    /* ===== HEADER (IDENTICAL SIZES TO HOMEPAGE) ===== */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      transition: background var(--transition), border var(--transition);
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; gap: 20px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 800; font-size: 1.3rem; letter-spacing: -0.4px;
+      flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 38px; height: 38px; border-radius: 11px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-hover));
+      display: grid; place-items: center;
+      font-size: 1.15rem;
+      box-shadow: 0 4px 12px var(--brand-glow);
+    }
 
-    /* FORM CARD */
-    .form-card,.result-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow)}
-    .form-card h2{font-size:1.15rem;margin-bottom:18px;display:flex;align-items:center;gap:8px}
-    .input-group{margin-bottom:18px}
-    .input-group label{display:block;font-size:.88rem;font-weight:600;margin-bottom:6px;color:var(--ink2)}
-    .input-row{display:flex;gap:8px}
-    .input-row input{flex:1;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink);font-size:1rem;outline:none;transition:border .15s}
-    .input-row input:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-glow)}
-    .input-row select{padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink);font-size:.9rem;cursor:pointer;outline:none;min-width:80px}
-    .input-hint{font-size:.78rem;color:var(--muted);margin-top:4px}
-    .toggle-group{display:flex;gap:6px;margin-bottom:18px}
-    .toggle-btn{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink2);font-size:.85rem;font-weight:600;cursor:pointer;transition:all .15s}
-    .toggle-btn.active{background:var(--brand);color:#fff;border-color:var(--brand)}
-    .toggle-btn:hover:not(.active){border-color:var(--brand)}
+    /* HEADER CENTER = SEARCH */
+    .header-center {
+      flex: 1;
+      max-width: 440px;
+      position: relative;
+    }
+    .header-search-box {
+      display: flex; align-items: center;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 6px 4px 18px;
+      transition: all var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    .header-search-box:focus-within {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px var(--brand-glow), var(--shadow);
+    }
+    .header-search-box .icon { color: var(--muted); font-size: 1rem; margin-right: 8px; }
+    .header-search-box input {
+      flex: 1; border: none; outline: none;
+      background: transparent; color: var(--ink);
+      font-size: 0.92rem; padding: 8px 0;
+    }
+    .header-search-box input::placeholder { color: var(--muted); }
+    .header-search-box kbd {
+      display: none;
+      padding: 3px 7px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-right: 8px;
+    }
+    @media (min-width: 640px) { .header-search-box kbd { display: inline-block; } }
 
-    /* RESULTS */
-    .result-card{background:linear-gradient(160deg,var(--brand-glow),var(--card) 60%);border-color:var(--brand)}
-    .result-main{font-size:2.4rem;font-weight:800;color:var(--brand);letter-spacing:-1px;margin:8px 0}
-    .result-label{font-size:.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-    .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
-    .result-item .label{font-size:.8rem;color:var(--muted)}
-    .result-item .value{font-size:1.1rem;font-weight:700}
+    /* SEARCH DROPDOWN */
+    .search-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0; right: 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      max-height: 380px;
+      overflow-y: auto;
+      display: none;
+      z-index: 200;
+    }
+    .search-dropdown.open { display: block; }
+    .search-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: background .15s;
+      border-bottom: 1px solid var(--border);
+    }
+    .search-item:last-child { border-bottom: none; }
+    .search-item:hover { background: var(--brand-glow); }
+    .search-item .s-icon { font-size: 1.1rem; }
+    .search-item .s-text { flex: 1; }
+    .search-item .s-name { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+    .search-item .s-cat { font-size: 0.72rem; color: var(--muted); }
+    .search-empty {
+      padding: 20px; text-align: center;
+      color: var(--muted); font-size: 0.85rem;
+    }
 
-    /* AMORTIZATION */
-    .amort-section{margin-top:24px}
-    .amort-toggle{width:100%;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;cursor:pointer;font-weight:600;font-size:.9rem;color:var(--ink);display:flex;justify-content:space-between;align-items:center}
-    .amort-table-wrap{overflow-x:auto;margin-top:12px;display:none}
-    .amort-table-wrap.open{display:block}
-    table{width:100%;border-collapse:collapse;font-size:.82rem}
-    th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--border)}
-    th{font-weight:700;color:var(--muted);text-transform:uppercase;font-size:.72rem;letter-spacing:.5px}
-    td:first-child,th:first-child{text-align:left}
+    /* HEADER ACTIONS */
+    .header-actions {
+      display: flex; align-items: center; gap: 10px;
+      flex-shrink: 0;
+    }
+    .back-btn {
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      transition: all var(--transition);
+      display: flex; align-items: center; gap: 6px;
+      white-space: nowrap;
+    }
+    .back-btn:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+      box-shadow: 0 0 0 3px var(--brand-glow);
+    }
+    .theme-toggle {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      display: grid; place-items: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px var(--brand-glow);
+      transform: rotate(15deg);
+    }
 
-    /* DISCLAIMER */
-    .disclaimer{margin-top:24px;padding:16px;background:var(--brand-glow);border:1px solid var(--brand);border-radius:12px;font-size:.85rem;color:var(--ink2);line-height:1.6}
-    .disclaimer strong{color:var(--brand)}
+    /* ===== MAIN TITLE ===== */
+    .page-title {
+      font-size: clamp(1.7rem, 3.5vw, 2.3rem);
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      margin: 32px 0 8px;
+      line-height: 1.15;
+    }
+    .page-title .highlight { color: var(--brand); }
+    .page-sub {
+      color: var(--ink-secondary);
+      font-size: 1rem;
+      margin-bottom: 22px;
+      max-width: 720px;
+    }
 
-    /* SEO CONTENT */
-    .seo-content{margin:40px 0;max-width:800px}
-    .seo-content h2{font-size:1.3rem;margin:28px 0 10px}
-    .seo-content p{color:var(--ink2);font-size:.95rem;margin-bottom:12px}
-    .seo-content ul{margin:0 0 16px 20px;color:var(--ink2);font-size:.95rem}
-    .seo-content li{margin-bottom:6px}
+    /* ===== SETTINGS BAR ===== */
+    .settings-bar {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin: 20px 0;
+      padding: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      align-items: center;
+      font-size: 0.85rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .settings-bar label { font-weight: 600; color: var(--ink-secondary); margin-right: 4px; }
+    .settings-bar select {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 0.85rem;
+      cursor: pointer;
+      outline: none;
+      transition: border .15s;
+    }
+    .settings-bar select:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); }
+    .setting-group { display: flex; align-items: center; gap: 6px; }
 
-    /* FOOTER */
-    .site-footer{background:var(--card);border-top:1px solid var(--border);padding:36px 0 20px;margin-top:40px;text-align:center;font-size:.82rem;color:var(--muted)}
+    /* ===== CALCULATOR LAYOUT ===== */
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 860px) { .calc-layout { grid-template-columns: 1fr; } }
+
+    .form-card, .result-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .form-card h2 {
+      font-size: 1.15rem;
+      margin-bottom: 18px;
+      display: flex; align-items: center; gap: 8px;
+      letter-spacing: -0.2px;
+    }
+    .input-group { margin-bottom: 18px; }
+    .input-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--ink-secondary);
+    }
+    .input-row { display: flex; gap: 8px; align-items: center; }
+    .input-row input {
+      flex: 1;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 1rem;
+      outline: none;
+      transition: border .15s, box-shadow .15s;
+    }
+    .input-row input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); }
+    .input-row select {
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 0.9rem;
+      cursor: pointer;
+      outline: none;
+      min-width: 80px;
+    }
+    .input-row select:focus { border-color: var(--brand); }
+    .input-hint { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+    .toggle-group { display: flex; gap: 6px; margin-bottom: 18px; }
+    .toggle-btn {
+      flex: 1;
+      padding: 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg);
+      color: var(--ink-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .toggle-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+    .toggle-btn:hover:not(.active) { border-color: var(--brand); }
+
+    /* ===== RESULT CARD ===== */
+    .result-card {
+      background: linear-gradient(160deg, var(--brand-glow), var(--card) 60%);
+      border-color: var(--brand);
+    }
+    .result-main {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--brand);
+      letter-spacing: -1px;
+      margin: 8px 0;
+      line-height: 1.15;
+    }
+    .result-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .result-item .label { font-size: 0.8rem; color: var(--muted); }
+    .result-item .value { font-size: 1.1rem; font-weight: 700; color: var(--ink); }
+
+    /* ===== AMORTIZATION ===== */
+    .amort-section { margin-top: 24px; }
+    .amort-toggle {
+      width: 100%;
+      padding: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--ink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all .15s;
+    }
+    .amort-toggle:hover { border-color: var(--brand); }
+    .amort-table-wrap { overflow-x: auto; margin-top: 12px; display: none; }
+    .amort-table-wrap.open { display: block; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    th, td { padding: 10px 12px; text-align: right; border-bottom: 1px solid var(--border); }
+    th {
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.5px;
+    }
+    td:first-child, th:first-child { text-align: left; }
+
+    /* ===== DISCLAIMER ===== */
+    .disclaimer {
+      margin-top: 24px;
+      padding: 16px;
+      background: var(--brand-glow);
+      border: 1px solid var(--brand);
+      border-radius: 12px;
+      font-size: 0.85rem;
+      color: var(--ink-secondary);
+      line-height: 1.6;
+    }
+    .disclaimer strong { color: var(--brand); }
+
+    /* ===== SEO CONTENT ===== */
+    .seo-content { margin: 40px 0; max-width: 800px; }
+    .seo-content h2 { font-size: 1.3rem; margin: 28px 0 10px; letter-spacing: -0.3px; }
+    .seo-content p { color: var(--ink-secondary); font-size: 0.95rem; margin-bottom: 12px; }
+    .seo-content ul { margin: 0 0 16px 20px; color: var(--ink-secondary); font-size: 0.95rem; }
+    .seo-content li { margin-bottom: 6px; }
+
+    /* ===== FOOTER ===== */
+    .site-footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 36px 0 20px;
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .site-footer a { color: var(--ink-secondary); margin: 0 6px; transition: color .15s; }
+    .site-footer a:hover { color: var(--brand); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .container { padding: 0 16px; }
+      .header-inner { gap: 10px; flex-wrap: wrap; padding: 12px 0; }
+      .header-center { order: 3; flex-basis: 100%; max-width: 100%; }
+      .back-btn { padding: 9px 12px; font-size: 0.82rem; }
+      .back-btn .back-text { display: none; }
+      .form-card, .result-card { padding: 20px; }
+      .result-main { font-size: 2rem; }
+    }
+    @media (max-width: 480px) {
+      .result-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- ===== HEADER (MATCHES HOMEPAGE EXACTLY) ===== -->
 <header class="site-header">
   <div class="container header-inner">
-    <a href="/" class="logo"><span class="logo-icon">🐼</span> SitPanda</a>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    <a href="/" class="logo">
+      <span class="logo-icon">🐼</span>
+      <span>SitPanda</span>
+    </a>
+
+    <div class="header-center">
+      <div class="header-search-box">
+        <span class="icon">🔍</span>
+        <input type="text" id="headerSearch" placeholder="Search calculators..." autocomplete="off">
+        <kbd>⌘ K</kbd>
+      </div>
+      <div class="search-dropdown" id="searchDropdown"></div>
+    </div>
+
+    <div class="header-actions">
+      <a href="/" class="back-btn">← <span class="back-text">Back</span></a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    </div>
   </div>
 </header>
 
 <main class="container">
 
-  <!-- TITLE -->
-  <h1 style="font-size:clamp(1.6rem,3.5vw,2.2rem);font-weight:800;letter-spacing:-.5px;margin:28px 0 8px;">
-    Mortgage Calculator — <span style="color:var(--brand)">Estimate Your Monthly Payment</span>
+  <!-- ===== TITLE ===== -->
+  <h1 class="page-title">
+    Mortgage Calculator — <span class="highlight">Estimate Your Monthly Payment</span>
   </h1>
-  <p style="color:var(--ink2);font-size:.95rem;margin-bottom:20px;">
+  <p class="page-sub">
     Free home loan calculator for Pakistan, India, US, UK &amp; more. Enter your loan details below to see monthly EMI, total interest, and full cost.
   </p>
 
-  <!-- SETTINGS BAR -->
+  <!-- ===== SETTINGS BAR ===== -->
   <div class="settings-bar">
     <div class="setting-group">
       <label>🌍 Country</label>
@@ -141,7 +491,7 @@
     </div>
   </div>
 
-  <!-- CALCULATOR LAYOUT -->
+  <!-- ===== CALCULATOR ===== -->
   <div class="calc-layout">
 
     <!-- LEFT: FORM -->
@@ -152,7 +502,7 @@
         <label for="homePrice">Home Price</label>
         <div class="input-row">
           <input type="number" id="homePrice" value="10000000" min="0">
-          <span id="currencySymbol1" style="padding:12px;font-weight:700;color:var(--brand)">₨</span>
+          <span id="currencySymbol1" style="padding:0 12px;font-weight:700;color:var(--brand)">₨</span>
         </div>
       </div>
 
@@ -161,7 +511,7 @@
         <div class="input-row">
           <input type="number" id="downPayment" value="2000000" min="0">
           <input type="number" id="downPercent" value="20" min="0" max="100" style="max-width:80px">
-          <span style="padding:12px;font-size:.85rem;color:var(--muted)">%</span>
+          <span style="font-size:.85rem;color:var(--muted)">%</span>
         </div>
         <div class="input-hint" id="downHint">20% of home price</div>
       </div>
@@ -170,7 +520,7 @@
         <label for="interestRate">Annual Interest Rate (%)</label>
         <div class="input-row">
           <input type="number" id="interestRate" value="15" min="0" step="0.01">
-          <span style="padding:12px;font-size:.85rem;color:var(--muted)">%</span>
+          <span style="font-size:.85rem;color:var(--muted)">%</span>
         </div>
         <div class="input-hint" id="rateHint">Typical rate: ~15% (KIBOR + 3%)</div>
       </div>
@@ -194,18 +544,18 @@
       <div id="extraFields" style="display:none">
         <div class="input-group">
           <label for="propertyTax">Annual Property Tax (%)</label>
-          <input type="number" id="propertyTax" value="0" min="0" step="0.01" style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink)">
+          <input type="number" id="propertyTax" value="0" min="0" step="0.01" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink);outline:none">
         </div>
         <div class="input-group">
           <label for="insurance">Annual Home Insurance</label>
           <div class="input-row">
             <input type="number" id="insurance" value="0" min="0">
-            <span id="currencySymbol2" style="padding:12px;font-weight:700;color:var(--brand)">₨</span>
+            <span id="currencySymbol2" style="padding:0 12px;font-weight:700;color:var(--brand)">₨</span>
           </div>
         </div>
         <div class="input-group">
           <label for="pmiRate">PMI (% of loan/year, if down payment &lt; 20%)</label>
-          <input type="number" id="pmiRate" value="0" min="0" step="0.01" style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink)">
+          <input type="number" id="pmiRate" value="0" min="0" step="0.01" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink);outline:none">
         </div>
       </div>
     </div>
@@ -235,7 +585,6 @@
         </div>
       </div>
 
-      <!-- AMORTIZATION -->
       <div class="amort-section">
         <button class="amort-toggle" id="amortToggle">
           <span>📊 View Amortization Schedule (first 12 months)</span>
@@ -253,16 +602,16 @@
     </div>
   </div>
 
-  <!-- DISCLAIMER -->
+  <!-- ===== DISCLAIMER ===== -->
   <div class="disclaimer">
     <strong>✔ Verified Formula:</strong> This calculator uses the standard reducing-balance EMI formula: <code>EMI = P × r × (1+r)<sup>n</sup> ÷ ((1+r)<sup>n</sup> − 1)</code>. Rates and defaults are indicative only. Actual bank rates, fees, and eligibility vary. This tool is for planning and educational purposes — it is not a loan offer or financial advice. Always confirm final terms with your bank or a licensed financial advisor.
   </div>
 
-  <!-- SEO CONTENT -->
+  <!-- ===== SEO CONTENT ===== -->
   <div class="seo-content">
     <h2>How to Use This Mortgage Calculator</h2>
     <p>This free mortgage calculator works for home loans in <strong>Pakistan (PKR), India (INR), the United States (USD), the United Kingdom (GBP), the UAE (AED), and Saudi Arabia (SAR)</strong>. Simply enter your <strong>home price</strong>, <strong>down payment</strong>, <strong>annual interest rate</strong>, and <strong>loan term</strong> to instantly see your monthly payment.</p>
-    <p>For a more complete estimate, switch to <strong>“+ Tax &amp; Insurance”</strong> to include annual property tax, home insurance, and PMI (private mortgage insurance) if your down payment is below 20%.</p>
+    <p>For a more complete estimate, switch to <strong>"+ Tax &amp; Insurance"</strong> to include annual property tax, home insurance, and PMI (private mortgage insurance) if your down payment is below 20%.</p>
 
     <h2>Mortgage Formula Used</h2>
     <p>The calculator uses the standard reducing-balance formula:</p>
@@ -277,9 +626,9 @@
 
     <h2>Country-Specific Notes</h2>
     <ul>
-      <li><strong>Pakistan:</strong> Home finance is typically priced at <strong>KIBOR + bank spread</strong>. As of October 2026, the SBP policy rate is <strong>11.5%</strong> and 1-year KIBOR is around <strong>12.3%</strong>, with typical bank home-finance rates around <strong>15.3%</strong>[reference:5]. The State Bank caps total loan repayments at <strong>50% of net monthly income</strong> (Debt Burden Ratio)[reference:6].</li>
-      <li><strong>India:</strong> Under the <strong>old tax regime</strong>, home loan interest is deductible up to <strong>₹2,00,000</strong> under <strong>Section 24(b)</strong>, and principal repayment up to <strong>₹1,50,000</strong> under <strong>Section 80C</strong>. These deductions are <strong>not available</strong> under the new tax regime[reference:7].</li>
-      <li><strong>United States:</strong> The full monthly payment is often called <strong>PITI</strong> — Principal, Interest, Taxes, and Insurance. If your down payment is below 20%, lenders typically require <strong>PMI</strong>, which is usually <strong>0.3%–1.5%</strong> of the loan amount annually[reference:8].</li>
+      <li><strong>Pakistan:</strong> Home finance is typically priced at <strong>KIBOR + bank spread</strong>. As of October 2026, the SBP policy rate is <strong>11.5%</strong> and 1-year KIBOR is around <strong>12.3%</strong>, with typical bank home-finance rates around <strong>15.3%</strong>. The State Bank caps total loan repayments at <strong>50% of net monthly income</strong> (Debt Burden Ratio).</li>
+      <li><strong>India:</strong> Under the <strong>old tax regime</strong>, home loan interest is deductible up to <strong>₹2,00,000</strong> under <strong>Section 24(b)</strong>, and principal repayment up to <strong>₹1,50,000</strong> under <strong>Section 80C</strong>. These deductions are <strong>not available</strong> under the new tax regime.</li>
+      <li><strong>United States:</strong> The full monthly payment is often called <strong>PITI</strong> — Principal, Interest, Taxes, and Insurance. If your down payment is below 20%, lenders typically require <strong>PMI</strong>, which is usually <strong>0.3%–1.5%</strong> of the loan amount annually.</li>
     </ul>
 
     <h2>Frequently Asked Questions</h2>
@@ -290,15 +639,115 @@
 
 </main>
 
-<!-- FOOTER -->
+<!-- ===== FOOTER ===== -->
 <footer class="site-footer">
   <div class="container">
-    © 2026 SitPanda. All rights reserved. &nbsp;|&nbsp; <a href="/privacy">Privacy</a> &nbsp;|&nbsp; <a href="/about">About</a> &nbsp;|&nbsp; <a href="/contact">Contact</a>
+    © 2026 SitPanda. All rights reserved. |
+    <a href="/privacy">Privacy</a> |
+    <a href="/about">About</a> |
+    <a href="/contact">Contact</a>
   </div>
 </footer>
 
 <script>
 (function() {
+  // ===== CALCULATOR DATABASE (34 tools, same as homepage) =====
+  const calculators = [
+    { name: 'Mortgage Calculator', url: '/mortgage-calculator.html', keywords: 'mortgage home loan emi', icon: '🏠', cat: 'Finance' },
+    { name: 'Loan Calculator', url: '/loan-calculator.html', keywords: 'loan emi personal auto student', icon: '🏦', cat: 'Finance' },
+    { name: 'Compound Interest Calculator', url: '/compound-interest-calculator.html', keywords: 'compound interest savings growth', icon: '📈', cat: 'Finance' },
+    { name: 'Salary Calculator', url: '/salary-calculator.html', keywords: 'salary income hourly annual', icon: '💵', cat: 'Finance' },
+    { name: 'Inflation Calculator', url: '/inflation-calculator.html', keywords: 'inflation money value', icon: '📉', cat: 'Finance' },
+    { name: 'Zakat Calculator', url: '/zakat-calculator.html', keywords: 'zakat islamic charity', icon: '🕌', cat: 'Finance' },
+    { name: 'EMI Calculator', url: '/emi-calculator.html', keywords: 'emi equated monthly installment', icon: '📊', cat: 'Finance' },
+    { name: 'Income Tax Calculator', url: '/tax-calculator.html', keywords: 'tax income pakistan india', icon: '🧾', cat: 'Finance' },
+    { name: 'Savings Goal Calculator', url: '/savings-goal-calculator.html', keywords: 'savings goal target', icon: '🎯', cat: 'Finance' },
+    { name: 'Retirement Calculator', url: '/retirement-calculator.html', keywords: 'retirement pension', icon: '🌴', cat: 'Finance' },
+    { name: 'BMI Calculator', url: '/bmi-calculator.html', keywords: 'bmi body mass index', icon: '⚖️', cat: 'Health' },
+    { name: 'Calorie Calculator', url: '/calorie-calculator.html', keywords: 'calorie diet food', icon: '🍎', cat: 'Health' },
+    { name: 'Body Fat Calculator', url: '/body-fat-calculator.html', keywords: 'body fat percentage', icon: '💪', cat: 'Health' },
+    { name: 'BMR Calculator', url: '/bmr-calculator.html', keywords: 'bmr basal metabolic rate', icon: '🔥', cat: 'Health' },
+    { name: 'Ideal Weight Calculator', url: '/ideal-weight-calculator.html', keywords: 'ideal weight height', icon: '📏', cat: 'Health' },
+    { name: 'Water Intake Calculator', url: '/water-intake-calculator.html', keywords: 'water intake hydration', icon: '💧', cat: 'Health' },
+    { name: 'Heart Rate Calculator', url: '/heart-rate-calculator.html', keywords: 'heart rate exercise zones', icon: '❤️‍🔥', cat: 'Health' },
+    { name: 'Pregnancy Due Date', url: '/pregnancy-calculator.html', keywords: 'pregnancy due date', icon: '👶', cat: 'Health' },
+    { name: 'Percentage Calculator', url: '/percentage-calculator.html', keywords: 'percentage percent', icon: '％', cat: 'Math' },
+    { name: 'Scientific Calculator', url: '/scientific-calculator.html', keywords: 'scientific advanced math', icon: '🔬', cat: 'Math' },
+    { name: 'Fraction Calculator', url: '/fraction-calculator.html', keywords: 'fraction add subtract multiply', icon: '½', cat: 'Math' },
+    { name: 'Average Calculator', url: '/average-calculator.html', keywords: 'average mean median mode', icon: '📊', cat: 'Math' },
+    { name: 'Ratio Calculator', url: '/ratio-calculator.html', keywords: 'ratio proportion', icon: '⚖️', cat: 'Math' },
+    { name: 'Standard Deviation', url: '/standard-deviation-calculator.html', keywords: 'standard deviation statistics', icon: '📈', cat: 'Math' },
+    { name: 'Triangle Calculator', url: '/triangle-calculator.html', keywords: 'triangle area perimeter angles', icon: '🔺', cat: 'Math' },
+    { name: 'Unit Converter', url: '/unit-converter.html', keywords: 'unit converter length weight temperature', icon: '🔄', cat: 'Math' },
+    { name: 'Age Calculator', url: '/age-calculator.html', keywords: 'age birthday date of birth', icon: '🎂', cat: 'Everyday' },
+    { name: 'Date Difference', url: '/date-difference-calculator.html', keywords: 'date difference days between', icon: '📅', cat: 'Everyday' },
+    { name: 'Time Calculator', url: '/time-calculator.html', keywords: 'time add subtract hours', icon: '⏰', cat: 'Everyday' },
+    { name: 'Countdown Calculator', url: '/countdown-calculator.html', keywords: 'countdown event days', icon: '⏳', cat: 'Everyday' },
+    { name: 'Tip Calculator', url: '/tip-calculator.html', keywords: 'tip restaurant bill split', icon: '🍽️', cat: 'Everyday' },
+    { name: 'Discount Calculator', url: '/discount-calculator.html', keywords: 'discount sale price', icon: '🏷️', cat: 'Everyday' },
+    { name: 'GPA Calculator', url: '/gpa-calculator.html', keywords: 'gpa grade point average', icon: '🎓', cat: 'Everyday' },
+    { name: 'Fuel Cost Calculator', url: '/fuel-cost-calculator.html', keywords: 'fuel cost trip petrol', icon: '⛽', cat: 'Everyday' }
+  ];
+
+  // ===== HEADER SEARCH =====
+  const headerSearch = document.getElementById('headerSearch');
+  const searchDropdown = document.getElementById('searchDropdown');
+
+  function renderResults(query) {
+    const q = query.toLowerCase().trim();
+    if (!q) { searchDropdown.classList.remove('open'); return; }
+
+    const matches = calculators.filter(c =>
+      (c.name + ' ' + c.keywords).toLowerCase().includes(q)
+    ).slice(0, 8);
+
+    if (matches.length === 0) {
+      searchDropdown.innerHTML = '<div class="search-empty">No calculators found. Try “BMI”, “loan”, “age”...</div>';
+    } else {
+      searchDropdown.innerHTML = matches.map(c =>
+        `<a href="${c.url}" class="search-item">
+          <span class="s-icon">${c.icon}</span>
+          <div class="s-text">
+            <div class="s-name">${c.name}</div>
+            <div class="s-cat">${c.cat}</div>
+          </div>
+        </a>`
+      ).join('');
+    }
+    searchDropdown.classList.add('open');
+  }
+
+  headerSearch.addEventListener('input', e => renderResults(e.target.value));
+  headerSearch.addEventListener('focus', e => { if (e.target.value) renderResults(e.target.value); });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-center')) searchDropdown.classList.remove('open');
+  });
+
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      headerSearch.focus();
+    }
+    if (e.key === 'Escape') {
+      searchDropdown.classList.remove('open');
+      headerSearch.blur();
+    }
+  });
+
+  // ===== THEME TOGGLE =====
+  const themeToggle = document.getElementById('themeToggle');
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark');
+    themeToggle.textContent = '☀️';
+  }
+  themeToggle.addEventListener('click', function() {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+
   // ===== COUNTRY-CURRENCY MAP =====
   const countryData = {
     PK: { currency: 'PKR', symbol: '₨', rate: 15, label: 'Typical rate: ~15% (KIBOR + 3%)' },
@@ -309,7 +758,6 @@
     SA: { currency: 'SAR', symbol: '﷼', rate: 5.0, label: 'Typical rate: ~5.0%' }
   };
 
-  // ===== ELEMENTS =====
   const countrySelect = document.getElementById('countrySelect');
   const currencySelect = document.getElementById('currencySelect');
   const unitSelect = document.getElementById('unitSelect');
@@ -338,17 +786,14 @@
   const amortBody = document.getElementById('amortBody');
   const amortArrow = document.getElementById('amortArrow');
 
-  // ===== STATE =====
   let currentSymbol = '₨';
   let includeExtras = false;
 
-  // ===== FORMAT =====
   function fmt(n) {
     if (!isFinite(n) || isNaN(n)) return '0';
     return Math.round(n).toLocaleString('en-US');
   }
 
-  // ===== COUNTRY DETECTION =====
   async function detectCountry() {
     try {
       const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(4000) });
@@ -356,15 +801,19 @@
       if (data.country_code && countryData[data.country_code]) {
         countrySelect.value = data.country_code;
         applyCountry();
+        return;
       }
-    } catch (e) {
-      // fallback: browser language
-      const lang = (navigator.language || 'en-PK').split('-')[1];
-      if (lang === 'PK') { countrySelect.value = 'PK'; applyCountry(); }
+    } catch (e) {}
+    // fallback
+    const lang = (navigator.language || 'en-PK').split('-')[1];
+    if (lang && countryData[lang]) {
+      countrySelect.value = lang;
+      applyCountry();
+    } else {
+      applyCountry();
     }
   }
 
-  // ===== APPLY COUNTRY =====
   function applyCountry() {
     const code = countrySelect.value;
     const d = countryData[code];
@@ -377,7 +826,6 @@
     interestRate.value = d.rate;
     rateHint.textContent = d.label;
 
-    // Adjust default home price roughly per currency
     if (code === 'PK') { homePrice.value = 10000000; downPayment.value = 2000000; }
     else if (code === 'IN') { homePrice.value = 5000000; downPayment.value = 1000000; }
     else if (code === 'US') { homePrice.value = 350000; downPayment.value = 70000; }
@@ -389,7 +837,6 @@
     calculate();
   }
 
-  // ===== CURRENCY MANUAL CHANGE =====
   currencySelect.addEventListener('change', function() {
     const map = { PKR:'₨', INR:'₹', USD:'$', GBP:'£', AED:'د.إ', SAR:'﷼' };
     currentSymbol = map[this.value] || '$';
@@ -400,7 +847,6 @@
 
   countrySelect.addEventListener('change', applyCountry);
 
-  // ===== DOWN PAYMENT SYNC =====
   function syncDownPercent() {
     const price = parseFloat(homePrice.value) || 0;
     const down = parseFloat(downPayment.value) || 0;
@@ -410,16 +856,8 @@
     }
   }
 
-  homePrice.addEventListener('input', function() {
-    syncDownPercent();
-    calculate();
-  });
-
-  downPayment.addEventListener('input', function() {
-    syncDownPercent();
-    calculate();
-  });
-
+  homePrice.addEventListener('input', function() { syncDownPercent(); calculate(); });
+  downPayment.addEventListener('input', function() { syncDownPercent(); calculate(); });
   downPercent.addEventListener('input', function() {
     const price = parseFloat(homePrice.value) || 0;
     const pct = parseFloat(this.value) || 0;
@@ -428,7 +866,6 @@
     calculate();
   });
 
-  // ===== TOGGLE EXTRAS =====
   document.querySelectorAll('.toggle-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
@@ -439,13 +876,11 @@
     });
   });
 
-  // ===== AMORTIZATION TOGGLE =====
   amortToggle.addEventListener('click', function() {
     amortTableWrap.classList.toggle('open');
     amortArrow.textContent = amortTableWrap.classList.contains('open') ? '▲' : '▼';
   });
 
-  // ===== CALCULATE =====
   function calculate() {
     const price = parseFloat(homePrice.value) || 0;
     const down = parseFloat(downPayment.value) || 0;
@@ -453,7 +888,7 @@
     const termVal = parseFloat(loanTerm.value) || 1;
     const termInYears = termUnit.value === 'years' ? termVal : termVal / 12;
 
-    const P = price - down; // loan amount
+    const P = price - down;
     const n = termInYears * 12;
     const r = annualRate / 12 / 100;
 
@@ -466,18 +901,13 @@
       return;
     }
 
-    // EMI formula (verified)
     let emi;
-    if (r === 0) {
-      emi = P / n;
-    } else {
-      emi = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
-    }
+    if (r === 0) emi = P / n;
+    else emi = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
 
     const totalPayable = emi * n;
     const totalInterest = totalPayable - P;
 
-    // Extras
     let monthlyExtra = 0;
     if (includeExtras) {
       const taxRate = parseFloat(propertyTax.value) || 0;
@@ -495,7 +925,6 @@
 
     const totalMonthly = emi + monthlyExtra;
 
-    // Display
     monthlyPI.textContent = currentSymbol + ' ' + fmt(totalMonthly);
     monthlyTotalLabel.textContent = includeExtras
       ? `Includes P&I (${currentSymbol} ${fmt(emi)}) + tax, insurance${parseFloat(pmiRate.value) > 0 ? ' & PMI' : ''}`
@@ -505,21 +934,17 @@
     loanAmountEl.textContent = currentSymbol + ' ' + fmt(P);
     downPaymentDisplay.textContent = currentSymbol + ' ' + fmt(down);
 
-    // Amortization (first 12 months)
     buildAmort(P, r, n, emi);
   }
 
-  // ===== AMORTIZATION TABLE =====
   function buildAmort(P, r, n, emi) {
     let balance = P;
     let html = '';
     const months = Math.min(12, n);
-
     for (let m = 1; m <= months; m++) {
       const interest = balance * r;
       const principal = emi - interest;
       balance -= principal;
-
       html += `<tr>
         <td>${m}</td>
         <td>${currentSymbol} ${fmt(principal)}</td>
@@ -530,30 +955,15 @@
     amortBody.innerHTML = html;
   }
 
-  // ===== THEME =====
-  const themeToggle = document.getElementById('themeToggle');
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    themeToggle.textContent = '☀️';
-  }
-  themeToggle.addEventListener('click', function() {
-    document.body.classList.toggle('dark');
-    const isDark = document.body.classList.contains('dark');
-    themeToggle.textContent = isDark ? '☀️' : '🌙';
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  });
-
-  // ===== INIT =====
-  detectCountry();
-  // Listen to all inputs
   [interestRate, loanTerm, propertyTax, insurance, pmiRate].forEach(el => {
     el.addEventListener('input', calculate);
   });
   termUnit.addEventListener('change', calculate);
-  unitSelect.addEventListener('change', calculate); // placeholder for unit-aware labels
+  unitSelect.addEventListener('change', calculate);
 
-  // Initial calculation after slight delay (for country detection)
-  setTimeout(calculate, 100);
+  // INIT
+  detectCountry();
+  setTimeout(calculate, 150);
 })();
 </script>
 
