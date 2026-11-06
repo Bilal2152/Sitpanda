@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Allow AI crawlers for better visibility
+User-agent: ChatGPT-User
+Allow: /
+User-agent: GPTBot
+Allow: /
+
+# Sitemap location
+Sitemap: https://sitpanda.com/sitemap.xml
