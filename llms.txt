@@ -1,0 +1,13 @@
+# SitPanda
+> Free, fast, and accurate online calculators for finance, health, and everyday life.
+
+## Calculators
+- [Home](https://sitpanda.com/): Directory of all available tools.
+- [Mortgage Calculator](https://sitpanda.com/mortgage-calculator.html): Home loan EMI estimator.
+- [Loan Calculator](https://sitpanda.com/loan-calculator.html): Personal, auto, student, and business loan EMI.
+- [Compound Interest Calculator](https://sitpanda.com/compound-interest-calculator.html): Investment growth and savings estimator.
+- [Salary Calculator](https://sitpanda.com/salary-calculator.html): Hourly, daily, weekly, and annual pay converter.
+- [Inflation Calculator](https://sitpanda.com/inflation-calculator.html): Purchasing power and CPI estimator.
+
+## About
+- [Contact Us](https://sitpanda.com/contact.html)
