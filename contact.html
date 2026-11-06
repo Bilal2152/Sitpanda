@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — SitPanda</title>
+  <meta name="description" content="Contact SitPanda for questions, corrections, suggestions, or business enquiries. We reply within a few business days.">
+  
+  <link rel="canonical" href="https://sitpanda.com/contact.html">
+  
+  <style>
+    :root {
+      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15,118,110,0.15);
+      --bg: #F8FAFC; --card: #FFFFFF; --ink: #0F172A; --ink-secondary: #475569; --muted: #94A3B8;
+      --border: #E2E8F0; --radius: 16px;
+      --shadow: 0 4px 16px rgba(15,23,42,0.08);
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.dark {
+      --bg: #0B1120; --card: #1E293B; --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #64748B;
+      --border: #334155; --brand: #2DD4BF; --brand-glow: rgba(45,212,191,0.12);
+      --shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg); color: var(--ink); line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      transition: background var(--transition), color var(--transition);
+      min-height: 100vh;
+    }
+    a { text-decoration: none; color: var(--brand); }
+    a:hover { text-decoration: underline; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input, textarea { font-family: inherit; }
+    .container { width: 100%; max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+    /* HEADER */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; color: var(--ink); }
+    .logo-icon {
+      width: 38px; height: 38px; border-radius: 11px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-hover));
+      display: grid; place-items: center; font-size: 1.15rem;
+      box-shadow: 0 4px 12px var(--brand-glow); color: #fff;
+    }
+    .theme-toggle {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--card); border: 1px solid var(--border);
+      display: grid; place-items: center; font-size: 1.2rem;
+      cursor: pointer; transition: all var(--transition);
+    }
+    .theme-toggle:hover { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); }
+
+    /* PAGE CONTENT */
+    .page-title {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800; letter-spacing: -0.5px;
+      margin: 40px 0 10px; line-height: 1.2;
+    }
+    .page-sub { color: var(--ink-secondary); font-size: 1rem; margin-bottom: 32px; }
+    
+    /* FORM CARD */
+    .form-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 40px;
+      box-shadow: var(--shadow); margin-bottom: 40px;
+    }
+    .input-group { margin-bottom: 22px; }
+    .input-group label {
+      display: block; font-size: 0.88rem; font-weight: 600;
+      margin-bottom: 6px; color: var(--ink-secondary);
+    }
+    .input-group input,
+    .input-group textarea {
+      width: 100%; padding: 14px 16px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      background: var(--bg); color: var(--ink);
+      font-size: 1rem; outline: none;
+      transition: border .15s, box-shadow .15s;
+    }
+    .input-group input:focus,
+    .input-group textarea:focus {
+      border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow);
+    }
+    .input-group textarea { resize: vertical; min-height: 140px; }
+    .input-hint { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+    .submit-btn {
+      width: 100%; padding: 14px;
+      background: var(--brand); color: #fff;
+      border-radius: 10px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: background .15s;
+    }
+    .submit-btn:hover { background: var(--brand-hover); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* INFO BOX */
+    .info-box {
+      margin-top: 16px; padding: 16px;
+      background: var(--brand-glow); border: 1px solid var(--brand);
+      border-radius: 12px; font-size: 0.85rem;
+      color: var(--ink-secondary); line-height: 1.6;
+    }
+    .info-box strong { color: var(--brand); }
+
+    /* SUCCESS MESSAGE */
+    .success-msg {
+      display: none; padding: 16px;
+      background: #F0FDF4; border: 1px solid #A7F3D0;
+      border-radius: 10px; font-size: 0.9rem;
+      color: #166534; margin-bottom: 20px;
+    }
+    body.dark .success-msg { background: rgba(22,101,52,0.2); border-color: #166534; color: #86EFAC; }
+    .success-msg.show { display: block; }
+
+    /* FOOTER */
+    .site-footer {
+      background: var(--card); border-top: 1px solid var(--border);
+      padding: 36px 0 20px; margin-top: 40px;
+      text-align: center; font-size: 0.82rem; color: var(--muted);
+    }
+    .site-footer a { color: var(--ink-secondary); margin: 0 6px; }
+    .site-footer a:hover { color: var(--brand); }
+
+    @media (max-width: 600px) {
+      .container { padding: 0 16px; }
+      .form-card { padding: 24px; }
+      .page-title { margin-top: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo">
+      <span class="logo-icon">🐼</span>
+      <span>SitPanda</span>
+    </a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+  </div>
+</header>
+
+<main class="container">
+
+  <h1 class="page-title">Contact <span style="color:var(--brand);">SitPanda</span></h1>
+  <p class="page-sub">
+    Have a question, spotted an error, or want to suggest a new calculator? Fill in the form below and we'll get back to you as soon as possible.
+  </p>
+
+  <div class="success-msg" id="successMsg">
+    ✅ Thank you! Your message has been sent. We'll reply within a few business days.
+  </div>
+
+  <div class="form-card">
+
+    <form id="contactForm" action="https://formspree.io/f/xoeebzvj" method="POST">
+
+      <div class="input-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" required placeholder="e.g. Ahmed Khan">
+      </div>
+
+      <div class="input-group">
+        <label for="email">Your Email</label>
+        <input type="email" id="email" name="email" required placeholder="you@example.com">
+        <div class="input-hint">We'll use this to reply to you. We never share it.</div>
+      </div>
+
+      <div class="input-group">
+        <label for="message">Your Message</label>
+        <textarea id="message" name="message" required placeholder="Please describe your question, correction, or suggestion. If it's about a specific calculator, please include the calculator name and the values you entered."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
+
+    </form>
+
+    <div class="info-box">
+      <strong>📌 A quick note:</strong> We read every message. For corrections, please include the calculator name, the values you entered, and what you expected to see — this helps us fix issues faster. We do not provide personalised financial, tax, or medical advice.
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    © 2026 SitPanda. All rights reserved. |
+    <a href="/privacy.html">Privacy</a> |
+    <a href="/about.html">About</a> |
+    <a href="/contact.html">Contact</a>
+  </div>
+</footer>
+
+<script>
+(function() {
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark');
+    themeToggle.textContent = '☀️';
+  }
+  themeToggle.addEventListener('click', function() {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+
+  // Form submission via Formspree
+  const form = document.getElementById('contactForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const successMsg = document.getElementById('successMsg');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        form.style.display = 'none';
+        successMsg.classList.add('show');
+      } else {
+        alert('Something went wrong. Please try again, or email us directly at abilal751@gmail.com');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+      }
+    } catch (error) {
+      alert('Network error. Please try again, or email us directly at abilal751@gmail.com');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Message';
+    }
+  });
+})();
+</script>
+
+</body>
+</html> 
