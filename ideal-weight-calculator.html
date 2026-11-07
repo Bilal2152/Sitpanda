@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ideal Weight Calculator — Robinson, Miller, Devine &amp; Hamwi | SitPanda</title>
+  <meta name="description" content="Calculate your ideal body weight based on your height and gender using 4 popular medical formulas (Robinson, Miller, Devine, Hamwi) and the healthy BMI range.">
+  <link rel="canonical" href="https://sitpanda.com/ideal-weight-calculator.html">
+  
+  <style>
+    :root {
+      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15,118,110,0.15);
+      --bg: #F8FAFC; --card: #FFFFFF; --ink: #0F172A; --ink-secondary: #475569; --muted: #94A3B8;
+      --border: #E2E8F0; --radius: 16px;
+      --shadow-sm: 0 1px 3px rgba(15,23,42,0.06);
+      --shadow: 0 4px 16px rgba(15,23,42,0.08);
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.dark {
+      --bg: #0B1120; --card: #1E293B; --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #64748B;
+      --border: #334155; --brand: #2DD4BF; --brand-hover: #5EEAD4; --brand-glow: rgba(45,212,191,0.12);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3); --shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased;
+      transition: background var(--transition), color var(--transition); min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input, select { font-family: inherit; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .site-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; flex-shrink: 0; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--brand), var(--brand-hover)); display: grid; place-items: center; font-size: 1.15rem; color: #fff; }
+    .header-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .back-btn { padding: 9px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--border); font-size: 0.88rem; font-weight: 600; color: var(--ink-secondary); display: flex; align-items: center; gap: 6px; }
+    .back-btn:hover { border-color: var(--brand); color: var(--brand); }
+    .theme-toggle { width: 42px; height: 42px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: grid; place-items: center; font-size: 1.2rem; cursor: pointer; }
+    .theme-toggle:hover { border-color: var(--brand); }
+
+    .page-title { font-size: clamp(1.7rem, 3.5vw, 2.3rem); font-weight: 800; letter-spacing: -0.6px; margin: 32px 0 8px; }
+    .page-title .highlight { color: var(--brand); }
+    .page-sub { color: var(--ink-secondary); font-size: 1rem; margin-bottom: 22px; max-width: 720px; }
+
+    .calc-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; align-items: start; }
+    @media (max-width: 860px) { .calc-layout { grid-template-columns: 1fr; } }
+
+    .form-card, .result-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-sm); }
+    .form-card h2 { font-size: 1.15rem; margin-bottom: 18px; }
+    
+    .toggle-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .tab-btn { flex: 1; padding: 10px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink-secondary); font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+    
+    .input-group { margin-bottom: 18px; }
+    .input-group label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 6px; color: var(--ink-secondary); }
+    .input-row { display: flex; gap: 8px; align-items: center; }
+    .input-row input, .input-row select { flex: 1; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink); font-size: 1rem; outline: none; }
+    .input-row input:focus, .input-row select:focus { border-color: var(--brand); }
+    .input-row span { font-size: 0.85rem; color: var(--muted); font-weight: 600; min-width: 35px; }
+
+    .result-card { background: linear-gradient(160deg, var(--brand-glow), var(--card) 60%); border-color: var(--brand); }
+    .result-label { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    .result-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .result-table th, .result-table td { padding: 14px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    .result-table th { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; font-weight: 600; }
+    .result-table td { font-size: 1rem; font-weight: 600; }
+    .result-table tr:last-child td { border-bottom: none; }
+    .result-table .highlight { color: var(--brand); font-size: 1.1rem; font-weight: 800; }
+    
+    .bmi-range-box { margin-top: 20px; padding: 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; text-align: center; }
+    .bmi-range-box .label { font-size: 0.85rem; color: var(--ink-secondary); font-weight: 600; }
+    .bmi-range-box .value { font-size: 1.4rem; font-weight: 800; color: var(--brand); margin-top: 4px; }
+
+    .disclaimer { margin-top: 24px; padding: 16px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; font-size: 0.85rem; color: var(--ink-secondary); }
+    .disclaimer strong { color: var(--brand); }
+    .seo-content { margin: 40px 0; max-width: 800px; }
+    .seo-content h2 { font-size: 1.3rem; margin: 28px 0 10px; }
+    .seo-content p, .seo-content li { color: var(--ink-secondary); font-size: 0.95rem; margin-bottom: 12px; }
+    .seo-content ul { margin-left: 20px; }
+
+    .site-footer { background: var(--card); border-top: 1px solid var(--border); padding: 36px 0 20px; margin-top: 40px; text-align: center; font-size: 0.82rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+    <div class="header-actions">
+      <a href="/" class="back-btn">← Back</a>
+      <button class="theme-toggle" id="themeToggle">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">Ideal Weight Calculator — <span class="highlight">Find Your Healthy Range</span></h1>
+  <p class="page-sub">Calculate your ideal body weight based on medical formulas (Robinson, Miller, Devine, Hamwi) and the healthy BMI range.</p>
+
+  <div class="calc-layout">
+    <div class="form-card">
+      <h2>📏 Your Details</h2>
+      
+      <div class="toggle-tabs">
+        <button class="tab-btn active" data-unit="metric">Metric (cm)</button>
+        <button class="tab-btn" data-unit="imperial">Imperial (ft/in)</button>
+      </div>
+
+      <div class="input-group">
+        <label>Gender</label>
+        <div class="input-row">
+          <select id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-group" id="heightMetric">
+        <label>Height (cm)</label>
+        <div class="input-row">
+          <input type="number" id="heightCm" value="175">
+          <span>cm</span>
+        </div>
+      </div>
+
+      <div class="input-group" id="heightImperial" style="display:none;">
+        <label>Height (ft / in)</label>
+        <div class="input-row">
+          <input type="number" id="heightFt" value="5" placeholder="ft">
+          <span>ft</span>
+          <input type="number" id="heightIn" value="9" placeholder="in">
+          <span>in</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-label">Ideal Body Weight (IBW)</div>
+      
+      <table class="result-table">
+        <thead>
+          <tr><th>Formula</th><th>Ideal Weight</th></tr>
+        </thead>
+        <tbody>
+          <!-- Static fallbacks for crawlers -->
+          <tr><td>Robinson (1983)</td><td class="highlight" id="resRobinson">69.1 kg</td></tr>
+          <tr><td>Miller (1983)</td><td class="highlight" id="resMiller">68.9 kg</td></tr>
+          <tr><td>Devine (1974)</td><td class="highlight" id="resDevine">70.7 kg</td></tr>
+          <tr><td>Hamwi (1964)</td><td class="highlight" id="resHamwi">72.3 kg</td></tr>
+        </tbody>
+      </table>
+
+      <div class="bmi-range-box">
+        <div class="label">Healthy BMI Range (18.5 - 24.9)</div>
+        <div class="value" id="resBmiRange">56.6 - 76.2 kg</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>✔ Verified Formulas:</strong> Uses the standard medical formulas for Ideal Body Weight (IBW), which were originally developed for medication dosing but are now widely used in fitness. <strong>Note:</strong> "Ideal weight" is a broad estimate and does not account for muscle mass or bone density. Consult a doctor for personalized advice.
+  </div>
+
+  <div class="seo-content">
+    <h2>What is Ideal Body Weight (IBW)?</h2>
+    <p>Ideal Body Weight (IBW) is a medical concept that estimates the healthiest weight for a person based on their height and gender. It was originally created by the insurance industry and pharmacologists to determine safe medication dosages, but today it is widely used as a general health benchmark.</p>
+    
+    <h2>Which Formula is Most Accurate?</h2>
+    <p>There is no single "perfect" formula. Each formula was developed using different population data:</p>
+    <ul>
+      <li><strong>Robinson (1983):</strong> Often considered the most accurate for modern populations.</li>
+      <li><strong>Miller (1983):</strong> Designed to be more accurate for people with lower body weights.</li>
+      <li><strong>Devine (1974):</strong> The most widely used formula in clinical settings (hospitals).</li>
+      <li><strong>Hamwi (1964):</strong> An older formula that tends to give slightly higher ideal weights.</li>
+    </ul>
+
+    <h2>Why the Healthy BMI Range Matters</h2>
+    <p>While the formulas above give a single number, the <strong>Healthy BMI Range</strong> (18.5 to 24.9) gives you a "safe zone." Being anywhere within this range is generally considered healthy. Muscle mass, bone structure, and age can make your personal ideal weight different from a formula's calculation.</p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">© 2026 SitPanda. All rights reserved. | <a href="/privacy.html">Privacy</a> | <a href="/about.html">About</a> | <a href="/contact.html">Contact</a></div>
+</footer>
+
+<script>
+(function() {
+  const gender = document.getElementById('gender');
+  const heightCm = document.getElementById('heightCm');
+  const heightFt = document.getElementById('heightFt');
+  const heightIn = document.getElementById('heightIn');
+  const heightMetric = document.getElementById('heightMetric');
+  const heightImperial = document.getElementById('heightImperial');
+
+  const resRobinson = document.getElementById('resRobinson');
+  const resMiller = document.getElementById('resMiller');
+  const resDevine = document.getElementById('resDevine');
+  const resHamwi = document.getElementById('resHamwi');
+  const resBmiRange = document.getElementById('resBmiRange');
+
+  let currentUnit = 'metric';
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      currentUnit = this.dataset.unit;
+
+      if (currentUnit === 'metric') {
+        heightMetric.style.display = 'block';
+        heightImperial.style.display = 'none';
+        heightCm.value = 175;
+      } else {
+        heightMetric.style.display = 'none';
+        heightImperial.style.display = 'flex';
+        heightFt.value = 5; heightIn.value = 9;
+      }
+      calculate();
+    });
+  });
+
+  [gender, heightCm, heightFt, heightIn].forEach(el => {
+    el.addEventListener('input', calculate);
+  });
+
+  function calculate() {
+    let totalInches = 0, heightCmVal = 0;
+    
+    if (currentUnit === 'metric') {
+      heightCmVal = parseFloat(heightCm.value) || 0;
+      totalInches = heightCmVal / 2.54;
+    } else {
+      const ft = parseFloat(heightFt.value) || 0;
+      const inc = parseFloat(heightIn.value) || 0;
+      totalInches = (ft * 12) + inc;
+      heightCmVal = totalInches * 2.54;
+    }
+
+    if (totalInches <= 0) return;
+
+    // Formulas apply to heights over 5 feet (60 inches)
+    const inchesOver5Feet = Math.max(0, totalInches - 60);
+    const genderVal = gender.value;
+
+    let robinson = 0, miller = 0, devine = 0, hamwi = 0;
+
+    if (genderVal === 'male') {
+      robinson = 52 + (1.9 * inchesOver5Feet);
+      miller = 56.2 + (1.41 * inchesOver5Feet);
+      devine = 50.0 + (2.3 * inchesOver5Feet);
+      hamwi = 48.0 + (2.7 * inchesOver5Feet);
+    } else {
+      robinson = 49 + (1.7 * inchesOver5Feet);
+      miller = 53.1 + (1.36 * inchesOver5Feet);
+      devine = 45.5 + (2.3 * inchesOver5Feet);
+      hamwi = 45.5 + (2.2 * inchesOver5Feet);
+    }
+
+    // BMI Range 18.5 - 24.9
+    const heightM = heightCmVal / 100;
+    const bmiMin = 18.5 * (heightM * heightM);
+    const bmiMax = 24.9 * (heightM * heightM);
+
+    // Format based on unit
+    function formatWeight(kg) {
+      if (currentUnit === 'metric') {
+        return kg.toFixed(1) + ' kg';
+      } else {
+        return (kg / 0.453592).toFixed(1) + ' lb';
+      }
+    }
+
+    resRobinson.textContent = formatWeight(robinson);
+    resMiller.textContent = formatWeight(miller);
+    resDevine.textContent = formatWeight(devine);
+    resHamwi.textContent = formatWeight(hamwi);
+    resBmiRange.textContent = formatWeight(bmiMin) + ' - ' + formatWeight(bmiMax);
+  }
+
+  const themeToggle = document.getElementById('themeToggle'); 
+  if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} 
+  themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+
+  calculate();
+})();
+</script>
+</body>
+  </html>
