@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Percentage Calculator — Free Online Percent Tool | SitPanda</title>
+  <meta name="description" content="Solve common percentage problems: What is X% of Y, X is what % of Y, and percentage increase/decrease.">
+  <link rel="canonical" href="https://sitpanda.com/percentage-calculator.html">
+  <style>
+    :root { --brand:#0F766E; --bg:#F8FAFC; --card:#FFF; --ink:#0F172A; --ink2:#475569; --border:#E2E8F0; --radius:16px; --shadow:0 4px 16px rgba(15,23,42,0.08); }
+    body.dark { --bg:#0B1120; --card:#1E293B; --ink:#F1F5F9; --ink2:#CBD5E1; --border:#334155; --brand:#2DD4BF; }
+    *{margin:0;padding:0;box-sizing:border-box} body{font-family:"Inter",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+    .container{max-width:800px;margin:0 auto;padding:0 24px} a{text-decoration:none;color:inherit}
+    .site-header{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--border);padding:14px 0}
+    .header-inner{display:flex;justify-content:space-between;align-items:center}
+    .logo{font-weight:800;font-size:1.3rem;display:flex;gap:10px;align-items:center}
+    .theme-toggle{width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid var(--border);cursor:pointer;font-size:1.2rem}
+    .page-title{font-size:2rem;font-weight:800;margin:32px 0 8px} .page-sub{color:var(--ink2);margin-bottom:22px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);margin-bottom:24px}
+    .input-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap} .input-row input{width:100px;padding:12px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink);text-align:center}
+    .result-box{padding:16px;background:rgba(15,118,110,0.1);border:1px solid var(--brand);border-radius:10px;text-align:center;font-size:1.2rem;font-weight:700;margin-top:16px;color:var(--brand)}
+    .site-footer{text-align:center;padding:36px 0;border-top:1px solid var(--border);margin-top:40px;font-size:0.82rem;color:var(--ink2)}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="container header-inner"><a href="/" class="logo">🐼 SitPanda</a><button class="theme-toggle" id="themeToggle">🌙</button></div></header>
+<main class="container">
+  <h1 class="page-title">Percentage Calculator</h1>
+  <p class="page-sub">Quickly calculate percentages for daily math.</p>
+  <div class="card">
+    <h2 style="font-size:1.1rem;margin-bottom:16px;">What is X% of Y?</h2>
+    <div class="input-row"><span>What is</span><input type="number" id="c1x" value="20"><span>% of</span><input type="number" id="c1y" value="150"><span>?</span></div>
+    <div class="result-box" id="c1result">30</div>
+  </div>
+  <div class="card">
+    <h2 style="font-size:1.1rem;margin-bottom:16px;">X is what % of Y?</h2>
+    <div class="input-row"><input type="number" id="c2x" value="30"><span>is what % of</span><input type="number" id="c2y" value="150"><span>?</span></div>
+    <div class="result-box" id="c2result">20%</div>
+  </div>
+  <div class="card">
+    <h2 style="font-size:1.1rem;margin-bottom:16px;">Percentage Increase / Decrease</h2>
+    <div class="input-row"><span>From</span><input type="number" id="c3from" value="100"><span>to</span><input type="number" id="c3to" value="120"></div>
+    <div class="result-box" id="c3result">+20% Increase</div>
+  </div>
+</main>
+<footer class="site-footer">© 2026 SitPanda.</footer>
+<script>
+  const themeToggle=document.getElementById('themeToggle'); if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+  function calc(){const x1=parseFloat(document.getElementById('c1x').value)||0,y1=parseFloat(document.getElementById('c1y').value)||0;document.getElementById('c1result').textContent=(x1*y1/100).toFixed(2).replace(/\.00$/,'');}
+  function calc2(){const x2=parseFloat(document.getElementById('c2x').value)||0,y2=parseFloat(document.getElementById('c2y').value)||0;document.getElementById('c2result').textContent=(y2===0?0:(x2/y2*100)).toFixed(2)+'%';}
+  function calc3(){const f=parseFloat(document.getElementById('c3from').value)||0,t=parseFloat(document.getElementById('c3to').value)||0;if(f===0){document.getElementById('c3result').textContent='-';return;}const chg=((t-f)/f)*100;document.getElementById('c3result').textContent=(chg>0?'+':'')+chg.toFixed(2)+'% '+(chg>0?'Increase':chg<0?'Decrease':'Change');}
+  document.querySelectorAll('input').forEach(el=>el.addEventListener('input',()=>{calc();calc2();calc3();})); calc();calc2();calc3();
+</script>
+</body>
+</html>
