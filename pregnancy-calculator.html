@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pregnancy Due Date Calculator — Estimated Delivery Date | SitPanda</title>
+  <meta name="description" content="Calculate your estimated due date (EDD) using the LMP, conception, or IVF transfer method. Track your pregnancy weeks, trimesters, and milestones.">
+  <link rel="canonical" href="https://sitpanda.com/pregnancy-calculator.html">
+  
+  <style>
+    :root {
+      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15,118,110,0.15);
+      --bg: #F8FAFC; --card: #FFFFFF; --ink: #0F172A; --ink-secondary: #475569; --muted: #94A3B8;
+      --border: #E2E8F0; --radius: 16px;
+      --shadow-sm: 0 1px 3px rgba(15,23,42,0.06);
+      --shadow: 0 4px 16px rgba(15,23,42,0.08);
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.dark {
+      --bg: #0B1120; --card: #1E293B; --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #64748B;
+      --border: #334155; --brand: #2DD4BF; --brand-hover: #5EEAD4; --brand-glow: rgba(45,212,191,0.12);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3); --shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased;
+      transition: background var(--transition), color var(--transition); min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input, select { font-family: inherit; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .site-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; flex-shrink: 0; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--brand), var(--brand-hover)); display: grid; place-items: center; font-size: 1.15rem; color: #fff; }
+    .header-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .back-btn { padding: 9px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--border); font-size: 0.88rem; font-weight: 600; color: var(--ink-secondary); display: flex; align-items: center; gap: 6px; }
+    .back-btn:hover { border-color: var(--brand); color: var(--brand); }
+    .theme-toggle { width: 42px; height: 42px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: grid; place-items: center; font-size: 1.2rem; cursor: pointer; }
+    .theme-toggle:hover { border-color: var(--brand); }
+
+    .page-title { font-size: clamp(1.7rem, 3.5vw, 2.3rem); font-weight: 800; letter-spacing: -0.6px; margin: 32px 0 8px; }
+    .page-title .highlight { color: var(--brand); }
+    .page-sub { color: var(--ink-secondary); font-size: 1rem; margin-bottom: 22px; max-width: 720px; }
+
+    .calc-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; align-items: start; }
+    @media (max-width: 860px) { .calc-layout { grid-template-columns: 1fr; } }
+
+    .form-card, .result-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-sm); }
+    .form-card h2 { font-size: 1.15rem; margin-bottom: 18px; }
+    
+    .method-tabs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .method-btn { padding: 12px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink-secondary); font-weight: 600; cursor: pointer; text-align: left; transition: all 0.15s; }
+    .method-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+    
+    .input-group { margin-bottom: 18px; }
+    .input-group label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 6px; color: var(--ink-secondary); }
+    .input-row { display: flex; gap: 8px; align-items: center; }
+    .input-row input, .input-row select { flex: 1; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink); font-size: 1rem; outline: none; }
+    .input-row input:focus, .input-row select:focus { border-color: var(--brand); }
+
+    .result-card { background: linear-gradient(160deg, var(--brand-glow), var(--card) 60%); border-color: var(--brand); }
+    .result-label { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .result-main { font-size: 2.2rem; font-weight: 800; color: var(--brand); margin: 8px 0; line-height: 1.1; }
+    
+    .progress-wrap { margin-top: 20px; }
+    .progress-header { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; color: var(--ink-secondary); margin-bottom: 8px; }
+    .progress-bar-bg { height: 16px; background: var(--border); border-radius: 8px; overflow: hidden; position: relative; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #3B82F6, #10B981, #F59E0B); border-radius: 8px; transition: width 0.5s ease; }
+    
+    .milestone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+    .milestone-box { padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; text-align: center; }
+    .milestone-box .label { font-size: 0.75rem; color: var(--muted); font-weight: 600; text-transform: uppercase; }
+    .milestone-box .date { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-top: 4px; }
+
+    .disclaimer { margin-top: 24px; padding: 16px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; font-size: 0.85rem; color: var(--ink-secondary); }
+    .disclaimer strong { color: var(--brand); }
+    .seo-content { margin: 40px 0; max-width: 800px; }
+    .seo-content h2 { font-size: 1.3rem; margin: 28px 0 10px; }
+    .seo-content p, .seo-content li { color: var(--ink-secondary); font-size: 0.95rem; margin-bottom: 12px; }
+    .seo-content ul { margin-left: 20px; }
+
+    .site-footer { background: var(--card); border-top: 1px solid var(--border); padding: 36px 0 20px; margin-top: 40px; text-align: center; font-size: 0.82rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+    <div class="header-actions">
+      <a href="/" class="back-btn">← Back</a>
+      <button class="theme-toggle" id="themeToggle">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">Pregnancy Due Date Calculator — <span class="highlight">Track Your Journey</span></h1>
+  <p class="page-sub">Calculate your estimated due date (EDD) using the LMP, conception, or IVF transfer method. See your current week, trimester, and milestones.</p>
+
+  <div class="calc-layout">
+    <div class="form-card">
+      <h2>📅 Your Details</h2>
+
+      <div class="method-tabs">
+        <button class="method-btn active" data-method="lmp">Last Menstrual Period (LMP)</button>
+        <button class="method-btn" data-method="conception">Conception Date</button>
+        <button class="method-btn" data-method="ivf">IVF Transfer</button>
+      </div>
+
+      <div class="input-group" id="lmpGroup">
+        <label>First Day of Last Period</label>
+        <div class="input-row">
+          <input type="date" id="lmpDate">
+        </div>
+      </div>
+
+      <div class="input-group" id="conceptionGroup" style="display:none;">
+        <label>Date of Conception</label>
+        <div class="input-row">
+          <input type="date" id="conceptionDate">
+        </div>
+      </div>
+
+      <div class="input-group" id="ivfGroup" style="display:none;">
+        <label>Date of IVF Transfer</label>
+        <div class="input-row">
+          <input type="date" id="ivfDate">
+        </div>
+        <label style="margin-top:12px;">Embryo Type</label>
+        <div class="input-row">
+          <select id="embryoType">
+            <option value="3">3-Day Embryo</option>
+            <option value="5">5-Day Embryo (Blastocyst)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-label">Estimated Due Date (EDD)</div>
+      <!-- Static fallback for crawlers -->
+      <div class="result-main" id="eddDisplay">October 15, 2026</div>
+      <div class="result-sub" id="currentStatus" style="font-size:1rem;color:var(--ink-secondary);margin-top:4px;">You are 12 weeks and 3 days pregnant.</div>
+
+      <div class="progress-wrap">
+        <div class="progress-header">
+          <span>Trimester <span id="trimesterDisplay">1</span></span>
+          <span id="progressPercent">30% Complete</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressFill" style="width: 30%;"></div>
+        </div>
+      </div>
+
+      <div class="milestone-grid">
+        <div class="milestone-box">
+          <div class="label">End of 1st Trimester</div>
+          <div class="date" id="ms1">-</div>
+        </div>
+        <div class="milestone-box">
+          <div class="label">End of 2nd Trimester</div>
+          <div class="date" id="ms2">-</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>✔ Verified Formula:</strong> Uses standard obstetric formulas: LMP + 280 days (Naegele's Rule), Conception + 266 days, and IVF + 259/261 days. <strong>Important:</strong> Only about 4% of babies are born on their exact due date. This is an estimate—your doctor's ultrasound will provide the most accurate date.
+  </div>
+
+  <div class="seo-content">
+    <h2>How is the Due Date Calculated?</h2>
+    <p>Pregnancy lasts about 40 weeks (280 days) from the first day of your last menstrual period. Doctors use <strong>Naegele's Rule</strong>, which adds 280 days to your LMP date. However, if you know your exact conception date (or IVF transfer date), we can calculate a more precise due date.</p>
+    
+    <h2>What are Trimesters?</h2>
+    <ul>
+      <li><strong>1st Trimester (Weeks 1-13):</strong> Baby's major organs begin to form.</li>
+      <li><strong>2nd Trimester (Weeks 14-27):</strong> Often called the "golden period" as morning sickness usually fades.</li>
+      <li><strong>3rd Trimester (Weeks 28-40):</strong> Final growth and preparation for birth.</li>
+    </ul>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">© 2026 SitPanda. All rights reserved. | <a href="/privacy.html">Privacy</a> | <a href="/about.html">About</a> | <a href="/contact.html">Contact</a></div>
+</footer>
+
+<script>
+(function() {
+  const lmpDate = document.getElementById('lmpDate');
+  const conceptionDate = document.getElementById('conceptionDate');
+  const ivfDate = document.getElementById('ivfDate');
+  const embryoType = document.getElementById('embryoType');
+  
+  const lmpGroup = document.getElementById('lmpGroup');
+  const conceptionGroup = document.getElementById('conceptionGroup');
+  const ivfGroup = document.getElementById('ivfGroup');
+
+  const eddDisplay = document.getElementById('eddDisplay');
+  const currentStatus = document.getElementById('currentStatus');
+  const trimesterDisplay = document.getElementById('trimesterDisplay');
+  const progressPercent = document.getElementById('progressPercent');
+  const progressFill = document.getElementById('progressFill');
+  const ms1 = document.getElementById('ms1');
+  const ms2 = document.getElementById('ms2');
+
+  let currentMethod = 'lmp';
+
+  // Set default dates to today
+  const today = new Date().toISOString().split('T')[0];
+  lmpDate.value = today;
+  conceptionDate.value = today;
+  ivfDate.value = today;
+
+  document.querySelectorAll('.method-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      currentMethod = this.dataset.method;
+
+      lmpGroup.style.display = currentMethod === 'lmp' ? 'block' : 'none';
+      conceptionGroup.style.display = currentMethod === 'conception' ? 'block' : 'none';
+      ivfGroup.style.display = currentMethod === 'ivf' ? 'block' : 'none';
+      calculate();
+    });
+  });
+
+  [lmpDate, conceptionDate, ivfDate, embryoType].forEach(el => {
+    el.addEventListener('change', calculate);
+    el.addEventListener('input', calculate);
+  });
+
+  function calculate() {
+    let baseDate = null;
+    let daysToAdd = 0;
+
+    if (currentMethod === 'lmp' && lmpDate.value) {
+      baseDate = new Date(lmpDate.value);
+      daysToAdd = 280;
+    } else if (currentMethod === 'conception' && conceptionDate.value) {
+      baseDate = new Date(conceptionDate.value);
+      daysToAdd = 266;
+    } else if (currentMethod === 'ivf' && ivfDate.value) {
+      baseDate = new Date(ivfDate.value);
+      const eType = embryoType.value;
+      daysToAdd = eType === '5' ? 261 : 259;
+    }
+
+    if (!baseDate || isNaN(baseDate.getTime())) return;
+
+    // Calculate EDD
+    const edd = new Date(baseDate);
+    edd.setDate(edd.getDate() + daysToAdd);
+    
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    eddDisplay.textContent = edd.toLocaleDateString('en-US', options);
+
+    // Calculate Current Gestational Age (based on LMP equivalent)
+    // If user enters conception or IVF, we estimate LMP by subtracting 14 days
+    let estimatedLMP = new Date(baseDate);
+    if (currentMethod === 'conception') estimatedLMP.setDate(estimatedLMP.getDate() - 14);
+    else if (currentMethod === 'ivf') {
+      const offset = embryoType.value === '5' ? 19 : 17; // 14 + 5 or 14 + 3
+      estimatedLMP.setDate(estimatedLMP.getDate() - offset);
+    }
+
+    const now = new Date();
+    const diffTime = now - estimatedLMP;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    let weeks = Math.floor(diffDays / 7);
+    let days = diffDays % 7;
+
+    if (diffDays < 0) {
+      currentStatus.textContent = 'Due date is in the future.';
+      progressFill.style.width = '0%';
+      progressPercent.textContent = '0% Complete';
+      return;
+    }
+
+    if (weeks > 40) weeks = 40;
+
+    // Trimester Logic
+    let trimester = 1;
+    if (weeks >= 14 && weeks < 28) trimester = 2;
+    else if (weeks >= 28) trimester = 3;
+
+    currentStatus.textContent = `You are ${weeks} weeks and ${days} days pregnant.`;
+    trimesterDisplay.textContent = trimester;
+
+    // Progress Bar (Max 40 weeks)
+    const progress = Math.min(100, (weeks / 40) * 100);
+    progressFill.style.width = progress + '%';
+    progressPercent.textContent = Math.round(progress) + '% Complete';
+
+    // Milestones
+    const endOf1st = new Date(estimatedLMP);
+    endOf1st.setDate(endOf1st.getDate() + (13 * 7 + 6)); // End of week 13
+    ms1.textContent = endOf1st.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+    const endOf2nd = new Date(estimatedLMP);
+    endOf2nd.setDate(endOf2nd.getDate() + (27 * 7 + 6)); // End of week 27
+    ms2.textContent = endOf2nd.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+
+  const themeToggle = document.getElementById('themeToggle'); 
+  if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} 
+  themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+
+  calculate();
+})();
+</script>
+</body>
+</html>
