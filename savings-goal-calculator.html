@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Savings Goal Calculator — Plan Your Financial Target | SitPanda</title>
+  <meta name="description" content="Free savings goal calculator with inflation adjustment, multiple scenarios, and year-by-year breakdown. Calculate required monthly deposits or time to goal globally.">
+  <link rel="canonical" href="https://sitpanda.com/savings-goal-calculator.html">
+
+  <style>
+    :root { --brand:#0F766E; --brand-hover:#0D9488; --brand-glow:rgba(15,118,110,0.15); --bg:#F8FAFC; --card:#FFF; --ink:#0F172A; --ink2:#475569; --muted:#94A3B8; --border:#E2E8F0; --radius:16px; --shadow-sm:0 1px 3px rgba(15,23,42,0.06); --shadow:0 4px 16px rgba(15,23,42,0.08); }
+    body.dark { --bg:#0B1120; --card:#1E293B; --ink:#F1F5F9; --ink2:#CBD5E1; --muted:#64748B; --border:#334155; --brand:#2DD4BF; --brand-hover:#5EEAD4; --brand-glow:rgba(45,212,191,0.12); }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:"Inter", -apple-system, sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; min-height:100vh; }
+    a { text-decoration:none; color:inherit; } button { font-family:inherit; cursor:pointer; border:none; background:none; }
+    input, select { font-family:inherit; } .container { width:100%; max-width:1200px; margin:0 auto; padding:0 24px; }
+    
+    .site-header { position:sticky; top:0; z-index:100; background:var(--bg); border-bottom:1px solid var(--border); backdrop-filter:blur(12px); }
+    .header-inner { display:flex; align-items:center; justify-content:space-between; padding:14px 0; gap:20px; }
+    .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.3rem; }
+    .logo-icon { width:38px; height:38px; border-radius:11px; background:linear-gradient(135deg,var(--brand),var(--brand-hover)); display:grid; place-items:center; font-size:1.15rem; color:#fff; }
+    .header-actions { display:flex; gap:10px; }
+    .back-btn { padding:9px 16px; border-radius:999px; background:var(--card); border:1px solid var(--border); font-weight:600; color:var(--ink2); }
+    .theme-toggle { width:42px; height:42px; border-radius:50%; background:var(--card); border:1px solid var(--border); display:grid; place-items:center; font-size:1.2rem; }
+    
+    .page-title { font-size:clamp(1.7rem,3.5vw,2.3rem); font-weight:800; margin:32px 0 8px; }
+    .page-title .highlight { color:var(--brand); } .page-sub { color:var(--ink2); margin-bottom:22px; max-width:720px; }
+    
+    .settings-bar { display:flex; flex-wrap:wrap; gap:10px; margin:20px 0; padding:14px; background:var(--card); border:1px solid var(--border); border-radius:12px; align-items:center; font-size:0.85rem; }
+    .settings-bar label { font-weight:600; color:var(--ink2); margin-right:4px; }
+    .settings-bar select { padding:8px 12px; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--ink); cursor:pointer; }
+    
+    .mode-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+    .mode-btn { padding:8px 14px; border:1.5px solid var(--border); border-radius:999px; background:var(--bg); color:var(--ink2); font-size:0.82rem; font-weight:600; cursor:pointer; }
+    .mode-btn:hover { border-color:var(--brand); } .mode-btn.active { background:var(--brand); color:#fff; border-color:var(--brand); }
+    
+    .calc-layout { display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start; }
+    @media(max-width:860px){ .calc-layout { grid-template-columns:1fr; } }
+    .form-card, .result-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; box-shadow:var(--shadow-sm); }
+    .form-card h2 { font-size:1.15rem; margin-bottom:18px; }
+    .input-group { margin-bottom:18px; }
+    .input-group label { display:block; font-size:0.88rem; font-weight:600; margin-bottom:6px; color:var(--ink2); }
+    .input-row { display:flex; gap:8px; align-items:center; }
+    .input-row input { flex:1; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; background:var(--bg); color:var(--ink); font-size:1rem; outline:none; }
+    .input-row input:focus { border-color:var(--brand); }
+    .input-row span { font-size:0.85rem; color:var(--muted); font-weight:600; }
+    .input-hint { font-size:0.78rem; color:var(--muted); margin-top:4px; }
+    
+    .result-card { background:linear-gradient(160deg,var(--brand-glow),var(--card) 60%); border-color:var(--brand); }
+    .result-main { font-size:2.4rem; font-weight:800; color:var(--brand); margin:8px 0; line-height:1.15; }
+    .result-label { font-size:0.85rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; }
+    .result-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:20px; padding-top:20px; border-top:1px solid var(--border); }
+    .result-item .label { font-size:0.8rem; color:var(--muted); } .result-item .value { font-size:1.1rem; font-weight:700; }
+
+    .progress-wrap { margin-top:24px; } .progress-label { display:flex; justify-content:space-between; font-size:0.78rem; color:var(--muted); margin-bottom:6px; }
+    .progress-bar { height:12px; background:var(--border); border-radius:6px; overflow:hidden; }
+    .progress-fill { height:100%; background:var(--brand); border-radius:6px; transition:width 0.3s; }
+
+    .scenario-table { width:100%; border-collapse:collapse; margin-top:20px; font-size:0.82rem; }
+    .scenario-table th, .scenario-table td { padding:10px 8px; text-align:right; border-bottom:1px solid var(--border); }
+    .scenario-table th:first-child, .scenario-table td:first-child { text-align:left; }
+    .scenario-table th { color:var(--muted); font-weight:600; font-size:0.75rem; text-transform:uppercase; }
+    .scenario-table tr:last-child td { border-bottom:none; }
+    
+    .disclaimer { margin-top:24px; padding:16px; background:var(--brand-glow); border:1px solid var(--brand); border-radius:12px; font-size:0.85rem; color:var(--ink2); }
+    .disclaimer strong { color:var(--brand); }
+    .seo-content { margin:40px 0; max-width:800px; } .seo-content h2 { font-size:1.3rem; margin:28px 0 10px; }
+    .seo-content p, .seo-content li { color:var(--ink2); font-size:0.95rem; margin-bottom:12px; } .seo-content ul { margin-left:20px; }
+    
+    .site-footer { background:var(--card); border-top:1px solid var(--border); padding:36px 0 20px; margin-top:40px; text-align:center; font-size:0.82rem; color:var(--muted); }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+    <div class="header-actions">
+      <a href="/" class="back-btn">← Back</a>
+      <button class="theme-toggle" id="themeToggle">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">Savings Goal Calculator — <span class="highlight">Plan Your Financial Target</span></h1>
+  <p class="page-sub">Calculate the monthly deposit needed, time to reach your goal, or the lump sum required today. Includes inflation adjustment and scenario comparison.</p>
+
+  <div class="settings-bar">
+    <div class="setting-group"><label>🌍 Country / Currency</label><select id="countrySelect"></select></div>
+  </div>
+
+  <div class="mode-tabs">
+    <button class="mode-btn active" data-mode="monthly">Monthly Deposit Needed</button>
+    <button class="mode-btn" data-mode="time">Time to Goal</button>
+    <button class="mode-btn" data-mode="lump">Lump Sum Needed Today</button>
+  </div>
+
+  <div class="calc-layout">
+    <div class="form-card">
+      <h2>🎯 Your Goal</h2>
+      <div class="input-group"><label for="goalAmount">Target Amount</label><div class="input-row"><input type="number" id="goalAmount" value="25000" min="0"><span id="currencySym1">$</span></div></div>
+      <div class="input-group"><label for="currentSavings">Current Savings (Head Start)</label><div class="input-row"><input type="number" id="currentSavings" value="4000" min="0"><span id="currencySym2">$</span></div></div>
+      <div class="input-group" id="timeGroup"><label for="timeYears">Time Horizon (Years)</label><div class="input-row"><input type="number" id="timeYears" value="3" min="0.1" step="0.1"><span>years</span></div></div>
+      <div class="input-group" id="monthlyGroup" style="display:none;"><label for="monthlyDeposit">Monthly Deposit</label><div class="input-row"><input type="number" id="monthlyDeposit" value="500" min="0"><span id="currencySym3">$</span></div></div>
+      <div class="input-group"><label for="annualReturn">Expected Annual Return (%)</label><div class="input-row"><input type="number" id="annualReturn" value="4.5" min="0" step="0.1"><span>%</span></div></div>
+      <div class="input-group"><label for="inflationRate">Inflation Rate (Optional, %)</label><div class="input-row"><input type="number" id="inflationRate" value="3" min="0" step="0.1"><span>%</span></div></div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-label" id="resultMainLabel">Required Monthly Deposit</div>
+      <div class="result-main" id="resultMainValue">$0</div>
+      <div class="result-label" id="resultSubLabel" style="margin-top:4px;">To reach your goal</div>
+      
+      <div class="result-grid">
+        <div class="result-item"><div class="label">Total Contributed</div><div class="value" id="totalContributed">$0</div></div>
+        <div class="result-item"><div class="label">Interest Earned</div><div class="value" id="interestEarned">$0</div></div>
+        <div class="result-item"><div class="label">Goal in Today's Money</div><div class="value" id="realValue">$0</div></div>
+        <div class="result-item"><div class="label">Time to Goal</div><div class="value" id="timeToGoal">0 mo</div></div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Progress</span><span id="progressPercent">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card" style="margin-top:24px;">
+    <h2>📊 Scenario Comparison</h2>
+    <table class="scenario-table">
+      <thead><tr><th>Scenario</th><th>Monthly Deposit</th><th>Time to Goal</th><th>Interest Earned</th></tr></thead>
+      <tbody id="scenarioBody"><tr><td colspan="4" style="text-align:center;color:var(--muted);">Calculating...</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="disclaimer">
+    <strong>✔ Methodology:</strong> Uses the <strong>Future Value of an Annuity</strong> formula: <code>FV = P(1+r)<sup>n</sup> + PMT × [((1+r)<sup>n</sup> − 1) / r]</code>. Inflation adjustment uses the Fisher equation. Returns are compounded monthly. This is an educational estimate, not financial advice.
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">© 2026 SitPanda. All rights reserved. | <a href="/privacy.html">Privacy</a> | <a href="/about.html">About</a> | <a href="/contact.html">Contact</a></div>
+</footer>
+
+<script>
+(function() {
+  const countryData = {
+    US:{currency:'USD',symbol:'$',locale:'en-US'}, GB:{currency:'GBP',symbol:'£',locale:'en-GB'}, CA:{currency:'CAD',symbol:'C$',locale:'en-CA'}, AU:{currency:'AUD',symbol:'A$',locale:'en-AU'}, NZ:{currency:'NZD',symbol:'NZ$',locale:'en-NZ'}, IE:{currency:'EUR',symbol:'€',locale:'en-IE'}, DE:{currency:'EUR',symbol:'€',locale:'de-DE'}, FR:{currency:'EUR',symbol:'€',locale:'fr-FR'}, ES:{currency:'EUR',symbol:'€',locale:'es-ES'}, IT:{currency:'EUR',symbol:'€',locale:'it-IT'}, NL:{currency:'EUR',symbol:'€',locale:'nl-NL'}, CH:{currency:'CHF',symbol:'Fr',locale:'de-CH'}, SE:{currency:'SEK',symbol:'kr',locale:'sv-SE'}, NO:{currency:'NOK',symbol:'kr',locale:'nb-NO'}, DK:{currency:'DKK',symbol:'kr',locale:'da-DK'}, PL:{currency:'PLN',symbol:'zł',locale:'pl-PL'}, CZ:{currency:'CZK',symbol:'Kč',locale:'cs-CZ'}, HU:{currency:'HUF',symbol:'Ft',locale:'hu-HU'}, RO:{currency:'RON',symbol:'lei',locale:'ro-RO'}, TR:{currency:'TRY',symbol:'₺',locale:'tr-TR'}, RU:{currency:'RUB',symbol:'₽',locale:'ru-RU'}, AE:{currency:'AED',symbol:'د.إ',locale:'ar-AE'}, SA:{currency:'SAR',symbol:'﷼',locale:'ar-SA'}, QA:{currency:'QAR',symbol:'ر.ق',locale:'ar-QA'}, KW:{currency:'KWD',symbol:'د.ك',locale:'ar-KW'}, BH:{currency:'BHD',symbol:'.د.ب',locale:'ar-BH'}, OM:{currency:'OMR',symbol:'ر.ع.',locale:'ar-OM'}, JO:{currency:'JOD',symbol:'د.ا',locale:'ar-JO'}, EG:{currency:'EGP',symbol:'E£',locale:'ar-EG'}, ZA:{currency:'ZAR',symbol:'R',locale:'en-ZA'}, NG:{currency:'NGN',symbol:'₦',locale:'en-NG'}, KE:{currency:'KES',symbol:'KSh',locale:'en-KE'}, GH:{currency:'GHS',symbol:'₵',locale:'en-GH'}, PK:{currency:'PKR',symbol:'₨',locale:'en-PK'}, IN:{currency:'INR',symbol:'₹',locale:'en-IN'}, BD:{currency:'BDT',symbol:'৳',locale:'bn-BD'}, LK:{currency:'LKR',symbol:'Rs',locale:'si-LK'}, NP:{currency:'NPR',symbol:'Rs',locale:'ne-NP'}, CN:{currency:'CNY',symbol:'¥',locale:'zh-CN'}, JP:{currency:'JPY',symbol:'¥',locale:'ja-JP'}, KR:{currency:'KRW',symbol:'₩',locale:'ko-KR'}, SG:{currency:'SGD',symbol:'S$',locale:'en-SG'}, MY:{currency:'MYR',symbol:'RM',locale:'ms-MY'}, TH:{currency:'THB',symbol:'฿',locale:'th-TH'}, ID:{currency:'IDR',symbol:'Rp',locale:'id-ID'}, PH:{currency:'PHP',symbol:'₱',locale:'en-PH'}, VN:{currency:'VND',symbol:'₫',locale:'vi-VN'}, HK:{currency:'HKD',symbol:'HK$',locale:'en-HK'}, TW:{currency:'TWD',symbol:'NT$',locale:'zh-TW'}, BR:{currency:'BRL',symbol:'R$',locale:'pt-BR'}, MX:{currency:'MXN',symbol:'MX$',locale:'es-MX'}, AR:{currency:'ARS',symbol:'$',locale:'es-AR'}, CL:{currency:'CLP',symbol:'$',locale:'es-CL'}, CO:{currency:'COP',symbol:'$',locale:'es-CO'}, PE:{currency:'PEN',symbol:'S/',locale:'es-PE'}
+  };
+
+  const countrySelect = document.getElementById('countrySelect');
+  Object.keys(countryData).sort().forEach(code => { const opt = document.createElement('option'); opt.value = code; opt.textContent = `${countryData[code].currency} (${countryData[code].symbol})`; countrySelect.appendChild(opt); });
+
+  const goalAmount = document.getElementById('goalAmount'), currentSavings = document.getElementById('currentSavings'), timeYears = document.getElementById('timeYears'), monthlyDeposit = document.getElementById('monthlyDeposit'), annualReturn = document.getElementById('annualReturn'), inflationRate = document.getElementById('inflationRate');
+  const currencySym1 = document.getElementById('currencySym1'), currencySym2 = document.getElementById('currencySym2'), currencySym3 = document.getElementById('currencySym3');
+  const resultMainLabel = document.getElementById('resultMainLabel'), resultMainValue = document.getElementById('resultMainValue'), resultSubLabel = document.getElementById('resultSubLabel'), totalContributed = document.getElementById('totalContributed'), interestEarned = document.getElementById('interestEarned'), realValue = document.getElementById('realValue'), timeToGoal = document.getElementById('timeToGoal'), progressPercent = document.getElementById('progressPercent'), progressFill = document.getElementById('progressFill'), scenarioBody = document.getElementById('scenarioBody');
+  const timeGroup = document.getElementById('timeGroup'), monthlyGroup = document.getElementById('monthlyGroup');
+
+  let currentSymbol = '$', currentLocale = 'en-US', currentCurrency = 'USD', currentMode = 'monthly';
+
+  function formatCurrency(amount) {
+    try { return new Intl.NumberFormat(currentLocale, {style:'currency', currency:currentCurrency, minimumFractionDigits:0, maximumFractionDigits:0}).format(amount); } 
+    catch(e) { return currentSymbol + ' ' + Math.round(amount).toLocaleString(); }
+  }
+
+  function applyCountry() {
+    const data = countryData[countrySelect.value]; if(!data) return;
+    currentSymbol = data.symbol; currentLocale = data.locale; currentCurrency = data.currency;
+    [currencySym1, currencySym2, currencySym3].forEach(el => el.textContent = currentSymbol);
+    calculate();
+  }
+  countrySelect.addEventListener('change', applyCountry);
+
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active')); this.classList.add('active'); currentMode = this.dataset.mode;
+      if(currentMode === 'time') { timeGroup.style.display = 'none'; monthlyGroup.style.display = 'block'; } 
+      else if(currentMode === 'monthly') { timeGroup.style.display = 'block'; monthlyGroup.style.display = 'none'; } 
+      else { timeGroup.style.display = 'block'; monthlyGroup.style.display = 'none'; }
+      calculate();
+    });
+  });
+
+  function calculate() {
+    const goal = parseFloat(goalAmount.value) || 0, current = parseFloat(currentSavings.value) || 0, years = parseFloat(timeYears.value) || 1, monthly = parseFloat(monthlyDeposit.value) || 0, annualR = parseFloat(annualReturn.value) || 0, inflation = parseFloat(inflationRate.value) || 0;
+    const n = years * 12, r = annualR / 12 / 100;
+
+    if(currentMode === 'time') {
+      if(monthly <= 0 && current <= 0) { resultMainLabel.textContent = 'Time to Goal'; resultMainValue.textContent = 'Never'; resultSubLabel.textContent = 'Enter a monthly deposit or starting balance.'; timeToGoal.textContent = '-'; progressFill.style.width = '0%'; progressPercent.textContent = '0%'; return; }
+      let months = 0, balance = current;
+      while(balance < goal && months < 1200) { balance = balance * (1 + r) + monthly; months++; }
+      const totalContr = current + (monthly * months), interest = Math.max(0, balance - totalContr);
+      resultMainLabel.textContent = 'Time to Goal'; resultMainValue.textContent = months + ' months'; resultSubLabel.textContent = `Approx. ${(months / 12).toFixed(1)} years`;
+      totalContributed.textContent = formatCurrency(totalContr); interestEarned.textContent = formatCurrency(interest);
+      realValue.textContent = formatCurrency(goal / Math.pow(1 + inflation / 100, months / 12)); timeToGoal.textContent = months + ' mo';
+      const progress = Math.min(100, (current / goal) * 100); progressFill.style.width = progress + '%'; progressPercent.textContent = progress.toFixed(0) + '%';
+      updateScenarios(current, goal, r, annualR, inflation); return;
+    }
+
+    if(currentMode === 'monthly') {
+      let reqMonthly = 0; const futureCurrent = current * Math.pow(1 + r, n);
+      if(goal > futureCurrent) { if(r === 0) { reqMonthly = (goal - current) / n; } else { reqMonthly = (goal - futureCurrent) * r / (Math.pow(1 + r, n) - 1); } }
+      resultMainLabel.textContent = 'Required Monthly Deposit'; resultMainValue.textContent = formatCurrency(reqMonthly); resultSubLabel.textContent = `To reach ${formatCurrency(goal)} in ${years} years`;
+      const totalContr = current + (reqMonthly * n), interest = Math.max(0, goal - totalContr);
+      totalContributed.textContent = formatCurrency(totalContr); interestEarned.textContent = formatCurrency(interest);
+      realValue.textContent = formatCurrency(goal / Math.pow(1 + inflation / 100, years)); timeToGoal.textContent = Math.round(n) + ' mo';
+      const progress = Math.min(100, (current / goal) * 100); progressFill.style.width = progress + '%'; progressPercent.textContent = progress.toFixed(0) + '%';
+      updateScenarios(current, goal, r, annualR, inflation, reqMonthly); return;
+    }
+
+    if(currentMode === 'lump') {
+      let reqLump = 0; if(goal > current) { reqLump = goal / Math.pow(1 + r, n); }
+      resultMainLabel.textContent = 'Lump Sum Needed Today'; resultMainValue.textContent = formatCurrency(reqLump); resultSubLabel.textContent = `To grow to ${formatCurrency(goal)} in ${years} years`;
+      const totalContr = reqLump, interest = Math.max(0, goal - totalContr);
+      totalContributed.textContent = formatCurrency(totalContr); interestEarned.textContent = formatCurrency(interest);
+      realValue.textContent = formatCurrency(goal / Math.pow(1
