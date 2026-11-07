@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Intake Calculator — How Much Water Should You Drink? | SitPanda</title>
+  <meta name="description" content="Calculate your daily water intake needs based on your weight, exercise duration, and climate. Find out exactly how many glasses of water you need to stay hydrated.">
+  <link rel="canonical" href="https://sitpanda.com/water-intake-calculator.html">
+  
+  <style>
+    :root {
+      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15,118,110,0.15);
+      --bg: #F8FAFC; --card: #FFFFFF; --ink: #0F172A; --ink-secondary: #475569; --muted: #94A3B8;
+      --border: #E2E8F0; --radius: 16px;
+      --shadow-sm: 0 1px 3px rgba(15,23,42,0.06);
+      --shadow: 0 4px 16px rgba(15,23,42,0.08);
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.dark {
+      --bg: #0B1120; --card: #1E293B; --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #64748B;
+      --border: #334155; --brand: #2DD4BF; --brand-hover: #5EEAD4; --brand-glow: rgba(45,212,191,0.12);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3); --shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased;
+      transition: background var(--transition), color var(--transition); min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input, select { font-family: inherit; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .site-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; flex-shrink: 0; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--brand), var(--brand-hover)); display: grid; place-items: center; font-size: 1.15rem; color: #fff; }
+    .header-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .back-btn { padding: 9px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--border); font-size: 0.88rem; font-weight: 600; color: var(--ink-secondary); display: flex; align-items: center; gap: 6px; }
+    .back-btn:hover { border-color: var(--brand); color: var(--brand); }
+    .theme-toggle { width: 42px; height: 42px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: grid; place-items: center; font-size: 1.2rem; cursor: pointer; }
+    .theme-toggle:hover { border-color: var(--brand); }
+
+    .page-title { font-size: clamp(1.7rem, 3.5vw, 2.3rem); font-weight: 800; letter-spacing: -0.6px; margin: 32px 0 8px; }
+    .page-title .highlight { color: var(--brand); }
+    .page-sub { color: var(--ink-secondary); font-size: 1rem; margin-bottom: 22px; max-width: 720px; }
+
+    .calc-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; align-items: start; }
+    @media (max-width: 860px) { .calc-layout { grid-template-columns: 1fr; } }
+
+    .form-card, .result-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-sm); }
+    .form-card h2 { font-size: 1.15rem; margin-bottom: 18px; }
+    
+    .toggle-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .tab-btn { flex: 1; padding: 10px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink-secondary); font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+    
+    .input-group { margin-bottom: 18px; }
+    .input-group label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 6px; color: var(--ink-secondary); }
+    .input-row { display: flex; gap: 8px; align-items: center; }
+    .input-row input, .input-row select { flex: 1; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink); font-size: 1rem; outline: none; }
+    .input-row input:focus, .input-row select:focus { border-color: var(--brand); }
+    .input-row span { font-size: 0.85rem; color: var(--muted); font-weight: 600; min-width: 35px; }
+
+    .result-card { background: linear-gradient(160deg, var(--brand-glow), var(--card) 60%); border-color: var(--brand); }
+    .result-label { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .result-main { font-size: 3rem; font-weight: 800; color: var(--brand); margin: 8px 0; line-height: 1.1; }
+    .result-sub { font-size: 1rem; color: var(--ink-secondary); font-weight: 500; margin-top: 4px; }
+
+    .glass-box { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 20px; padding: 16px; background: var(--bg); border-radius: 12px; border: 1px solid var(--border); }
+    .glass-box .num { font-size: 2rem; font-weight: 800; color: var(--brand); }
+    .glass-box .text { font-size: 0.9rem; color: var(--ink-secondary); text-align: left; }
+
+    .breakdown-table { width: 100%; border-collapse: collapse; margin-top: 24px; padding-top: 16px; }
+    .breakdown-table th, .breakdown-table td { padding: 10px 0; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+    .breakdown-table th { color: var(--muted); font-weight: 600; }
+    .breakdown-table td:last-child { text-align: right; font-weight: 700; }
+    .breakdown-table tr:last-child td { border-bottom: none; }
+
+    .disclaimer { margin-top: 24px; padding: 16px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; font-size: 0.85rem; color: var(--ink-secondary); }
+    .disclaimer strong { color: var(--brand); }
+    .seo-content { margin: 40px 0; max-width: 800px; }
+    .seo-content h2 { font-size: 1.3rem; margin: 28px 0 10px; }
+    .seo-content p, .seo-content li { color: var(--ink-secondary); font-size: 0.95rem; margin-bottom: 12px; }
+    .seo-content ul { margin-left: 20px; }
+
+    .site-footer { background: var(--card); border-top: 1px solid var(--border); padding: 36px 0 20px; margin-top: 40px; text-align: center; font-size: 0.82rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+    <div class="header-actions">
+      <a href="/" class="back-btn">← Back</a>
+      <button class="theme-toggle" id="themeToggle">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">Water Intake Calculator — <span class="highlight">How Much Water Do You Need?</span></h1>
+  <p class="page-sub">Calculate your personalized daily water requirement based on your body weight, exercise routine, and local climate.</p>
+
+  <div class="calc-layout">
+    <div class="form-card">
+      <h2>📊 Your Details</h2>
+      
+      <div class="toggle-tabs">
+        <button class="tab-btn active" data-unit="metric">Metric (kg)</button>
+        <button class="tab-btn" data-unit="imperial">Imperial (lb)</button>
+      </div>
+
+      <div class="input-group">
+        <label>Body Weight</label>
+        <div class="input-row">
+          <input type="number" id="weight" value="70">
+          <span id="weightUnit">kg</span>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Daily Exercise Duration</label>
+        <div class="input-row">
+          <input type="number" id="exercise" value="30" min="0" step="15">
+          <span>minutes</span>
+        </div>
+        <div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">Adds ~350ml per 30 mins of sweating.</div>
+      </div>
+
+      <div class="input-group">
+        <label>Climate / Weather</label>
+        <div class="input-row">
+          <select id="climate">
+            <option value="normal">Normal / Moderate (Spring/Autumn)</option>
+            <option value="hot">Hot / Humid (Summer)</option>
+            <option value="cold">Cold / Winter (Indoor heating)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-label">Daily Water Requirement</div>
+      <!-- Static fallback for crawlers -->
+      <div class="result-main" id="totalWater">2.80 Liters</div>
+      <div class="result-sub" id="totalWaterSub">About 11 cups (250ml each)</div>
+      
+      <div class="glass-box">
+        <div class="num" id="glassCount">11</div>
+        <div class="text">Glasses of water<br>(Assuming 250ml / 8oz glass)</div>
+      </div>
+
+      <table class="breakdown-table">
+        <thead>
+          <tr><th>Breakdown</th><th>Amount</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Base (Body Weight)</td><td id="baseWater">2.45 L</td></tr>
+          <tr><td>Exercise Adjustment</td><td id="exWater">+ 0.35 L</td></tr>
+          <tr><td>Climate Adjustment</td><td id="clWater">+ 0.00 L</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>✔ Methodology:</strong> Uses the standard hydration formula: <strong>35ml per kg</strong> of body weight. Adds 350ml for every 30 minutes of exercise, and 500ml for hot climates (or 250ml for cold climates with indoor heating). This is an educational estimate—listen to your body and consult a doctor if you have kidney or heart conditions.
+  </div>
+
+  <div class="seo-content">
+    <h2>Why the "8 Glasses a Day" Rule is a Myth</h2>
+    <p>You have probably heard that you should drink 8 glasses of water a day. While that's a good general goal, your actual needs depend on your body size, how much you sweat, and the weather. A 50kg sedentary person needs much less water than a 90kg athlete training in the summer.</p>
+    
+    <h2>Factors That Increase Water Needs</h2>
+    <ul>
+      <li><strong>Exercise:</strong> When you sweat, you lose water and electrolytes. You should drink an extra 1.5 to 2.5 cups (350-600ml) of water for every 30 minutes of exercise.</li>
+      <li><strong>Environment:</strong> Hot or humid weather can make you sweat more, requiring additional fluid intake. High altitudes and indoor heating can also increase water loss.</li>
+      <li><strong>Illness:</strong> Fever, vomiting, and diarrhea cause massive fluid loss. Doctors often recommend increasing water intake during these times.</li>
+    </ul>
+
+    <h2>Signs of Dehydration</h2>
+    <p>Thirst is the body's natural alarm system, but it's often a late indicator. Other signs include dark yellow urine, fatigue, dizziness, and dry mouth. If you are well-hydrated, your urine should be pale yellow and clear.</p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">© 2026 SitPanda. All rights reserved. | <a href="/privacy.html">Privacy</a> | <a href="/about.html">About</a> | <a href="/contact.html">Contact</a></div>
+</footer>
+
+<script>
+(function() {
+  const weight = document.getElementById('weight');
+  const weightUnit = document.getElementById('weightUnit');
+  const exercise = document.getElementById('exercise');
+  const climate = document.getElementById('climate');
+  
+  const totalWater = document.getElementById('totalWater');
+  const totalWaterSub = document.getElementById('totalWaterSub');
+  const glassCount = document.getElementById('glassCount');
+  const baseWater = document.getElementById('baseWater');
+  const exWater = document.getElementById('exWater');
+  const clWater = document.getElementById('clWater');
+
+  let currentUnit = 'metric';
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      currentUnit = this.dataset.unit;
+
+      if (currentUnit === 'metric') {
+        weightUnit.textContent = 'kg';
+        weight.value = 70;
+      } else {
+        weightUnit.textContent = 'lb';
+        weight.value = 154;
+      }
+      calculate();
+    });
+  });
+
+  [weight, exercise, climate].forEach(el => {
+    el.addEventListener('input', calculate);
+  });
+
+  function calculate() {
+    let weightKg = parseFloat(weight.value) || 0;
+    if (currentUnit === 'imperial') {
+      weightKg = weightKg * 0.453592; // Convert lb to kg
+    }
+
+    if (weightKg <= 0) return;
+
+    // 1. Base Water: 35ml per kg
+    let baseLiters = weightKg * 0.035;
+
+    // 2. Exercise: +350ml (0.35L) per 30 mins
+    const exMins = parseFloat(exercise.value) || 0;
+    let exLiters = (exMins / 30) * 0.35;
+
+    // 3. Climate
+    let clLiters = 0;
+    const clValue = climate.value;
+    if (clValue === 'hot') clLiters = 0.5;
+    else if (clValue === 'cold') clLiters = 0.25;
+
+    const totalLiters = baseLiters + exLiters + clLiters;
+
+    // Calculate glasses (250ml per glass)
+    const glasses = Math.round(totalLiters / 0.25);
+
+    // Formatting based on unit
+    if (currentUnit === 'metric') {
+      totalWater.textContent = totalLiters.toFixed(2) + ' Liters';
+      totalWaterSub.textContent = `About ${glasses} cups (250ml each)`;
+      baseWater.textContent = baseLiters.toFixed(2) + ' L';
+      exWater.textContent = '+ ' + exLiters.toFixed(2) + ' L';
+      clWater.textContent = '+ ' + clLiters.toFixed(2) + ' L';
+    } else {
+      // Convert Liters to Ounces (1 Liter = 33.814 oz)
+      const totalOz = totalLiters * 33.814;
+      totalWater.textContent = totalOz.toFixed(0) + ' oz';
+      totalWaterSub.textContent = `About ${glasses} cups (8oz each)`;
+      baseWater.textContent = (baseLiters * 33.814).toFixed(0) + ' oz';
+      exWater.textContent = '+ ' + (exLiters * 33.814).toFixed(0) + ' oz';
+      clWater.textContent = '+ ' + (clLiters * 33.814).toFixed(0) + ' oz';
+    }
+
+    glassCount.textContent = glasses;
+  }
+
+  const themeToggle = document.getElementById('themeToggle'); 
+  if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} 
+  themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+
+  calculate();
+})();
+</script>
+</body>
+  </html>
