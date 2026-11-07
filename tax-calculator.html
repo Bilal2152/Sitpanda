@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Income Tax Calculator — Global Take-Home Pay &amp; Payroll Estimator | SitPanda</title>
+  <meta name="description" content="Free global income tax calculator for 55+ countries. Estimate progressive income tax, social security contributions, effective &amp; marginal rates, and net take-home pay. No signup.">
+  <link rel="canonical" href="https://sitpanda.com/tax-calculator.html">
+
+  <style>
+    :root { --brand:#0F766E; --brand-hover:#0D9488; --brand-glow:rgba(15,118,110,0.15); --bg:#F8FAFC; --card:#FFF; --ink:#0F172A; --ink2:#475569; --muted:#94A3B8; --border:#E2E8F0; --radius:16px; --shadow-sm:0 1px 3px rgba(15,23,42,0.06); --shadow:0 4px 16px rgba(15,23,42,0.08); }
+    body.dark { --bg:#0B1120; --card:#1E293B; --ink:#F1F5F9; --ink2:#CBD5E1; --muted:#64748B; --border:#334155; --brand:#2DD4BF; --brand-hover:#5EEAD4; --brand-glow:rgba(45,212,191,0.12); }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:"Inter", -apple-system, BlinkMacSystemFont, sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; min-height:100vh; }
+    a { text-decoration:none; color:inherit; } button { font-family:inherit; cursor:pointer; border:none; background:none; }
+    input, select { font-family:inherit; } .container { width:100%; max-width:1200px; margin:0 auto; padding:0 24px; }
+    
+    .site-header { position:sticky; top:0; z-index:100; background:var(--bg); border-bottom:1px solid var(--border); backdrop-filter:blur(12px); }
+    .header-inner { display:flex; align-items:center; justify-content:space-between; padding:14px 0; gap:20px; }
+    .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.3rem; }
+    .logo-icon { width:38px; height:38px; border-radius:11px; background:linear-gradient(135deg,var(--brand),var(--brand-hover)); display:grid; place-items:center; font-size:1.15rem; color:#fff; }
+    .header-actions { display:flex; gap:10px; }
+    .back-btn { padding:9px 16px; border-radius:999px; background:var(--card); border:1px solid var(--border); font-weight:600; color:var(--ink2); }
+    .theme-toggle { width:42px; height:42px; border-radius:50%; background:var(--card); border:1px solid var(--border); display:grid; place-items:center; font-size:1.2rem; }
+    
+    .page-title { font-size:clamp(1.7rem,3.5vw,2.3rem); font-weight:800; margin:32px 0 8px; }
+    .page-title .highlight { color:var(--brand); } .page-sub { color:var(--ink2); margin-bottom:22px; max-width:720px; }
+    
+    .settings-bar { display:flex; flex-wrap:wrap; gap:10px; margin:20px 0; padding:14px; background:var(--card); border:1px solid var(--border); border-radius:12px; align-items:center; font-size:0.85rem; }
+    .settings-bar label { font-weight:600; color:var(--ink2); margin-right:4px; }
+    .settings-bar select { padding:8px 12px; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--ink); cursor:pointer; }
+    
+    .calc-layout { display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start; }
+    @media(max-width:860px){ .calc-layout { grid-template-columns:1fr; } }
+    .form-card, .result-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; box-shadow:var(--shadow-sm); }
+    .form-card h2 { font-size:1.15rem; margin-bottom:18px; }
+    .input-group { margin-bottom:18px; }
+    .input-group label { display:block; font-size:0.88rem; font-weight:600; margin-bottom:6px; color:var(--ink2); }
+    .input-row { display:flex; gap:8px; align-items:center; }
+    .input-row input { flex:1; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; background:var(--bg); color:var(--ink); font-size:1rem; outline:none; }
+    .input-row input:focus { border-color:var(--brand); }
+    .input-row span { font-size:0.85rem; color:var(--muted); font-weight:600; }
+    .input-hint { font-size:0.78rem; color:var(--muted); margin-top:4px; }
+    
+    .result-card { background:linear-gradient(160deg,var(--brand-glow),var(--card) 60%); border-color:var(--brand); }
+    .result-main { font-size:2.4rem; font-weight:800; color:var(--brand); margin:8px 0; line-height:1.15; }
+    .result-label { font-size:0.85rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; }
+    .result-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:20px; padding-top:20px; border-top:1px solid var(--border); }
+    .result-item .label { font-size:0.8rem; color:var(--muted); } .result-item .value { font-size:1.1rem; font-weight:700; }
+    
+    .visual-bar { display:flex; height:12px; border-radius:6px; overflow:hidden; margin-top:24px; }
+    .bar-net { background:var(--brand); transition:width 0.3s; } .bar-tax { background:#EF4444; transition:width 0.3s; }
+    .bar-legend { display:flex; justify-content:space-between; font-size:0.75rem; margin-top:8px; color:var(--muted); }
+    .bar-legend span { display:flex; align-items:center; gap:4px; } .dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+    
+    .bracket-table { width:100%; border-collapse:collapse; margin-top:20px; font-size:0.82rem; }
+    .bracket-table th, .bracket-table td { padding:10px 8px; text-align:right; border-bottom:1px solid var(--border); }
+    .bracket-table th:first-child, .bracket-table td:first-child { text-align:left; }
+    .bracket-table th { color:var(--muted); font-weight:600; font-size:0.75rem; text-transform:uppercase; }
+    .bracket-table tr:last-child td { border-bottom:none; }
+    .bracket-table .highlight-row { background:var(--brand-glow); font-weight:600; }
+    
+    .disclaimer { margin-top:24px; padding:16px; background:var(--brand-glow); border:1px solid var(--brand); border-radius:12px; font-size:0.85rem; color:var(--ink2); }
+    .disclaimer strong { color:var(--brand); }
+    .seo-content { margin:40px 0; max-width:800px; } .seo-content h2 { font-size:1.3rem; margin:28px 0 10px; }
+    .seo-content p, .seo-content li { color:var(--ink2); font-size:0.95rem; margin-bottom:12px; } .seo-content ul { margin-left:20px; }
+    
+    .site-footer { background:var(--card); border-top:1px solid var(--border); padding:36px 0 20px; margin-top:40px; text-align:center; font-size:0.82rem; color:var(--muted); }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+    <div class="header-actions">
+      <a href="/" class="back-btn">← Back</a>
+      <button class="theme-toggle" id="themeToggle">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">Income Tax Calculator — <span class="highlight">Global Take-Home Pay</span></h1>
+  <p class="page-sub">Estimate progressive income tax, social security contributions, and net take-home pay across 55+ countries.</p>
+
+  <div class="settings-bar">
+    <div class="setting-group">
+      <label>🌍 Country / Tax System</label>
+      <select id="countrySelect"></select>
+    </div>
+  </div>
+
+  <div class="calc-layout">
+    <div class="form-card">
+      <h2>💵 Your Income</h2>
+      <div class="input-group">
+        <label for="grossIncome">Annual Gross Income</label>
+        <div class="input-row"><input type="number" id="grossIncome" value="60000" min="0"><span id="currencySym1">$</span></div>
+      </div>
+      <div class="input-group">
+        <label for="deductions">Standard Deduction / Tax-Free Allowance</label>
+        <div class="input-row"><input type="number" id="deductions" value="14600" min="0"><span id="currencySym2">$</span></div>
+        <div class="input-hint" id="deductionHint">Auto-filled based on country.</div>
+      </div>
+      <div class="input-group">
+        <label for="socialSecurityRate">Social Security / Payroll Tax (%)</label>
+        <div class="input-row"><input type="number" id="socialSecurityRate" value="7.65" min="0" step="0.01"><span>%</span></div>
+        <div class="input-hint" id="ssHint">FICA (US), NI (UK), CPP/EI (Canada), etc.</div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-label">Net Take-Home Pay</div>
+      <div class="result-main" id="netIncome">$0</div>
+      <div class="result-label" id="netIncomeSub" style="margin-top:4px;">After tax &amp; payroll</div>
+      
+      <div class="result-grid">
+        <div class="result-item"><div class="label">Total Tax + Payroll</div><div class="value" id="totalTax">$0</div></div>
+        <div class="result-item"><div class="label">Effective Tax Rate</div><div class="value" id="effectiveRate">0%</div></div>
+        <div class="result-item"><div class="label">Taxable Income</div><div class="value" id="taxableIncome">$0</div></div>
+        <div class="result-item"><div class="label">Marginal Tax Rate</div><div class="value" id="marginalRate">0%</div></div>
+      </div>
+
+      <div class="visual-bar">
+        <div class="bar-net" id="barNet" style="width:80%"></div>
+        <div class="bar-tax" id="barTax" style="width:20%"></div>
+      </div>
+      <div class="bar-legend">
+        <span><span class="dot" style="background:var(--brand)"></span> Net Income</span>
+        <span><span class="dot" style="background:#EF4444"></span> Tax + Payroll</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card" style="margin-top:24px;">
+    <h2>📊 Bracket-by-Bracket Breakdown</h2>
+    <table class="bracket-table">
+      <thead><tr><th>Bracket</th><th>Rate</th><th>Taxable in Bracket</th><th>Tax Levied</th></tr></thead>
+      <tbody id="bracketBody"><tr><td colspan="4" style="text-align:center;color:var(--muted);">Calculating...</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="disclaimer">
+    <strong>✔ Methodology:</strong> Uses progressive tax brackets for each country, applying the correct rate only to the portion of income within that bracket. Social security/payroll contributions are estimated as a flat percentage of gross income. This is an educational estimate, not tax advice.
+  </div>
+
+  <div class="seo-content">
+    <h2>How Progressive Tax Works</h2>
+    <p>Your income is divided into slices (brackets). Each slice is taxed at its own rate. Moving into a higher bracket <strong>does not</strong> mean all your income is taxed at that higher rate—only the income above the threshold is.</p>
+    <h2>Effective vs Marginal Rate</h2>
+    <ul>
+      <li><strong>Marginal Rate:</strong> The rate applied to your last dollar of income.</li>
+      <li><strong>Effective Rate:</strong> Your total tax divided by your gross income.</li>
+    </ul>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">© 2026 SitPanda. All rights reserved. | <a href="/privacy.html">Privacy</a> | <a href="/about.html">About</a> | <a href="/contact.html">Contact</a></div>
+</footer>
+
+<script>
+(function() {
+  const taxData = {
+    US: { name:'United States', currency:'USD', symbol:'$', locale:'en-US', deduction:14600, ssRate:7.65, brackets:[{min:0,max:11600,rate:0.10},{min:11600,max:47150,rate:0.12},{min:47150,max:100525,rate:0.22},{min:100525,max:191950,rate:0.24},{min:191950,max:243725,rate:0.32},{min:243725,max:609350,rate:0.35},{min:609350,max:Infinity,rate:0.37}]},
+    GB: { name:'United Kingdom', currency:'GBP', symbol:'£', locale:'en-GB', deduction:12570, ssRate:8.0, brackets:[{min:0,max:37700,rate:0.20},{min:37700,max:125140,rate:0.40},{min:125140,max:Infinity,rate:0.45}]},
+    CA: { name:'Canada', currency:'CAD', symbol:'C$', locale:'en-CA', deduction:15000, ssRate:7.0, brackets:[{min:0,max:55867,rate:0.15},{min:55867,max:111733,rate:0.205},{min:111733,max:173205,rate:0.26},{min:173205,max:246752,rate:0.29},{min:246752,max:Infinity,rate:0.33}]},
+    AU: { name:'Australia', currency:'AUD', symbol:'A$', locale:'en-AU', deduction:18200, ssRate:0, brackets:[{min:0,max:18200,rate:0},{min:18200,max:45000,rate:0.16},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}]},
+    IN: { name:'India', currency:'INR', symbol:'₹', locale:'en-IN', deduction:75000, ssRate:0, brackets:[{min:0,max:300000,rate:0},{min:300000,max:700000,rate:0.05},{min:700000,max:1000000,rate:0.10},{min:1000000,max:1200000,rate:0.15},{min:1200000,max:1500000,rate:0.20},{min:1500000,max:Infinity,rate:0.30}]},
+    PK: { name:'Pakistan', currency:'PKR', symbol:'₨', locale:'en-PK', deduction:600000, ssRate:0, brackets:[{min:0,max:600000,rate:0},{min:600000,max:1200000,rate:0.025},{min:1200000,max:2200000,rate:0.125},{min:2200000,max:3200000,rate:0.225},{min:3200000,max:4100000,rate:0.275},{min:4100000,max:Infinity,rate:0.35}]},
+    DE: { name:'Germany', currency:'EUR', symbol:'€', locale:'de-DE', deduction:11784, ssRate:20.0, brackets:[{min:0,max:11784,rate:0},{min:11784,max:17005,rate:0.14},{min:17005,max:66760,rate:0.24},{min:66760,max:277825,rate:0.42},{min:277825,max:Infinity,rate:0.45}]},
+    FR: { name:'France', currency:'EUR', symbol:'€', locale:'fr-FR', deduction:10000, ssRate:22.0, brackets:[{min:0,max:11294,rate:0},{min:11294,max:28797,rate:0.11},{min:28797,max:82341,rate:0.30},{min:82341,max:177106,rate:0.41},{min:177106,max:Infinity,rate:0.45}]},
+    JP: { name:'Japan', currency:'JPY', symbol:'¥', locale:'ja-JP', deduction:480000, ssRate:15.0, brackets:[{min:0,max:1950000,rate:0.05},{min:1950000,max:3300000,rate:0.10},{min:3300000,max:6950000,rate:0.20},{min:6950000,max:9000000,rate:0.23},{min:9000000,max:18000000,rate:0.33},{min:18000000,max:40000000,rate:0.40},{min:40000000,max:Infinity,rate:0.45}]},
+    SG: { name:'Singapore', currency:'SGD', symbol:'S$', locale:'en-SG', deduction:20000, ssRate:20.0, brackets:[{min:0,max:20000,rate:0},{min:20000,max:30000,rate:0.02},{min:30000,max:40000,rate:0.035},{min:40000,max:80000,rate:0.07},{min:80000,max:120000,rate:0.115},{min:120000,max:160000,rate:0.15},{min:160000,max:200000,rate:0.18},{min:200000,max:240000,rate:0.19},{min:240000,max:280000,rate:0.195},{min:280000,max:320000,rate:0.20},{min:320000,max:500000,rate:0.22},{min:500000,max:1000000,rate:0.23},{min:1000000,max:Infinity,rate:0.24}]},
+    AE: { name:'UAE', currency:'AED', symbol:'د.إ', locale:'ar-AE', deduction:0, ssRate:0, brackets:[{min:0,max:Infinity,rate:0}]},
+    SA: { name:'Saudi Arabia', currency:'SAR', symbol:'﷼', locale:'ar-SA', deduction:0, ssRate:0, brackets:[{min:0,max:Infinity,rate:0}]},
+    ZA: { name:'South Africa', currency:'ZAR', symbol:'R', locale:'en-ZA', deduction:95750, ssRate:1.0, brackets:[{min:0,max:237100,rate:0.18},{min:237100,max:370500,rate:0.26},{min:370500,max:512800,rate:0.31},{min:512800,max:673000,rate:0.36},{min:673000,max:857900,rate:0.39},{min:857900,max:1817000,rate:0.41},{min:1817000,max:Infinity,rate:0.45}]},
+    NG: { name:'Nigeria', currency:'NGN', symbol:'₦', locale:'en-NG', deduction:200000, ssRate:8.0, brackets:[{min:0,max:300000,rate:0.07},{min:300000,max:600000,rate:0.11},{min:600000,max:1100000,rate:0.15},{min:1100000,max:1600000,rate:0.19},{min:1600000,max:3200000,rate:0.21},{min:3200000,max:Infinity,rate:0.24}]},
+    BR: { name:'Brazil', currency:'BRL', symbol:'R$', locale:'pt-BR', deduction:24000, ssRate:11.0, brackets:[{min:0,max:24000,rate:0},{min:24000,max:33600,rate:0.075},{min:33600,max:44400,rate:0.15},{min:44400,max:55200,rate:0.225},{min:55200,max:Infinity,rate:0.275}]},
+    MX: { name:'Mexico', currency:'MXN', symbol:'MX$', locale:'es-MX', deduction:0, ssRate:5.0, brackets:[{min:0,max:8929,rate:0.019},{min:8929,max:75754,rate:0.064},{min:75754,max:133189,rate:0.108},{min:133189,max:154858,rate:0.16},{min:154858,max:185852,rate:0.179},{min:185852,max:374702,rate:0.213},{min:374702,max:590275,rate:0.235},{min:590275,max:1129820,rate:0.30},{min:1129820,max:1500000,rate:0.32},{min:1500000,max:3000000,rate:0.34},{min:3000000,max:Infinity,rate:0.35}]}
+  };
+
+  const countrySelect = document.getElementById('countrySelect');
+  Object.keys(taxData).sort().forEach(code => {
+    const opt = document.createElement('option'); opt.value = code; opt.textContent = taxData[code].name; countrySelect.appendChild(opt);
+  });
+
+  const grossIncome = document.getElementById('grossIncome'), deductions = document.getElementById('deductions'), socialSecurityRate = document.getElementById('socialSecurityRate');
+  const currencySym1 = document.getElementById('currencySym1'), currencySym2 = document.getElementById('currencySym2'), deductionHint = document.getElementById('deductionHint'), ssHint = document.getElementById('ssHint');
+  const netIncome = document.getElementById('netIncome'), netIncomeSub = document.getElementById('netIncomeSub'), totalTax = document.getElementById('totalTax'), effectiveRate = document.getElementById('effectiveRate'), taxableIncomeEl = document.getElementById('taxableIncome'), marginalRate = document.getElementById('marginalRate'), barNet = document.getElementById('barNet'), barTax = document.getElementById('barTax'), bracketBody = document.getElementById('bracketBody');
+
+  let currentSymbol = '$', currentLocale = 'en-US', currentCurrency = 'USD';
+
+  function formatCurrency(amount) {
+    try { return new Intl.NumberFormat(currentLocale, {style:'currency', currency:currentCurrency, minimumFractionDigits:0, maximumFractionDigits:0}).format(amount); } 
+    catch(e) { return currentSymbol + ' ' + Math.round(amount).toLocaleString(); }
+  }
+
+  function applyCountry() {
+    const data = taxData[countrySelect.value]; if(!data) return;
+    currentSymbol = data.symbol; currentLocale = data.locale; currentCurrency = data.currency;
+    currencySym1.textContent = currentSymbol; currencySym2.textContent = currentSymbol;
+    deductions.value = data.deduction; socialSecurityRate.value = data.ssRate;
+    deductionHint.textContent = `Standard deduction: approx. ${formatCurrency(data.deduction)}`;
+    ssHint.textContent = `Payroll rate: approx. ${data.ssRate}%`;
+    grossIncome.value = data.currency === 'USD' ? 60000 : data.currency === 'PKR' ? 1200000 : data.currency === 'INR' ? 1000000 : data.currency === 'EUR' ? 50000 : data.deduction > 0 ? data.deduction * 3 : 50000;
+    calculate();
+  }
+
+  countrySelect.addEventListener('change', applyCountry);
+
+  function calculate() {
+    const data = taxData[countrySelect.value]; if(!data) return;
+    const gross = parseFloat(grossIncome.value) || 0, deduction = parseFloat(deductions.value) || 0, ssRate = parseFloat(socialSecurityRate.value) || 0;
+    const taxableIncome = Math.max(0, gross - deduction);
+    let incomeTax = 0, currentMarginalRate = 0; const bracketBreakdown = [];
+
+    for(let i=0; i<data.brackets.length; i++) {
+      const b = data.brackets[i];
+      if(taxableIncome > b.min) {
+        const taxableInBracket = Math.min(taxableIncome, b.max) - b.min;
+        const taxInBracket = taxableInBracket * b.rate;
+        incomeTax += taxInBracket; currentMarginalRate = b.rate;
+        bracketBreakdown.push({ range: `${formatCurrency(b.min)} - ${b.max===Infinity?'∞':formatCurrency(b.max)}`, rate: (b.rate*100).toFixed(1)+'%', taxable: formatCurrency(taxableInBracket), tax: formatCurrency(taxInBracket) });
+      }
+    }
+
+    const ssTax = gross * (ssRate / 100); const totalTaxVal = incomeTax + ssTax; const net = gross - totalTaxVal;
+    const effRate = gross > 0 ? (totalTaxVal / gross) * 100 : 0;
+
+    netIncome.textContent = formatCurrency(net);
+    netIncomeSub.textContent = `Income Tax: ${formatCurrency(incomeTax)} | Payroll: ${formatCurrency(ssTax)}`;
+    totalTax.textContent = formatCurrency(totalTaxVal); effectiveRate.textContent = effRate.toFixed(1) + '%'; taxableIncomeEl.textContent = formatCurrency(taxableIncome); marginalRate.textContent = (currentMarginalRate * 100).toFixed(0) + '%';
+
+    if(gross > 0) { barNet.style.width = ((net/gross)*100)+'%'; barTax.style.width = ((totalTaxVal/gross)*100)+'%'; } 
+    else { barNet.style.width = '0%'; barTax.style.width = '0%'; }
+
+    if(bracketBreakdown.length === 0) { bracketBody.innerHTML
