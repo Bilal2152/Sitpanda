@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Time Calculator — Add or Subtract Hours, Minutes &amp; Seconds | SitPanda</title>
+  <meta name="description" content="Free online time calculator. Add or subtract two time durations (hours, minutes, seconds) to find the total time.">
+  <link rel="canonical" href="https://sitpanda.com/time-calculator.html">
+  
+  <style>
+    :root {
+      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15,118,110,0.15);
+      --bg: #F8FAFC; --card: #FFFFFF; --ink: #0F172A; --ink-secondary: #475569; --muted: #94A3B8;
+      --border: #E2E8F0; --radius: 16px; --shadow-sm: 0 1px 3px rgba(15,23,42,0.06); --shadow: 0 4px 16px rgba(15,23,42,0.08);
+    }
+    body.dark {
+      --bg: #0B1120; --card: #1E293B; --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #64748B;
+      --border: #334155; --brand: #2DD4BF; --brand-hover: #5EEAD4; --brand-glow: rgba(45,212,191,0.12);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; } button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input { font-family: inherit; } .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .site-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--brand), var(--brand-hover)); display: grid; place-items: center; font-size: 1.15rem; color: #fff; }
+    .header-actions { display: flex; gap: 10px; }
+    .back-btn { padding: 9px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--border); font-weight: 600; color: var(--ink-secondary); }
+    .theme-toggle { width: 42px; height: 42px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: grid; place-items: center; font-size: 1.2rem; }
+
+    .page-title { font-size: 2.3rem; font-weight: 800; margin: 32px 0 8px; text-align: center; }
+    .page-sub { color: var(--ink-secondary); text-align: center; margin-bottom: 32px; }
+
+    .calc-wrapper { max-width: 800px; margin: 0 auto 40px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-sm); }
+    
+    .mode-tabs { display: flex; gap: 8px; margin-bottom: 24px; justify-content: center; }
+    .tab-btn { padding: 10px 24px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink-secondary); font-weight: 600; cursor: pointer; font-size: 1rem; }
+    .tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+    .time-row { display: flex; align-items: flex-end; justify-content: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+    .time-group { text-align: center; }
+    .time-group label { display: block; font-size: 0.8rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; }
+    .time-group input { width: 80px; padding: 12px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink); font-size: 1.5rem; text-align: center; outline: none; font-weight: 700; }
+    .time-group input:focus { border-color: var(--brand); }
+    .time-sep { font-size: 2rem; font-weight: 700; color: var(--muted); padding-bottom: 4px; }
+    
+    .operator-select { font-size: 1.5rem; padding: 10px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--brand); cursor: pointer; font-weight: 700; height: 56px; margin-bottom: 4px; }
+
+    .result-box { text-align: center; padding: 24px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; margin-top: 24px; }
+    .result-box .label { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; font-weight: 600; }
+    <div class="result-box">
+      <div class="label">Total Result</div>
+      <!-- Static fallback -->
+      <div class="value" id="timeResult">13 : 30 : 00</div>
+      <div class="sub" id="timeSub">(13 hours, 30 minutes)</div>
+    </div>
+
+    .disclaimer { max-width: 800px; margin: 0 auto; padding: 16px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; font-size: 0.85rem; color: var(--ink-secondary); }
+    .site-footer { text-align: center; padding: 36px 0; border-top: 1px solid var(--border); margin-top: 40px; font-size: 0.82rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🐼</span>SitPanda</a>
+    <div class="header-actions"><a href="/" class="back-btn">← Back</a><button class="theme-toggle" id="themeToggle">🌙</button></div>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">Time Calculator</h1>
+  <p class="page-sub">Add or subtract hours, minutes, and seconds.</p>
+
+  <div class="calc-wrapper">
+    <div class="mode-tabs">
+      <button class="tab-btn active" id="tabAdd">Add Time (+)</button>
+      <button class="tab-btn" id="tabSubtract">Subtract Time (−)</button>
+    </div>
+
+    <!-- Time Row -->
+    <div class="time-row">
+      <!-- Time 1 -->
+      <div class="time-group"><label>Hours</label><input type="number" id="h1" value="10" min="0"></div>
+      <div class="time-sep">:</div>
+      <div class="time-group"><label>Mins</label><input type="number" id="m1" value="30" min="0"></div>
+      <div class="time-sep">:</div>
+      <div class="time-group"><label>Secs</label><input type="number" id="s1" value="0" min="0"></div>
+
+      <!-- Operator -->
+      <div style="display:flex; flex-direction:column; justify-content:flex-end;">
+        <select class="operator-select" id="operator">
+          <option value="+">+</option>
+          <option value="-">−</option>
+        </select>
+      </div>
+
+      <!-- Time 2 -->
+      <div class="time-group"><label>Hours</label><input type="number" id="h2" value="3" min="0"></div>
+      <div class="time-sep">:</div>
+      <div class="time-group"><label>Mins</label><input type="number" id="m2" value="45" min="0"></div>
+      <div class="time-sep">:</div>
+      <div class="time-group"><label>Secs</label><input type="number" id="s2" value="30" min="0"></div>
+    </div>
+
+    <div class="result-box">
+      <div class="label">Total Result</div>
+      <div class="value" id="timeResult">14 : 15 : 30</div>
+      <div class="sub" id="timeSub">(14 hours, 15 minutes, 30 seconds)</div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>✔ How it works:</strong> If the total minutes or seconds exceed 59, they automatically carry over to hours. For subtraction, the result cannot be negative (Time 2 must be smaller than Time 1).
+  </div>
+</main>
+
+<footer class="site-footer">© 2026 SitPanda. All rights reserved.</footer>
+
+<script>
+(function() {
+  const tabAdd = document.getElementById('tabAdd');
+  const tabSubtract = document.getElementById('tabSubtract');
+  const operator = document.getElementById('operator');
+  
+  const h1 = document.getElementById('h1'), m1 = document.getElementById('m1'), s1 = document.getElementById('s1');
+  const h2 = document.getElementById('h2'), m2 = document.getElementById('m2'), s2 = document.getElementById('s2');
+  
+  const timeResult = document.getElementById('timeResult');
+  const timeSub = document.getElementById('timeSub');
+
+  function setMode(mode) {
+    if (mode === 'add') {
+      tabAdd.classList.add('active'); tabSubtract.classList.remove('active');
+      operator.value = '+';
+    } else {
+      tabSubtract.classList.add('active'); tabAdd.classList.remove('active');
+      operator.value = '-';
+    }
+    calculate();
+  }
+
+  tabAdd.addEventListener('click', () => setMode('add'));
+  tabSubtract.addEventListener('click', () => setMode('subtract'));
+
+  function calculate() {
+    const hours1 = parseInt(h1.value) || 0;
+    const mins1 = parseInt(m1.value) || 0;
+    const secs1 = parseInt(s1.value) || 0;
+
+    const hours2 = parseInt(h2.value) || 0;
+    const mins2 = parseInt(m2.value) || 0;
+    const secs2 = parseInt(s2.value) || 0;
+
+    // Convert both to total seconds
+    const totalSecs1 = (hours1 * 3600) + (mins1 * 60) + secs1;
+    const totalSecs2 = (hours2 * 3600) + (mins2 * 60) + secs2;
+
+    let finalSecs = 0;
+    if (operator.value === '+') {
+      finalSecs = totalSecs1 + totalSecs2;
+    } else {
+      finalSecs = totalSecs1 - totalSecs2;
+      if (finalSecs < 0) {
+        timeResult.textContent = 'Negative';
+        timeSub.textContent = '(Time 1 is smaller than Time 2)';
+        return;
+      }
+    }
+
+    // Convert back to H:M:S
+    const resultHours = Math.floor(finalSecs / 3600);
+    const resultMins = Math.floor((finalSecs % 3600) / 60);
+    const resultSecs = finalSecs % 60;
+
+    // Format with leading zeros
+    const pad = (num) => String(num).padStart(2, '0');
+    
+    timeResult.textContent = `${pad(resultHours)} : ${pad(resultMins)} : ${pad(resultSecs)}`;
+    
+    // Build sub-text
+    let subParts = [];
+    if (resultHours > 0) subParts.push(`${resultHours} hour${resultHours !== 1 ? 's' : ''}`);
+    if (resultMins > 0) subParts.push(`${resultMins} minute${resultMins !== 1 ? 's' : ''}`);
+    if (resultSecs > 0) subParts.push(`${resultSecs} second${resultSecs !== 1 ? 's' : ''}`);
+    
+    timeSub.textContent = subParts.length > 0 ? `(${subParts.join(', ')})` : '(0 seconds)';
+  }
+
+  [h1, m1, s1, h2, m2, s2, operator].forEach(el => el.addEventListener('input', calculate));
+  [operator].forEach(el => el.addEventListener('change', calculate));
+
+  const themeToggle = document.getElementById('themeToggle'); if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+
+  calculate();
+})();
+</script>
+</body>
+</html>
