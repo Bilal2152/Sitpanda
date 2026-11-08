@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Average Calculator — Mean, Median &amp; Mode | SitPanda</title>
+  <meta name="description" content="Free online average calculator. Enter a list of numbers to instantly calculate the Mean (average), Median, Mode, and Range.">
+  <link rel="canonical" href="https://sitpanda.com/average-calculator.html">
+  
+  <style>
+    :root {
+      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15,118,110,0.15);
+      --bg: #F8FAFC; --card: #FFFFFF; --ink: #0F172A; --ink-secondary: #475569; --muted: #94A3B8;
+      --border: #E2E8F0; --radius: 16px; --shadow-sm: 0 1px 3px rgba(15,23,42,0.06); --shadow: 0 4px 16px rgba(15,23,42,0.08);
+    }
+    body.dark {
+      --bg: #0B1120; --card: #1E293B; --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #64748B;
+      --border: #334155; --brand: #2DD4BF; --brand-hover: #5EEAD4; --brand-glow: rgba(45,212,191,0.12);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; } button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    textarea { font-family: inherit; } .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .site-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--brand), var(--brand-hover)); display: grid; place-items: center; font-size: 1.15rem; color: #fff; }
+    .header-actions { display: flex; gap: 10px; }
+    .back-btn { padding: 9px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--border); font-weight: 600; color: var(--ink-secondary); }
+    .theme-toggle { width: 42px; height: 42px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: grid; place-items: center; font-size: 1.2rem; }
+
+    .page-title { font-size: 2.3rem; font-weight: 800; margin: 32px 0 8px; text-align: center; }
+    .page-sub { color: var(--ink-secondary); text-align: center; margin-bottom: 32px; }
+
+    .calc-wrapper { max-width: 800px; margin: 0 auto 40px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-sm); }
+    
+    textarea { width: 100%; padding: 16px; border: 1.5px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--ink); font-size: 1.1rem; outline: none; resize: vertical; min-height: 120px; line-height: 1.5; }
+    textarea:focus { border-color: var(--brand); }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 8px; }
+
+    .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-top: 24px; }
+    .result-card { background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; padding: 20px; text-align: center; }
+    .result-card .label { font-size: 0.8rem; color: var(--ink-secondary); text-transform: uppercase; font-weight: 600; }
+    .result-card .value { font-size: 2rem; font-weight: 800; color: var(--brand); margin-top: 4px; }
+    .result-card .sub { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+
+    .disclaimer { max-width: 800px; margin: 0 auto; padding: 16px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; font-size: 0.85rem; color: var(--ink-secondary); }
+    .disclaimer strong { color: var(--brand); }
+    .site-footer { text-align: center; padding: 36px 0; border-top: 1px solid var(--border); margin-top: 40px; font-size: 0.82rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🐼</span>SitPanda</a>
+    <div class="header-actions"><a href="/" class="back-btn">← Back</a><button class="theme-toggle" id="themeToggle">🌙</button></div>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">Average Calculator</h1>
+  <p class="page-sub">Enter a list of numbers separated by commas or spaces to find Mean, Median, Mode, and Range.</p>
+
+  <div class="calc-wrapper">
+    <textarea id="numbersInput" placeholder="Example: 10, 20, 30, 40, 50">10, 20, 30, 40, 50, 50</textarea>
+    <div class="hint">You can separate numbers using commas, spaces, or new lines.</div>
+
+    <div class="result-grid">
+      <div class="result-card">
+        <div class="label">Mean (Average)</div>
+        <!-- Static fallback -->
+        <div class="value" id="meanValue">33.33</div>
+        <div class="sub" id="meanSub">Sum = 200</div>
+      </div>
+      <div class="result-card">
+        <div class="label">Median</div>
+        <div class="value" id="medianValue">35</div>
+        <div class="sub">Middle value</div>
+      </div>
+      <div class="result-card">
+        <div class="label">Mode</div>
+        <div class="value" id="modeValue">50</div>
+        <div class="sub">Most frequent</div>
+      </div>
+      <div class="result-card">
+        <div class="label">Range</div>
+        <div class="value" id="rangeValue">40</div>
+        <div class="sub" id="rangeSub">Max 50 - Min 10</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>✔ Definitions:</strong> <b>Mean</b> is the average of all numbers. <b>Median</b> is the middle number when sorted. <b>Mode</b> is the number that appears most often. <b>Range</b> is the difference between the highest and lowest values.
+  </div>
+</main>
+
+<footer class="site-footer">© 2026 SitPanda. All rights reserved.</footer>
+
+<script>
+(function() {
+  const input = document.getElementById('numbersInput');
+  const meanValue = document.getElementById('meanValue');
+  const meanSub = document.getElementById('meanSub');
+  const medianValue = document.getElementById('medianValue');
+  const modeValue = document.getElementById('modeValue');
+  const rangeValue = document.getElementById('rangeValue');
+  const rangeSub = document.getElementById('rangeSub');
+
+  function calculate() {
+    // Parse numbers using regex to split by comma, space, or newline
+    const raw = input.value.trim();
+    if (!raw) return;
+
+    const nums = raw.split(/[\s,]+/).map(Number).filter(n => !isNaN(n));
+
+    if (nums.length === 0) {
+      meanValue.textContent = '-';
+      medianValue.textContent = '-';
+      modeValue.textContent = '-';
+      rangeValue.textContent = '-';
+      return;
+    }
+
+    // Sort for median and range
+    const sorted = [...nums].sort((a, b) => a - b);
+
+    // 1. Mean
+    const sum = nums.reduce((acc, val) => acc + val, 0);
+    const mean = sum / nums.length;
+    meanValue.textContent = mean.toFixed(2).replace(/\.?0+$/, '');
+    meanSub.textContent = `Sum = ${sum.toFixed(2).replace(/\.?0+$/, '')}`;
+
+    // 2. Median
+    const mid = Math.floor(sorted.length / 2);
+    let median = 0;
+    if (sorted.length % 2 === 0) {
+      median = (sorted[mid - 1] + sorted[mid]) / 2;
+    } else {
+      median = sorted[mid];
+    }
+    medianValue.textContent = median.toFixed(2).replace(/\.?0+$/, '');
+
+    // 3. Mode
+    const counts = {};
+    let maxCount = 0;
+    let mode = [];
+    nums.forEach(num => {
+      counts[num] = (counts[num] || 0) + 1;
+      if (counts[num] > maxCount) maxCount = counts[num];
+    });
+    
+    for (const key in counts) {
+      if (counts[key] === maxCount) mode.push(Number(key));
+    }
+    
+    if (mode.length === nums.length && nums.length > 1) {
+      modeValue.textContent = 'No Mode';
+    } else if (mode.length > 1) {
+      modeValue.textContent = mode.join(', ');
+      modeValue.style.fontSize = '1.2rem'; // Shrink if multiple modes
+    } else {
+      modeValue.textContent = mode[0];
+      modeValue.style.fontSize = '2rem';
+    }
+
+    // 4. Range
+    const min = sorted[0];
+    const max = sorted[sorted.length - 1];
+    rangeValue.textContent = max - min;
+    rangeSub.textContent = `Max ${max} - Min ${min}`;
+  }
+
+  input.addEventListener('input', calculate);
+
+  const themeToggle = document.getElementById('themeToggle'); if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+  calculate();
+})();
+</script>
+</body>
+</html>
