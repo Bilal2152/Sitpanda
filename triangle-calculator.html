@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Triangle Calculator — Solve Area, Sides &amp; Angles | SitPanda</title>
+  <meta name="description" content="Free online triangle calculator. Solve for missing sides, angles, perimeter, and area using SSS, SAS, or ASA methods.">
+  <link rel="canonical" href="https://sitpanda.com/triangle-calculator.html">
+  
+  <style>
+    :root {
+      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15,118,110,0.15);
+      --bg: #F8FAFC; --card: #FFFFFF; --ink: #0F172A; --ink-secondary: #475569; --muted: #94A3B8;
+      --border: #E2E8F0; --radius: 16px; --shadow-sm: 0 1px 3px rgba(15,23,42,0.06); --shadow: 0 4px 16px rgba(15,23,42,0.08);
+    }
+    body.dark {
+      --bg: #0B1120; --card: #1E293B; --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #64748B;
+      --border: #334155; --brand: #2DD4BF; --brand-hover: #5EEAD4; --brand-glow: rgba(45,212,191,0.12);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; } button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input, select { font-family: inherit; } .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .site-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--brand), var(--brand-hover)); display: grid; place-items: center; font-size: 1.15rem; color: #fff; }
+    .header-actions { display: flex; gap: 10px; }
+    .back-btn { padding: 9px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--border); font-weight: 600; color: var(--ink-secondary); }
+    .theme-toggle { width: 42px; height: 42px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: grid; place-items: center; font-size: 1.2rem; }
+
+    .page-title { font-size: 2.3rem; font-weight: 800; margin: 32px 0 8px; text-align: center; }
+    .page-sub { color: var(--ink-secondary); text-align: center; margin-bottom: 32px; }
+
+    .calc-wrapper { max-width: 900px; margin: 0 auto 40px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-sm); }
+    
+    .mode-tabs { display: flex; gap: 8px; margin-bottom: 24px; justify-content: center; flex-wrap: wrap; }
+    .tab-btn { padding: 10px 16px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink-secondary); font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+    .tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+    .input-section { display: none; }
+    .input-section.active { display: block; }
+    
+    .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .input-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--ink-secondary); }
+    .input-group input { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink); font-size: 1rem; outline: none; }
+    .input-group input:focus { border-color: var(--brand); }
+
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media(max-width: 600px) { .result-grid { grid-template-columns: 1fr; } }
+    
+    .result-box { background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; padding: 20px; }
+    .result-box h3 { font-size: 0.9rem; text-transform: uppercase; color: var(--brand); margin-bottom: 12px; letter-spacing: 0.5px; }
+    .res-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+    .res-row:last-child { border-bottom: none; }
+    .res-row .label { color: var(--ink-secondary); }
+    .res-row .val { font-weight: 700; }
+
+    .disclaimer { max-width: 900px; margin: 0 auto; padding: 16px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; font-size: 0.85rem; color: var(--ink-secondary); }
+    .site-footer { text-align: center; padding: 36px 0; border-top: 1px solid var(--border); margin-top: 40px; font-size: 0.82rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🐼</span>SitPanda</a>
+    <div class="header-actions"><a href="/" class="back-btn">← Back</a><button class="theme-toggle" id="themeToggle">🌙</button></div>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">Triangle Calculator</h1>
+  <p class="page-sub">Solve for missing sides, angles, perimeter, and area.</p>
+
+  <div class="calc-wrapper">
+    <div class="mode-tabs">
+      <button class="tab-btn active" data-target="sss">3 Sides (SSS)</button>
+      <button class="tab-btn" data-target="sas">2 Sides & 1 Angle (SAS)</button>
+      <button class="tab-btn" data-target="asa">1 Side & 2 Angles (ASA)</button>
+    </div>
+
+    <!-- SSS Mode -->
+    <div id="sss" class="input-section active">
+      <div class="input-grid">
+        <div class="input-group"><label>Side A</label><input type="number" id="sssA" value="3" min="0.01"></div>
+        <div class="input-group"><label>Side B</label><input type="number" id="sssB" value="4" min="0.01"></div>
+        <div class="input-group"><label>Side C</label><input type="number" id="sssC" value="5" min="0.01"></div>
+      </div>
+    </div>
+
+    <!-- SAS Mode -->
+    <div id="sas" class="input-section">
+      <div class="input-grid">
+        <div class="input-group"><label>Side A</label><input type="number" id="sasA" value="5" min="0.01"></div>
+        <div class="input-group"><label>Side B</label><input type="number" id="sasB" value="6" min="0.01"></div>
+        <div class="input-group"><label>Included Angle C (°)</label><input type="number" id="sasC" value="60" min="0.01" max="179.99"></div>
+      </div>
+    </div>
+
+    <!-- ASA Mode -->
+    <div id="asa" class="input-section">
+      <div class="input-grid">
+        <div class="input-group"><label>Side C</label><input type="number" id="asaC" value="8" min="0.01"></div>
+        <div class="input-group"><label>Angle A (°)</label><input type="number" id="asaA" value="45" min="0.01" max="179.99"></div>
+        <div class="input-group"><label>Angle B (°)</label><input type="number" id="asaB" value="45" min="0.01" max="179.99"></div>
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result-box">
+        <h3>Properties</h3>
+        <div class="res-row"><span class="label">Area</span><span class="val" id="resArea">6</span></div>
+        <div class="res-row"><span class="label">Perimeter</span><span class="val" id="resPerimeter">12</span></div>
+        <div class="res-row"><span class="label">Semi-perimeter</span><span class="val" id="resSemi">6</span></div>
+      </div>
+      <div class="result-box">
+        <h3>Sides & Angles</h3>
+        <div class="res-row"><span class="label">Side A</span><span class="val" id="outA">3</span></div>
+        <div class="res-row"><span class="label">Side B</span><span class="val" id="outB">4</span></div>
+        <div class="res-row"><span class="label">Side C</span><span class="val" id="outC">5</span></div>
+        <div class="res-row"><span class="label">Angle A (°)</span><span class="val" id="outAngA">36.87°</span></div>
+        <div class="res-row"><span class="label">Angle B (°)</span><span class="val" id="outAngB">53.13°</span></div>
+        <div class="res-row"><span class="label">Angle C (°)</span><span class="val" id="outAngC">90°</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>✔ Verified Formulas:</strong> Uses Law of Cosines, Law of Sines, and Heron's Formula. All angles are calculated in degrees. Ensure the sum of two sides is always greater than the third side (Triangle Inequality Theorem).
+  </div>
+</main>
+
+<footer class="site-footer">© 2026 SitPanda. All rights reserved.</footer>
+
+<script>
+(function() {
+  const tabs = document.querySelectorAll('.tab-btn');
+  const sections = document.querySelectorAll('.input-section');
+  let currentMode = 'sss';
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      tabs.forEach(t => t.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+      this.classList.add('active');
+      currentMode = this.dataset.target;
+      document.getElementById(currentMode).classList.add('active');
+      calculate();
+    });
+  });
+
+  // Inputs
+  const sssA = document.getElementById('sssA'), sssB = document.getElementById('sssB'), sssC = document.getElementById('sssC');
+  const sasA = document.getElementById('sasA'), sasB = document.getElementById('sasB'), sasC = document.getElementById('sasC');
+  const asaC = document.getElementById('asaC'), asaA = document.getElementById('asaA'), asaB = document.getElementById('asaB');
+
+  // Outputs
+  const resArea = document.getElementById('resArea'), resPerimeter = document.getElementById('resPerimeter'), resSemi = document.getElementById('resSemi');
+  const outA = document.getElementById('outA'), outB = document.getElementById('outB'), outC = document.getElementById('outC');
+  const outAngA = document.getElementById('outAngA'), outAngB = document.getElementById('outAngB'), outAngC = document.getElementById('outAngC');
+
+  const toRad = (deg) => deg * (Math.PI / 180);
+  const toDeg = (rad) => rad * (180 / Math.PI);
+  const fmt = (num) => Number(num.toFixed(2)).toString();
+
+  function calculate() {
+    let a, b, c, A, B, C;
+
+    try {
+      if (currentMode === 'sss') {
+        a = parseFloat(sssA.value); b = parseFloat(sssB.value); c = parseFloat(sssC.value);
+        if (!a || !b || !c) return;
+        if (a + b <= c || a + c <= b || b + c <= a) { reset('Invalid Triangle'); return; }
+
+        // Law of Cosines
+        A = toDeg(Math.acos((b*b + c*c - a*a) / (2 * b * c)));
+        B = toDeg(Math.acos((a*a + c*c - b*b) / (2 * a * c)));
+        C = 180 - A - B;
+      } 
+      else if (currentMode === 'sas') {
+        a = parseFloat(sasA.value); b = parseFloat(sasB.value); C = parseFloat(sasC.value);
+        if (!a || !b || !C) return;
+        c = Math.sqrt(a*a + b*b - 2*a*b*Math.cos(toRad(C)));
+        // Law of Sines (or Cosines) for remaining angles
+        A = toDeg(Math.asin((a * Math.sin(toRad(C))) / c));
+        B = 180 - A - C;
+      } 
+      else if (currentMode === 'asa') {
+        c = parseFloat(asaC.value); A = parseFloat(asaA.value); B = parseFloat(asaB.value);
+        if (!c || !A || !B || A + B >= 180) return;
+        C = 180 - A - B;
+        // Law of Sines
+        a = (c * Math.sin(toRad(A))) / Math.sin(toRad(C));
+        b = (c * Math.sin(toRad(B))) / Math.sin(toRad(C));
+      }
+
+      // Area & Perimeter
+      const perimeter = a + b + c;
+      const s = perimeter / 2;
+      const area = Math.sqrt(Math.max(0, s * (s-a) * (s-b) * (s-c)));
+
+      // Output
+      resArea.textContent = fmt(area);
+      resPerimeter.textContent = fmt(perimeter);
+      resSemi.textContent = fmt(s);
+      
+      outA.textContent = fmt(a); outB.textContent = fmt(b); outC.textContent = fmt(c);
+      outAngA.textContent = fmt(A) + '°'; outAngB.textContent = fmt(B) + '°'; outAngC.textContent = fmt(C) + '°';
+
+    } catch(e) { reset('Error'); }
+  }
+
+  function reset(msg) {
+    [resArea, resPerimeter, resSemi, outA, outB, outC, outAngA, outAngB, outAngC].forEach(el => el.textContent = '-');
+    resArea.textContent = msg;
+  }
+
+  // Attach listeners
+  [sssA, sssB, sssC, sasA, sasB, sasC, asaA, asaB, asaC].forEach(el => el.addEventListener('input', calculate));
+
+  const themeToggle = document.getElementById('themeToggle'); if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+
+  calculate();
+})();
+</script>
+</body>
+</html>
