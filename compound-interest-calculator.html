@@ -35,9 +35,6 @@
     .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 20px; }
     .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; }
     .logo-icon { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--brand), var(--brand-hover)); display: grid; place-items: center; font-size: 1.15rem; color: #fff; }
-    .header-center { flex: 1; max-width: 440px; position: relative; }
-    .header-search-box { display: flex; align-items: center; background: var(--card); border: 1.5px solid var(--border); border-radius: 999px; padding: 4px 6px 4px 18px; }
-    .header-search-box input { flex: 1; border: none; outline: none; background: transparent; color: var(--ink); font-size: 0.92rem; padding: 8px 0; }
     .header-actions { display: flex; gap: 10px; }
     .back-btn { padding: 9px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--border); font-weight: 600; color: var(--ink-secondary); }
     .theme-toggle { width: 42px; height: 42px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: grid; place-items: center; font-size: 1.2rem; }
@@ -45,9 +42,10 @@
     .page-title { font-size: clamp(1.7rem, 3.5vw, 2.3rem); font-weight: 800; margin: 32px 0 8px; }
     .page-title .highlight { color: var(--brand); }
     .page-sub { color: var(--ink-secondary); margin-bottom: 22px; }
-    
+
     .settings-bar { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; align-items: center; font-size: 0.85rem; }
-    .settings-bar select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--ink); cursor: pointer; }
+    .settings-bar label { font-weight: 600; color: var(--ink-secondary); margin-right: 4px; }
+    .settings-bar select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--ink); cursor: pointer; max-width: 200px; }
 
     .freq-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 20px 0 18px; }
     .freq-btn { padding: 9px 16px; border: 1.5px solid var(--border); border-radius: 999px; background: var(--card); color: var(--ink-secondary); font-size: 0.85rem; font-weight: 600; cursor: pointer; }
@@ -75,18 +73,10 @@
     .compare-box { margin-top: 16px; padding: 14px; background: #F0FDF4; border: 1px solid #A7F3D0; border-radius: 10px; font-size: 0.85rem; color: #166534; }
     body.dark .compare-box { background: rgba(22,101,52,0.2); border-color: #166534; color: #86EFAC; }
 
-    .amort-section { margin-top: 24px; }
-    .amort-toggle { width: 100%; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; font-weight: 600; display: flex; justify-content: space-between; }
-    .amort-table-wrap { overflow-x: auto; margin-top: 12px; display: none; }
-    .amort-table-wrap.open { display: block; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-    th, td { padding: 10px 12px; text-align: right; border-bottom: 1px solid var(--border); }
-    th:first-child, td:first-child { text-align: left; }
-
     .disclaimer { margin-top: 24px; padding: 16px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; font-size: 0.85rem; }
     .seo-content { margin: 40px 0; max-width: 800px; }
     .seo-content h2 { font-size: 1.3rem; margin: 28px 0 10px; }
-    .seo-content p { color: var(--ink-secondary); margin-bottom: 12px; }
+    .seo-content p, .seo-content li { color: var(--ink-secondary); margin-bottom: 12px; }
     .site-footer { background: var(--card); border-top: 1px solid var(--border); padding: 36px 0 20px; margin-top: 40px; text-align: center; font-size: 0.82rem; color: var(--muted); }
   </style>
 </head>
@@ -95,12 +85,6 @@
 <header class="site-header">
   <div class="container header-inner">
     <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
-    <div class="header-center">
-      <div class="header-search-box">
-        <span class="icon">🔍</span>
-        <input type="text" placeholder="Search calculators...">
-      </div>
-    </div>
     <div class="header-actions">
       <a href="/" class="back-btn">← Back</a>
       <button class="theme-toggle" id="themeToggle">🌙</button>
@@ -116,31 +100,7 @@
   <div class="settings-bar">
     <div class="setting-group">
       <label>🌍 Country / Region</label>
-      <select id="countrySelect">
-        <option value="US">United States</option>
-        <option value="PK">Pakistan</option>
-        <option value="IN">India</option>
-        <option value="GB">United Kingdom</option>
-        <option value="AE">UAE</option>
-        <option value="SA">Saudi Arabia</option>
-        <option value="DE">Germany</option>
-        <option value="CA">Canada</option>
-        <option value="AU">Australia</option>
-      </select>
-    </div>
-    <div class="setting-group">
-      <label>💱 Currency</label>
-      <select id="currencySelect">
-        <option value="USD">USD — $</option>
-        <option value="PKR">PKR — ₨</option>
-        <option value="INR">INR — ₹</option>
-        <option value="GBP">GBP — £</option>
-        <option value="AED">AED — د.إ</option>
-        <option value="SAR">SAR — ﷼</option>
-        <option value="EUR">EUR — €</option>
-        <option value="CAD">CAD — C$</option>
-        <option value="AUD">AUD — A$</option>
-      </select>
+      <select id="countrySelect"></select>
     </div>
   </div>
 
@@ -192,20 +152,6 @@
     <strong>✔ Verified Formula:</strong> This calculator uses the standard compound interest formula <code>A = P(1 + r/n)<sup>nt</sup></code> (plus future value of monthly contributions). Rates and defaults are indicative. This tool is for educational purposes — not investment advice.
   </div>
 
-  <div class="seo-content">
-    <h2>How to Use This Calculator</h2>
-    <p>Enter your <strong>initial investment</strong>, optional <strong>monthly contribution</strong>, <strong>annual interest rate</strong>, and <strong>investment duration</strong> to instantly see your future value. Use the compounding frequency tabs to see how often interest is added affects your returns.</p>
-    <h2>Formula Used</h2>
-    <p style="text-align:center;font-family:monospace;background:var(--card);padding:12px;border-radius:8px;">A = P × (1 + r/n)<sup>n×t</sup></p>
-    <ul>
-      <li><strong>A</strong> = Future value</li>
-      <li><strong>P</strong> = Principal (initial investment)</li>
-      <li><strong>r</strong> = Annual interest rate (as a decimal)</li>
-      <li><strong>n</strong> = Number of compounding periods per year</li>
-      <li><strong>t</strong> = Time in years</li>
-    </ul>
-  </div>
-
 </main>
 
 <footer class="site-footer">
@@ -214,20 +160,73 @@
 
 <script>
 (function() {
+  // ===== 55+ GLOBAL COUNTRY DATA =====
   const countryData = {
-    US: { currency: 'USD', symbol: '$', locale: 'en-US', rate: 5, freq: 12 },
-    PK: { currency: 'PKR', symbol: '₨', locale: 'en-PK', rate: 10, freq: 4 },
-    IN: { currency: 'INR', symbol: '₹', locale: 'en-IN', rate: 7, freq: 4 },
-    GB: { currency: 'GBP', symbol: '£', locale: 'en-GB', rate: 4, freq: 12 },
-    AE: { currency: 'AED', symbol: 'د.إ', locale: 'ar-AE', rate: 3.5, freq: 12 },
-    SA: { currency: 'SAR', symbol: '﷼', locale: 'ar-SA', rate: 3, freq: 12 },
+    US: { currency: 'USD', symbol: '$', locale: 'en-US', rate: 5.0, freq: 12 },
+    GB: { currency: 'GBP', symbol: '£', locale: 'en-GB', rate: 4.0, freq: 12 },
+    CA: { currency: 'CAD', symbol: 'C$', locale: 'en-CA', rate: 3.5, freq: 2 },
+    AU: { currency: 'AUD', symbol: 'A$', locale: 'en-AU', rate: 3.3, freq: 12 },
+    NZ: { currency: 'NZD', symbol: 'NZ$', locale: 'en-NZ', rate: 3.5, freq: 12 },
+    IE: { currency: 'EUR', symbol: '€', locale: 'en-IE', rate: 3.0, freq: 12 },
     DE: { currency: 'EUR', symbol: '€', locale: 'de-DE', rate: 2.5, freq: 12 },
-    CA: { currency: 'CAD', symbol: 'C$', locale: 'en-CA', rate: 4, freq: 2 },
-    AU: { currency: 'AUD', symbol: 'A$', locale: 'en-AU', rate: 4, freq: 12 }
+    FR: { currency: 'EUR', symbol: '€', locale: 'fr-FR', rate: 2.5, freq: 12 },
+    ES: { currency: 'EUR', symbol: '€', locale: 'es-ES', rate: 2.5, freq: 12 },
+    IT: { currency: 'EUR', symbol: '€', locale: 'it-IT', rate: 2.5, freq: 12 },
+    NL: { currency: 'EUR', symbol: '€', locale: 'nl-NL', rate: 2.5, freq: 12 },
+    CH: { currency: 'CHF', symbol: 'Fr', locale: 'de-CH', rate: 0.5, freq: 12 },
+    SE: { currency: 'SEK', symbol: 'kr', locale: 'sv-SE', rate: 2.0, freq: 12 },
+    NO: { currency: 'NOK', symbol: 'kr', locale: 'nb-NO', rate: 3.5, freq: 12 },
+    DK: { currency: 'DKK', symbol: 'kr', locale: 'da-DK', rate: 2.1, freq: 12 },
+    PL: { currency: 'PLN', symbol: 'zł', locale: 'pl-PL', rate: 4.0, freq: 12 },
+    CZ: { currency: 'CZK', symbol: 'Kč', locale: 'cs-CZ', rate: 2.8, freq: 12 },
+    HU: { currency: 'HUF', symbol: 'Ft', locale: 'hu-HU', rate: 4.5, freq: 12 },
+    RO: { currency: 'RON', symbol: 'lei', locale: 'ro-RO', rate: 5.3, freq: 12 },
+    TR: { currency: 'TRY', symbol: '₺', locale: 'tr-TR', rate: 35.0, freq: 12 },
+    RU: { currency: 'RUB', symbol: '₽', locale: 'ru-RU', rate: 15.0, freq: 12 },
+    AE: { currency: 'AED', symbol: 'د.إ', locale: 'ar-AE', rate: 3.5, freq: 12 },
+    SA: { currency: 'SAR', symbol: '﷼', locale: 'ar-SA', rate: 3.0, freq: 12 },
+    QA: { currency: 'QAR', symbol: 'ر.ق', locale: 'ar-QA', rate: 3.0, freq: 12 },
+    KW: { currency: 'KWD', symbol: 'د.ك', locale: 'ar-KW', rate: 3.0, freq: 12 },
+    BH: { currency: 'BHD', symbol: '.د.ب', locale: 'ar-BH', rate: 3.5, freq: 12 },
+    OM: { currency: 'OMR', symbol: 'ر.ع.', locale: 'ar-OM', rate: 3.0, freq: 12 },
+    JO: { currency: 'JOD', symbol: 'د.ا', locale: 'ar-JO', rate: 4.9, freq: 12 },
+    EG: { currency: 'EGP', symbol: 'E£', locale: 'ar-EG', rate: 14.6, freq: 12 },
+    ZA: { currency: 'ZAR', symbol: 'R', locale: 'en-ZA', rate: 6.9, freq: 12 },
+    NG: { currency: 'NGN', symbol: '₦', locale: 'en-NG', rate: 9.2, freq: 12 },
+    KE: { currency: 'KES', symbol: 'KSh', locale: 'en-KE', rate: 8.0, freq: 12 },
+    GH: { currency: 'GHS', symbol: '₵', locale: 'en-GH', rate: 10.0, freq: 12 },
+    PK: { currency: 'PKR', symbol: '₨', locale: 'en-PK', rate: 10.0, freq: 4 },
+    IN: { currency: 'INR', symbol: '₹', locale: 'en-IN', rate: 7.0, freq: 4 },
+    BD: { currency: 'BDT', symbol: '৳', locale: 'bn-BD', rate: 9.0, freq: 4 },
+    LK: { currency: 'LKR', symbol: 'Rs', locale: 'si-LK', rate: 8.0, freq: 4 },
+    NP: { currency: 'NPR', symbol: 'Rs', locale: 'ne-NP', rate: 7.0, freq: 4 },
+    CN: { currency: 'CNY', symbol: '¥', locale: 'zh-CN', rate: 1.5, freq: 12 },
+    JP: { currency: 'JPY', symbol: '¥', locale: 'ja-JP', rate: 0.5, freq: 12 },
+    KR: { currency: 'KRW', symbol: '₩', locale: 'ko-KR', rate: 3.5, freq: 12 },
+    SG: { currency: 'SGD', symbol: 'S$', locale: 'en-SG', rate: 3.0, freq: 12 },
+    MY: { currency: 'MYR', symbol: 'RM', locale: 'ms-MY', rate: 2.2, freq: 12 },
+    TH: { currency: 'THB', symbol: '฿', locale: 'th-TH', rate: 1.5, freq: 12 },
+    ID: { currency: 'IDR', symbol: 'Rp', locale: 'id-ID', rate: 5.5, freq: 12 },
+    PH: { currency: 'PHP', symbol: '₱', locale: 'en-PH', rate: 5.0, freq: 12 },
+    VN: { currency: 'VND', symbol: '₫', locale: 'vi-VN', rate: 5.0, freq: 12 },
+    HK: { currency: 'HKD', symbol: 'HK$', locale: 'en-HK', rate: 0.1, freq: 12 },
+    TW: { currency: 'TWD', symbol: 'NT$', locale: 'zh-TW', rate: 1.5, freq: 12 },
+    BR: { currency: 'BRL', symbol: 'R$', locale: 'pt-BR', rate: 10.0, freq: 12 },
+    MX: { currency: 'MXN', symbol: 'MX$', locale: 'es-MX', rate: 7.0, freq: 12 },
+    AR: { currency: 'ARS', symbol: '$', locale: 'es-AR', rate: 22.0, freq: 12 },
+    CL: { currency: 'CLP', symbol: '$', locale: 'es-CL', rate: 5.0, freq: 12 },
+    CO: { currency: 'COP', symbol: '$', locale: 'es-CO', rate: 10.0, freq: 12 },
+    PE: { currency: 'PEN', symbol: 'S/', locale: 'es-PE', rate: 4.5, freq: 12 }
   };
 
   const countrySelect = document.getElementById('countrySelect');
-  const currencySelect = document.getElementById('currencySelect');
+  Object.keys(countryData).sort().forEach(code => {
+    const opt = document.createElement('option');
+    opt.value = code;
+    opt.textContent = `${code} — ${countryData[code].currency} (${countryData[code].symbol})`;
+    countrySelect.appendChild(opt);
+  });
+
   const principal = document.getElementById('principal');
   const monthlyContribution = document.getElementById('monthlyContribution');
   const interestRate = document.getElementById('interestRate');
@@ -240,7 +239,7 @@
   const earEl = document.getElementById('ear');
   const freqLabel = document.getElementById('freqLabel');
   const compareText = document.getElementById('compareText');
-  
+
   let currentSymbol = '$', currentLocale = 'en-US', currentCurrency = 'USD', currentFreq = 4;
 
   function formatCurrency(amount) {
@@ -253,8 +252,8 @@
     const d = countryData[countrySelect.value];
     if (!d) return;
     currentCurrency = d.currency; currentLocale = d.locale; currentSymbol = d.symbol;
-    currencySelect.value = d.currency;
-    currencySym1.textContent = d.symbol; currencySym2.textContent = d.symbol;
+    currencySym1.textContent = d.symbol;
+    currencySym2.textContent = d.symbol;
     interestRate.value = d.rate;
     
     currentFreq = d.freq;
@@ -264,12 +263,6 @@
   }
 
   countrySelect.addEventListener('change', applyCountry);
-  currencySelect.addEventListener('change', function() {
-    currentCurrency = this.value;
-    for (const d of Object.values(countryData)) { if (d.currency === currentCurrency) { currentLocale = d.locale; currentSymbol = d.symbol; break; } }
-    currencySym1.textContent = currentSymbol; currencySym2.textContent = currentSymbol;
-    calculate();
-  });
 
   document.querySelectorAll('.freq-btn').forEach(btn => {
     btn.addEventListener('click', function() {
@@ -314,8 +307,9 @@
   if (localStorage.getItem('theme') === 'dark') { document.body.classList.add('dark'); themeToggle.textContent = '☀️'; }
   themeToggle.onclick = () => { document.body.classList.toggle('dark'); const d = document.body.classList.contains('dark'); themeToggle.textContent = d ? '☀️' : '🌙'; localStorage.setItem('theme', d ? 'dark' : 'light'); };
 
+  countrySelect.value = 'US';
   applyCountry();
 })();
 </script>
 </body>
-  </html>
+</html>
