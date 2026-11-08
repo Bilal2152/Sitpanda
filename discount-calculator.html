@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discount Calculator — Calculate Sale Price &amp; Savings | SitPanda</title>
+  <meta name="description" content="Free online discount calculator. Find the final price after a percentage or fixed discount, and see exactly how much money you saved.">
+  <link rel="canonical" href="https://sitpanda.com/discount-calculator.html">
+  
+  <style>
+    :root {
+      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15,118,110,0.15);
+      --bg: #F8FAFC; --card: #FFFFFF; --ink: #0F172A; --ink-secondary: #475569; --muted: #94A3B8;
+      --border: #E2E8F0; --radius: 16px; --shadow-sm: 0 1px 3px rgba(15,23,42,0.06); --shadow: 0 4px 16px rgba(15,23,42,0.08);
+    }
+    body.dark {
+      --bg: #0B1120; --card: #1E293B; --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #64748B;
+      --border: #334155; --brand: #2DD4BF; --brand-hover: #5EEAD4; --brand-glow: rgba(45,212,191,0.12);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; } button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input, select { font-family: inherit; } .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .site-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--brand), var(--brand-hover)); display: grid; place-items: center; font-size: 1.15rem; color: #fff; }
+    .header-actions { display: flex; gap: 10px; }
+    .back-btn { padding: 9px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--border); font-weight: 600; color: var(--ink-secondary); }
+    .theme-toggle { width: 42px; height: 42px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: grid; place-items: center; font-size: 1.2rem; }
+
+    .page-title { font-size: 2.3rem; font-weight: 800; margin: 32px 0 8px; text-align: center; }
+    .page-sub { color: var(--ink-secondary); text-align: center; margin-bottom: 32px; }
+
+    .calc-wrapper { max-width: 800px; margin: 0 auto 40px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-sm); }
+    
+    .settings-bar { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+    .settings-bar select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--ink); font-size: 0.85rem; cursor: pointer; outline: none; }
+
+    .mode-tabs { display: flex; gap: 8px; margin-bottom: 24px; justify-content: center; }
+    .tab-btn { padding: 10px 24px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink-secondary); font-weight: 600; cursor: pointer; font-size: 1rem; }
+    .tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+    .input-group { margin-bottom: 24px; }
+    .input-group label { display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; color: var(--ink-secondary); }
+    .input-row { display: flex; align-items: center; gap: 12px; }
+    .input-row input { flex: 1; padding: 16px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink); font-size: 1.3rem; outline: none; font-weight: 700; }
+    .input-row input:focus { border-color: var(--brand); }
+    .input-row span { font-size: 1.2rem; font-weight: 700; color: var(--brand); }
+
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
+    .result-card { background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; padding: 24px; text-align: center; }
+    .result-card .label { font-size: 0.9rem; color: var(--ink-secondary); text-transform: uppercase; font-weight: 600; }
+    .result-card .value { font-size: 2.5rem; font-weight: 800; color: var(--brand); margin-top: 8px; }
+    
+    .result-card.savings { background: #F0FDF4; border-color: #A7F3D0; }
+    body.dark .result-card.savings { background: rgba(22,101,52,0.2); border-color: #166534; }
+    .result-card.savings .value { color: #166534; }
+    body.dark .result-card.savings .value { color: #86EFAC; }
+
+    .disclaimer { max-width: 800px; margin: 0 auto; padding: 16px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; font-size: 0.85rem; color: var(--ink-secondary); }
+    .site-footer { text-align: center; padding: 36px 0; border-top: 1px solid var(--border); margin-top: 40px; font-size: 0.82rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🐼</span>SitPanda</a>
+    <div class="header-actions"><a href="/" class="back-btn">← Back</a><button class="theme-toggle" id="themeToggle">🌙</button></div>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">Discount Calculator</h1>
+  <p class="page-sub">Calculate the final sale price and your total savings.</p>
+
+  <div class="calc-wrapper">
+    <div class="settings-bar">
+      <select id="currencySelect"></select>
+    </div>
+
+    <div class="mode-tabs">
+      <button class="tab-btn active" data-mode="percent">Percentage Off (%)</button>
+      <button class="tab-btn" data-mode="fixed">Fixed Amount Off</button>
+    </div>
+
+    <div class="input-group">
+      <label>Original Price</label>
+      <div class="input-row">
+        <input type="number" id="originalPrice" value="100" min="0" step="0.01">
+        <span id="currencySym1">$</span>
+      </div>
+    </div>
+
+    <div class="input-group" id="percentGroup">
+      <label>Discount (%)</label>
+      <div class="input-row">
+        <input type="number" id="discountPercent" value="20" min="0" max="100">
+        <span>%</span>
+      </div>
+    </div>
+
+    <div class="input-group" id="fixedGroup" style="display:none;">
+      <label>Discount Amount</label>
+      <div class="input-row">
+        <input type="number" id="discountFixed" value="20" min="0">
+        <span id="currencySym2">$</span>
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result-card">
+        <div class="label">Final Price</div>
+        <!-- Static fallback -->
+        <div class="value" id="finalPrice">$80.00</div>
+      </div>
+      <div class="result-card savings">
+        <div class="label">You Save</div>
+        <div class="value" id="savedAmount">$20.00</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>✔ How it works:</strong> The calculator subtracts the discount from the original price. For percentage discounts, it calculates the percentage of the original price first.
+  </div>
+</main>
+
+<footer class="site-footer">© 2026 SitPanda. All rights reserved.</footer>
+
+<script>
+(function() {
+  // ===== GLOBAL CURRENCY MAP =====
+  const countryData = {
+    US: { currency: 'USD', symbol: '$', locale: 'en-US' },
+    GB: { currency: 'GBP', symbol: '£', locale: 'en-GB' },
+    CA: { currency: 'CAD', symbol: 'C$', locale: 'en-CA' },
+    AU: { currency: 'AUD', symbol: 'A$', locale: 'en-AU' },
+    EU: { currency: 'EUR', symbol: '€', locale: 'de-DE' },
+    AE: { currency: 'AED', symbol: 'د.إ', locale: 'ar-AE' },
+    SA: { currency: 'SAR', symbol: '﷼', locale: 'ar-SA' },
+    PK: { currency: 'PKR', symbol: '₨', locale: 'en-PK' },
+    IN: { currency: 'INR', symbol: '₹', locale: 'en-IN' },
+    BD: { currency: 'BDT', symbol: '৳', locale: 'bn-BD' },
+    JP: { currency: 'JPY', symbol: '¥', locale: 'ja-JP' },
+    CN: { currency: 'CNY', symbol: '¥', locale: 'zh-CN' },
+    BR: { currency: 'BRL', symbol: 'R$', locale: 'pt-BR' },
+    MX: { currency: 'MXN', symbol: 'MX$', locale: 'es-MX' },
+    ZA: { currency: 'ZAR', symbol: 'R', locale: 'en-ZA' },
+    NG: { currency: 'NGN', symbol: '₦', locale: 'en-NG' },
+    TR: { currency: 'TRY', symbol: '₺', locale: 'tr-TR' },
+    RU: { currency: 'RUB', symbol: '₽', locale: 'ru-RU' }
+  };
+
+  const currencySelect = document.getElementById('currencySelect');
+  Object.keys(countryData).forEach(code => {
+    const opt = document.createElement('option');
+    opt.value = code;
+    opt.textContent = countryData[code].currency;
+    currencySelect.appendChild(opt);
+  });
+  currencySelect.value = 'US';
+
+  const originalPrice = document.getElementById('originalPrice');
+  const discountPercent = document.getElementById('discountPercent');
+  const discountFixed = document.getElementById('discountFixed');
+  const percentGroup = document.getElementById('percentGroup');
+  const fixedGroup = document.getElementById('fixedGroup');
+  const currencySym1 = document.getElementById('currencySym1');
+  const currencySym2 = document.getElementById('currencySym2');
+  
+  const finalPrice = document.getElementById('finalPrice');
+  const savedAmount = document.getElementById('savedAmount');
+
+  let currentMode = 'percent';
+  let currentSymbol = '$', currentLocale = 'en-US', currentCurrency = 'USD';
+
+  function formatCurrency(amount) {
+    try {
+      return new Intl.NumberFormat(currentLocale, { style: 'currency', currency: currentCurrency, minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount);
+    } catch (e) { return currentSymbol + ' ' + amount.toFixed(2); }
+  }
+
+  function applyCurrency() {
+    const data = countryData[currencySelect.value];
+    if (!data) return;
+    currentSymbol = data.symbol; currentLocale = data.locale; currentCurrency = data.currency;
+    currencySym1.textContent = currentSymbol;
+    currencySym2.textContent = currentSymbol;
+    calculate();
+  }
+
+  currencySelect.addEventListener('change', applyCurrency);
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      currentMode = this.dataset.mode;
+      
+      if (currentMode === 'percent') {
+        percentGroup.style.display = 'block';
+        fixedGroup.style.display = 'none';
+      } else {
+        percentGroup.style.display = 'none';
+        fixedGroup.style.display = 'block';
+      }
+      calculate();
+    });
+  });
+
+  [originalPrice, discountPercent, discountFixed].forEach(el => el.addEventListener('input', calculate));
+
+  function calculate() {
+    const price = parseFloat(originalPrice.value) || 0;
+    let saved = 0;
+
+    if (currentMode === 'percent') {
+      const pct = parseFloat(discountPercent.value) || 0;
+      saved = price * (pct / 100);
+    } else {
+      saved = parseFloat(discountFixed.value) || 0;
+    }
+
+    let final = price - saved;
+    if (final < 0) final = 0; // Prevent negative prices
+
+    finalPrice.textContent = formatCurrency(final);
+    savedAmount.textContent = formatCurrency(saved);
+  }
+
+  const themeToggle = document.getElementById('themeToggle'); if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+
+  applyCurrency();
+})();
+</script>
+</body>
+</html>
