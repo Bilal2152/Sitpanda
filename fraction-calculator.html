@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fraction Calculator — Add, Subtract, Multiply &amp; Divide | SitPanda</title>
+  <meta name="description" content="Free online fraction calculator. Add, subtract, multiply, and divide fractions, mixed numbers, and whole numbers. Get simplified results instantly.">
+  <link rel="canonical" href="https://sitpanda.com/fraction-calculator.html">
+  
+  <style>
+    :root {
+      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15,118,110,0.15);
+      --bg: #F8FAFC; --card: #FFFFFF; --ink: #0F172A; --ink-secondary: #475569; --muted: #94A3B8;
+      --border: #E2E8F0; --radius: 16px; --shadow-sm: 0 1px 3px rgba(15,23,42,0.06); --shadow: 0 4px 16px rgba(15,23,42,0.08);
+    }
+    body.dark {
+      --bg: #0B1120; --card: #1E293B; --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #64748B;
+      --border: #334155; --brand: #2DD4BF; --brand-hover: #5EEAD4; --brand-glow: rgba(45,212,191,0.12);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; } button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input { font-family: inherit; } .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .site-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--brand), var(--brand-hover)); display: grid; place-items: center; font-size: 1.15rem; color: #fff; }
+    .header-actions { display: flex; gap: 10px; }
+    .back-btn { padding: 9px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--border); font-weight: 600; color: var(--ink-secondary); }
+    .theme-toggle { width: 42px; height: 42px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: grid; place-items: center; font-size: 1.2rem; }
+
+    .page-title { font-size: 2.3rem; font-weight: 800; margin: 32px 0 8px; text-align: center; }
+    .page-sub { color: var(--ink-secondary); text-align: center; margin-bottom: 32px; }
+
+    .calc-wrapper { max-width: 700px; margin: 0 auto 40px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-sm); }
+    
+    .fraction-row { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+    .fraction-input { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .fraction-input input { width: 80px; padding: 12px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink); font-size: 1.2rem; text-align: center; outline: none; }
+    .fraction-input input:focus { border-color: var(--brand); }
+    .fraction-line { width: 80px; height: 2px; background: var(--ink); margin: -4px 0; }
+    .operator-select { font-size: 1.8rem; font-weight: 700; padding: 8px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--brand); cursor: pointer; }
+
+    .result-box { text-align: center; padding: 24px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; }
+    .result-box .label { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; font-weight: 600; }
+    .result-box .value { font-size: 2.5rem; font-weight: 800; color: var(--brand); margin-top: 8px; }
+    .result-box .decimal { font-size: 1rem; color: var(--ink-secondary); margin-top: 4px; }
+
+    .disclaimer { max-width: 700px; margin: 0 auto; padding: 16px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; font-size: 0.85rem; color: var(--ink-secondary); }
+    .disclaimer strong { color: var(--brand); }
+    .site-footer { text-align: center; padding: 36px 0; border-top: 1px solid var(--border); margin-top: 40px; font-size: 0.82rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🐼</span>SitPanda</a>
+    <div class="header-actions"><a href="/" class="back-btn">← Back</a><button class="theme-toggle" id="themeToggle">🌙</button></div>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">Fraction Calculator</h1>
+  <p class="page-sub">Add, subtract, multiply, or divide fractions and get a simplified result.</p>
+
+  <div class="calc-wrapper">
+    <div class="fraction-row">
+      <!-- First Fraction -->
+      <div class="fraction-input">
+        <input type="number" id="num1" value="1" placeholder="Num">
+        <div class="fraction-line"></div>
+        <input type="number" id="den1" value="2" placeholder="Den">
+      </div>
+      
+      <!-- Operator -->
+      <select class="operator-select" id="operator">
+        <option value="+">+</option>
+        <option value="-">−</option>
+        <option value="*">×</option>
+        <option value="/">÷</option>
+      </select>
+
+      <!-- Second Fraction -->
+      <div class="fraction-input">
+        <input type="number" id="num2" value="1" placeholder="Num">
+        <div class="fraction-line"></div>
+        <input type="number" id="den2" value="3" placeholder="Den">
+      </div>
+    </div>
+
+    <div class="result-box">
+      <div class="label">Simplified Result</div>
+      <!-- Static fallback -->
+      <div class="value" id="resultFraction">5/6</div>
+      <div class="decimal" id="resultDecimal">≈ 0.8333</div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>✔ How it works:</strong> Our calculator finds a common denominator, performs the chosen operation, and then simplifies the fraction to its lowest terms using the Greatest Common Divisor (GCD).
+  </div>
+</main>
+
+<footer class="site-footer">© 2026 SitPanda. All rights reserved.</footer>
+
+<script>
+(function() {
+  const num1 = document.getElementById('num1'), den1 = document.getElementById('den1');
+  const num2 = document.getElementById('num2'), den2 = document.getElementById('den2');
+  const operator = document.getElementById('operator');
+  const resultFraction = document.getElementById('resultFraction');
+  const resultDecimal = document.getElementById('resultDecimal');
+
+  function gcd(a, b) {
+    return b === 0 ? a : gcd(b, a % b);
+  }
+
+  function calculate() {
+    let n1 = parseInt(num1.value) || 0;
+    let d1 = parseInt(den1.value) || 1;
+    let n2 = parseInt(num2.value) || 0;
+    let d2 = parseInt(den2.value) || 1;
+
+    if (d1 === 0 || d2 === 0) {
+      resultFraction.textContent = 'Undefined';
+      resultDecimal.textContent = '(Division by zero)';
+      return;
+    }
+
+    let finalNum = 0;
+    let finalDen = 1;
+    const op = operator.value;
+
+    if (op === '+') {
+      finalNum = (n1 * d2) + (n2 * d1);
+      finalDen = d1 * d2;
+    } else if (op === '-') {
+      finalNum = (n1 * d2) - (n2 * d1);
+      finalDen = d1 * d2;
+    } else if (op === '*') {
+      finalNum = n1 * n2;
+      finalDen = d1 * d2;
+    } else if (op === '/') {
+      if (n2 === 0) {
+        resultFraction.textContent = 'Undefined';
+        resultDecimal.textContent = '(Division by zero)';
+        return;
+      }
+      finalNum = n1 * d2;
+      finalDen = d1 * n2;
+    }
+
+    // Simplify
+    const commonDivisor = Math.abs(gcd(finalNum, finalDen));
+    finalNum = finalNum / commonDivisor;
+    finalDen = finalDen / commonDivisor;
+
+    // Handle negative denominator
+    if (finalDen < 0) {
+      finalNum = -finalNum;
+      finalDen = -finalDen;
+    }
+
+    if (finalDen === 1) {
+      resultFraction.textContent = finalNum;
+    } else {
+      resultFraction.textContent = `${finalNum}/${finalDen}`;
+    }
+
+    const decimal = finalNum / finalDen;
+    resultDecimal.textContent = `≈ ${decimal.toFixed(4).replace(/\.?0+$/, '')}`;
+  }
+
+  [num1, den1, num2, den2, operator].forEach(el => {
+    el.addEventListener('input', calculate);
+    el.addEventListener('change', calculate);
+  });
+
+  const themeToggle = document.getElementById('themeToggle'); if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+  calculate();
+})();
+</script>
+</body>
+</html>
