@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ratio Calculator — Simplify Ratios &amp; Solve Proportions | SitPanda</title>
+  <meta name="description" content="Free online ratio calculator. Simplify ratios to their lowest terms or solve for a missing value in a proportion (A:B = C:D).">
+  <link rel="canonical" href="https://sitpanda.com/ratio-calculator.html">
+  
+  <style>
+    :root {
+      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15,118,110,0.15);
+      --bg: #F8FAFC; --card: #FFFFFF; --ink: #0F172A; --ink-secondary: #475569; --muted: #94A3B8;
+      --border: #E2E8F0; --radius: 16px; --shadow-sm: 0 1px 3px rgba(15,23,42,0.06); --shadow: 0 4px 16px rgba(15,23,42,0.08);
+    }
+    body.dark {
+      --bg: #0B1120; --card: #1E293B; --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #64748B;
+      --border: #334155; --brand: #2DD4BF; --brand-hover: #5EEAD4; --brand-glow: rgba(45,212,191,0.12);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; } button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input { font-family: inherit; } .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .site-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--brand), var(--brand-hover)); display: grid; place-items: center; font-size: 1.15rem; color: #fff; }
+    .header-actions { display: flex; gap: 10px; }
+    .back-btn { padding: 9px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--border); font-weight: 600; color: var(--ink-secondary); }
+    .theme-toggle { width: 42px; height: 42px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: grid; place-items: center; font-size: 1.2rem; }
+
+    .page-title { font-size: 2.3rem; font-weight: 800; margin: 32px 0 8px; text-align: center; }
+    .page-sub { color: var(--ink-secondary); text-align: center; margin-bottom: 32px; }
+
+    .calc-wrapper { max-width: 800px; margin: 0 auto 40px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-sm); }
+    
+    .mode-tabs { display: flex; gap: 8px; margin-bottom: 24px; justify-content: center; }
+    .tab-btn { padding: 10px 20px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink-secondary); font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .tab-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+    .input-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+    .input-row input { width: 100px; padding: 12px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink); font-size: 1.2rem; text-align: center; outline: none; }
+    .input-row input:focus { border-color: var(--brand); }
+    .input-row span { font-size: 1.5rem; font-weight: 700; color: var(--ink-secondary); }
+
+    .result-box { text-align: center; padding: 24px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; }
+    .result-box .label { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; font-weight: 600; }
+    .result-box .value { font-size: 2.5rem; font-weight: 800; color: var(--brand); margin-top: 8px; }
+
+    .disclaimer { max-width: 800px; margin: 0 auto; padding: 16px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; font-size: 0.85rem; color: var(--ink-secondary); }
+    .site-footer { text-align: center; padding: 36px 0; border-top: 1px solid var(--border); margin-top: 40px; font-size: 0.82rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🐼</span>SitPanda</a>
+    <div class="header-actions"><a href="/" class="back-btn">← Back</a><button class="theme-toggle" id="themeToggle">🌙</button></div>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">Ratio Calculator</h1>
+  <p class="page-sub">Simplify ratios or solve for a missing value in a proportion.</p>
+
+  <div class="calc-wrapper">
+    <div class="mode-tabs">
+      <button class="tab-btn active" id="tabSimplify">Simplify Ratio</button>
+      <button class="tab-btn" id="tabSolve">Solve Proportion</button>
+    </div>
+
+    <!-- Simplify Mode -->
+    <div id="simplifySection">
+      <div class="input-row">
+        <input type="number" id="simpA" value="10" placeholder="A">
+        <span>:</span>
+        <input type="number" id="simpB" value="15" placeholder="B">
+      </div>
+      <div class="result-box">
+        <div class="label">Simplified Ratio</div>
+        <!-- Static fallback -->
+        <div class="value" id="simpResult">2 : 3</div>
+      </div>
+    </div>
+
+    <!-- Solve Mode -->
+    <div id="solveSection" style="display:none;">
+      <div class="input-row">
+        <input type="number" id="solveA" value="2" placeholder="A">
+        <span>:</span>
+        <input type="number" id="solveB" value="3" placeholder="B">
+        <span>=</span>
+        <input type="number" id="solveC" value="10" placeholder="C">
+        <span>:</span>
+        <input type="number" id="solveD" placeholder="?" disabled>
+      </div>
+      <div class="result-box">
+        <div class="label">Missing Value (D)</div>
+        <div class="value" id="solveResult">15</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>✔ How it works:</strong> To simplify, we divide both sides by their Greatest Common Divisor (GCD). To solve a proportion (A:B = C:D), we use the cross-multiplication rule: <code>A × D = B × C</code>.
+  </div>
+</main>
+
+<footer class="site-footer">© 2026 SitPanda. All rights reserved.</footer>
+
+<script>
+(function() {
+  const tabSimplify = document.getElementById('tabSimplify');
+  const tabSolve = document.getElementById('tabSolve');
+  const simplifySection = document.getElementById('simplifySection');
+  const solveSection = document.getElementById('solveSection');
+
+  // Simplify logic
+  const simpA = document.getElementById('simpA'), simpB = document.getElementById('simpB'), simpResult = document.getElementById('simpResult');
+  
+  // Solve logic
+  const solveA = document.getElementById('solveA'), solveB = document.getElementById('solveB'), solveC = document.getElementById('solveC'), solveD = document.getElementById('solveD'), solveResult = document.getElementById('solveResult');
+
+  function gcd(a, b) {
+    return b === 0 ? a : gcd(b, a % b);
+  }
+
+  function simplifyRatio() {
+    let a = Math.abs(parseInt(simpA.value) || 0);
+    let b = Math.abs(parseInt(simpB.value) || 0);
+    if (a === 0 || b === 0) { simpResult.textContent = 'Invalid'; return; }
+    const divisor = gcd(a, b);
+    simpResult.textContent = `${a/divisor} : ${b/divisor}`;
+  }
+
+  function solveProportion() {
+    let a = parseFloat(solveA.value) || 0;
+    let b = parseFloat(solveB.value) || 0;
+    let c = parseFloat(solveC.value) || 0;
+
+    if (a === 0) { solveResult.textContent = 'Invalid'; return; }
+    const d = (b * c) / a;
+    solveD.value = d;
+    solveResult.textContent = d;
+  }
+
+  tabSimplify.addEventListener('click', () => {
+    tabSimplify.classList.add('active'); tabSolve.classList.remove('active');
+    simplifySection.style.display = 'block'; solveSection.style.display = 'none';
+  });
+
+  tabSolve.addEventListener('click', () => {
+    tabSolve.classList.add('active'); tabSimplify.classList.remove('active');
+    solveSection.style.display = 'block'; simplifySection.style.display = 'none';
+  });
+
+  [simpA, simpB].forEach(el => el.addEventListener('input', simplifyRatio));
+  [solveA, solveB, solveC].forEach(el => el.addEventListener('input', solveProportion));
+
+  const themeToggle = document.getElementById('themeToggle'); if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+  
+  simplifyRatio(); solveProportion();
+})();
+</script>
+</body>
+</html>
