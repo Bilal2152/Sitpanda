@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tip Calculator — Calculate Tip &amp; Split the Bill | SitPanda</title>
+  <meta name="description" content="Free online tip calculator. Enter your bill amount, choose a tip percentage, and split the total between any number of people. Supports multiple currencies.">
+  <link rel="canonical" href="https://sitpanda.com/tip-calculator.html">
+  
+  <style>
+    :root {
+      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15,118,110,0.15);
+      --bg: #F8FAFC; --card: #FFFFFF; --ink: #0F172A; --ink-secondary: #475569; --muted: #94A3B8;
+      --border: #E2E8F0; --radius: 16px; --shadow-sm: 0 1px 3px rgba(15,23,42,0.06); --shadow: 0 4px 16px rgba(15,23,42,0.08);
+    }
+    body.dark {
+      --bg: #0B1120; --card: #1E293B; --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #64748B;
+      --border: #334155; --brand: #2DD4BF; --brand-hover: #5EEAD4; --brand-glow: rgba(45,212,191,0.12);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; } button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input, select { font-family: inherit; } .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .site-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--brand), var(--brand-hover)); display: grid; place-items: center; font-size: 1.15rem; color: #fff; }
+    .header-actions { display: flex; gap: 10px; }
+    .back-btn { padding: 9px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--border); font-weight: 600; color: var(--ink-secondary); }
+    .theme-toggle { width: 42px; height: 42px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: grid; place-items: center; font-size: 1.2rem; }
+
+    .page-title { font-size: 2.3rem; font-weight: 800; margin: 32px 0 8px; text-align: center; }
+    .page-sub { color: var(--ink-secondary); text-align: center; margin-bottom: 32px; }
+
+    .calc-wrapper { max-width: 900px; margin: 0 auto 40px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-sm); }
+    
+    .settings-bar { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+    .settings-bar select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--ink); font-size: 0.85rem; cursor: pointer; outline: none; }
+
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    @media(max-width: 768px) { .calc-layout { grid-template-columns: 1fr; gap: 24px; } }
+
+    .form-card h2 { font-size: 1.15rem; margin-bottom: 20px; }
+    .input-group { margin-bottom: 20px; }
+    .input-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--ink-secondary); }
+    .input-row { display: flex; align-items: center; gap: 8px; }
+    .input-row input { flex: 1; padding: 14px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--ink); font-size: 1.2rem; outline: none; font-weight: 600; }
+    .input-row input:focus { border-color: var(--brand); }
+    .input-row span { font-size: 1rem; font-weight: 700; color: var(--brand); }
+
+    /* Tip Buttons */
+    .tip-buttons { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .tip-btn { flex: 1; padding: 10px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--bg); font-weight: 600; cursor: pointer; transition: all 0.15s; min-width: 60px; }
+    .tip-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+    
+    /* Slider */
+    input[type="range"] { width: 100%; accent-color: var(--brand); margin-top: 8px; }
+
+    .result-card { background: var(--brand-glow); border: 1px solid var(--brand); border-radius: var(--radius); padding: 24px; }
+    .result-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 1.1rem; }
+    .result-row:last-child { border-bottom: none; }
+    .result-row .label { color: var(--ink-secondary); font-weight: 500; }
+    .result-row .value { font-weight: 800; color: var(--ink); }
+    .result-row.highlight { background: var(--brand); color: #fff; border-radius: 10px; padding: 16px; margin-top: 8px; border-bottom: none; }
+    .result-row.highlight .label, .result-row.highlight .value { color: #fff; font-size: 1.3rem; }
+
+    .disclaimer { max-width: 900px; margin: 0 auto; padding: 16px; background: var(--brand-glow); border: 1px solid var(--brand); border-radius: 12px; font-size: 0.85rem; color: var(--ink-secondary); }
+    .site-footer { text-align: center; padding: 36px 0; border-top: 1px solid var(--border); margin-top: 40px; font-size: 0.82rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🐼</span>SitPanda</a>
+    <div class="header-actions"><a href="/" class="back-btn">← Back</a><button class="theme-toggle" id="themeToggle">🌙</button></div>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">Tip Calculator</h1>
+  <p class="page-sub">Calculate the perfect tip and split the bill instantly.</p>
+
+  <div class="calc-wrapper">
+    <div class="settings-bar">
+      <select id="currencySelect"></select>
+    </div>
+
+    <div class="calc-layout">
+      <!-- LEFT: INPUTS -->
+      <div class="form-card">
+        <h2>Bill Details</h2>
+        
+        <div class="input-group">
+          <label>Bill Amount</label>
+          <div class="input-row">
+            <input type="number" id="billAmount" value="100" min="0" step="0.01">
+            <span id="currencySym1">$</span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Tip Percentage (%)</label>
+          <div class="input-row">
+            <input type="number" id="tipPercentage" value="15" min="0" max="100">
+            <span>%</span>
+          </div>
+          <div class="tip-buttons">
+            <button class="tip-btn" data-val="10">10%</button>
+            <button class="tip-btn active" data-val="15">15%</button>
+            <button class="tip-btn" data-val="20">20%</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Split Between (People)</label>
+          <div class="input-row">
+            <input type="number" id="splitPeople" value="1" min="1" step="1">
+            <span>Person(s)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: RESULTS -->
+      <div class="result-card">
+        <div class="result-row">
+          <span class="label">Bill Amount</span>
+          <span class="value" id="resBill">$100.00</span>
+        </div>
+        <div class="result-row">
+          <span class="label">Tip Amount</span>
+          <span class="value" id="resTip">$15.00</span>
+        </div>
+        <div class="result-row">
+          <span class="label">Total Bill (with Tip)</span>
+          <span class="value" id="resTotal">$115.00</span>
+        </div>
+        
+        <div class="result-row highlight">
+          <span class="label">Pay Per Person</span>
+          <span class="value" id="resPerPerson">$115.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>✔ How it works:</strong> The tip is calculated on the pre-tax bill amount. The total is then divided equally among the number of people you specify. Select your local currency from the top right to format the results correctly.
+  </div>
+</main>
+
+<footer class="site-footer">© 2026 SitPanda. All rights reserved.</footer>
+
+<script>
+(function() {
+  // ===== GLOBAL CURRENCY MAP =====
+  const countryData = {
+    US: { currency: 'USD', symbol: '$', locale: 'en-US' },
+    GB: { currency: 'GBP', symbol: '£', locale: 'en-GB' },
+    CA: { currency: 'CAD', symbol: 'C$', locale: 'en-CA' },
+    AU: { currency: 'AUD', symbol: 'A$', locale: 'en-AU' },
+    EU: { currency: 'EUR', symbol: '€', locale: 'de-DE' },
+    AE: { currency: 'AED', symbol: 'د.إ', locale: 'ar-AE' },
+    SA: { currency: 'SAR', symbol: '﷼', locale: 'ar-SA' },
+    PK: { currency: 'PKR', symbol: '₨', locale: 'en-PK' },
+    IN: { currency: 'INR', symbol: '₹', locale: 'en-IN' },
+    BD: { currency: 'BDT', symbol: '৳', locale: 'bn-BD' },
+    JP: { currency: 'JPY', symbol: '¥', locale: 'ja-JP' },
+    CN: { currency: 'CNY', symbol: '¥', locale: 'zh-CN' },
+    BR: { currency: 'BRL', symbol: 'R$', locale: 'pt-BR' },
+    MX: { currency: 'MXN', symbol: 'MX$', locale: 'es-MX' },
+    ZA: { currency: 'ZAR', symbol: 'R', locale: 'en-ZA' },
+    NG: { currency: 'NGN', symbol: '₦', locale: 'en-NG' },
+    TR: { currency: 'TRY', symbol: '₺', locale: 'tr-TR' },
+    RU: { currency: 'RUB', symbol: '₽', locale: 'ru-RU' }
+  };
+
+  const currencySelect = document.getElementById('currencySelect');
+  Object.keys(countryData).forEach(code => {
+    const opt = document.createElement('option');
+    opt.value = code;
+    opt.textContent = countryData[code].currency;
+    currencySelect.appendChild(opt);
+  });
+  currencySelect.value = 'US';
+
+  const billAmount = document.getElementById('billAmount');
+  const tipPercentage = document.getElementById('tipPercentage');
+  const splitPeople = document.getElementById('splitPeople');
+  const currencySym1 = document.getElementById('currencySym1');
+  
+  const resBill = document.getElementById('resBill');
+  const resTip = document.getElementById('resTip');
+  const resTotal = document.getElementById('resTotal');
+  const resPerPerson = document.getElementById('resPerPerson');
+
+  let currentSymbol = '$', currentLocale = 'en-US', currentCurrency = 'USD';
+
+  function formatCurrency(amount) {
+    try {
+      return new Intl.NumberFormat(currentLocale, { style: 'currency', currency: currentCurrency, minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount);
+    } catch (e) { return currentSymbol + ' ' + amount.toFixed(2); }
+  }
+
+  function applyCurrency() {
+    const data = countryData[currencySelect.value];
+    if (!data) return;
+    currentSymbol = data.symbol; currentLocale = data.locale; currentCurrency = data.currency;
+    currencySym1.textContent = currentSymbol;
+    calculate();
+  }
+
+  currencySelect.addEventListener('change', applyCurrency);
+
+  document.querySelectorAll('.tip-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tip-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      tipPercentage.value = this.dataset.val;
+      calculate();
+    });
+  });
+
+  // If user manually types a tip, remove active state from buttons
+  tipPercentage.addEventListener('input', function() {
+    document.querySelectorAll('.tip-btn').forEach(b => b.classList.remove('active'));
+    this.dataset.val = this.value; // Keep data-val in sync
+    calculate();
+  });
+
+  [billAmount, splitPeople].forEach(el => el.addEventListener('input', calculate));
+
+  function calculate() {
+    const bill = parseFloat(billAmount.value) || 0;
+    const tipPct = parseFloat(tipPercentage.value) || 0;
+    const people = parseInt(splitPeople.value) || 1;
+
+    const tipAmt = bill * (tipPct / 100);
+    const total = bill + tipAmt;
+    const perPerson = total / people;
+
+    resBill.textContent = formatCurrency(bill);
+    resTip.textContent = formatCurrency(tipAmt);
+    resTotal.textContent = formatCurrency(total);
+    resPerPerson.textContent = formatCurrency(perPerson);
+  }
+
+  const themeToggle = document.getElementById('themeToggle'); if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+
+  applyCurrency();
+})();
+</script>
+</body>
+</html>
