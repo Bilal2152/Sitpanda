@@ -351,7 +351,7 @@
       .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
     }
     @media (max-width: 720px) {
-      .header-nav { display: none; }
+      .header-nav { display: flex; overflow-x: auto; white-space: nowrap; width: 100%; padding-top: 10px; gap: 12px; order: 3; scrollbar-width: none; }
       .hero { padding: 44px 0 32px; }
       .hero h1 { letter-spacing: -0.8px; }
       .calc-grid { grid-template-columns: 1fr; }
@@ -399,7 +399,7 @@
         <a href="#finance">Finance</a>
         <a href="#health">Health</a>
         <a href="#math">Math</a>
-        <a href="#everyday">Everyday</a>
+        <a href="#everyday">Everyday</a><a href="/blog/">Blog</a>
       </nav>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
     </div>
