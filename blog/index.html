@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — SitPanda</title>
+  <meta name="description" content="Read guides, tutorials, and financial tips from the SitPanda team.">
+  <link rel="canonical" href="https://sitpanda.com/blog/" />
+  <style>
+    :root { --brand:#0F766E; --bg:#F8FAFC; --card:#FFF; --ink:#0F172A; --ink2:#475569; --border:#E2E8F0; --radius:16px; --shadow:0 4px 16px rgba(15,23,42,0.08); }
+    body.dark { --bg:#0B1120; --card:#1E293B; --ink:#F1F5F9; --ink2:#CBD5E1; --border:#334155; --brand:#2DD4BF; }
+    body { font-family:"Inter", sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; }
+    .container { max-width:1000px; margin:0 auto; padding:0 24px; }
+    a { text-decoration:none; color:inherit; }
+    .site-header { background:var(--card); border-bottom:1px solid var(--border); padding:16px 0; }
+    .header-inner { display:flex; justify-content:space-between; align-items:center; }
+    .logo { font-weight:800; font-size:1.3rem; display:flex; gap:10px; align-items:center; }
+    .logo-icon { width:38px; height:38px; background:var(--brand); border-radius:11px; display:grid; place-items:center; color:#fff; }
+    .theme-toggle { width:42px; height:42px; border-radius:50%; border:1px solid var(--border); background:var(--bg); font-size:1.2rem; cursor:pointer; }
+    .page-title { font-size:2.5rem; font-weight:800; margin:48px 0 16px; }
+    .page-sub { color:var(--ink2); font-size:1.1rem; margin-bottom:40px; }
+    .blog-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:24px; margin-bottom:60px; }
+    .blog-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); transition:all 0.2s; display:flex; flex-direction:column; }
+    .blog-card:hover { transform:translateY(-4px); border-color:var(--brand); }
+    .blog-card h2 { font-size:1.3rem; margin-bottom:8px; }
+    .blog-card p { color:var(--ink2); font-size:0.95rem; margin-bottom:16px; flex-grow:1; }
+    .blog-tag { display:inline-block; padding:4px 12px; background:rgba(15,118,110,0.1); color:var(--brand); border-radius:999px; font-size:0.75rem; font-weight:700; text-transform:uppercase; }
+    .site-footer { text-align:center; padding:40px 0; border-top:1px solid var(--border); color:var(--ink2); font-size:0.85rem; }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-icon">🐼</span>SitPanda</a>
+    <button class="theme-toggle" id="themeToggle">🌙</button>
+  </div>
+</header>
+<main class="container">
+  <h1 class="page-title">SitPanda Blog</h1>
+  <p class="page-sub">Guides, tutorials, and practical tips to help you make better decisions.</p>
+  <div class="blog-grid">
+    <!-- Article 1 -->
+    <a href="/blog/compound-interest-guide/" class="blog-card">
+      <span class="blog-tag">Finance</span>
+      <h2>How Compound Interest Grows Your Wealth</h2>
+      <p>Learn the formula behind compound interest and how to use it to plan your long-term savings.</p>
+    </a>
+  </div>
+</main>
+<footer class="site-footer">© 2026 SitPanda. All rights reserved.</footer>
+<script>
+  const t = document.getElementById('themeToggle');
+  if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');t.textContent='☀️'}
+  t.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');t.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+</script>
+</body>
+</html>
