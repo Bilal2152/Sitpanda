@@ -265,7 +265,7 @@
       <a href="/#everyday">Everyday</a>
       <a href="/blog/" class="nav-blog">Blog</a>
     </nav>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
   </div>
 </header>
 
@@ -368,171 +368,66 @@
 </footer>
 
 
-<script>
+
+
+
+
+
+
+
+
+<script id="sp-theme-final">
 (function() {
-  // ===== GLOBAL CURRENCY MAP =====
-  const countryData = {
-    US: { currency: 'USD', symbol: '$', locale: 'en-US' },
-    GB: { currency: 'GBP', symbol: '£', locale: 'en-GB' },
-    CA: { currency: 'CAD', symbol: 'C$', locale: 'en-CA' },
-    AU: { currency: 'AUD', symbol: 'A$', locale: 'en-AU' },
-    EU: { currency: 'EUR', symbol: '€', locale: 'de-DE' },
-    AE: { currency: 'AED', symbol: 'د.إ', locale: 'ar-AE' },
-    SA: { currency: 'SAR', symbol: '﷼', locale: 'ar-SA' },
-    PK: { currency: 'PKR', symbol: '₨', locale: 'en-PK' },
-    IN: { currency: 'INR', symbol: '₹', locale: 'en-IN' },
-    BD: { currency: 'BDT', symbol: '৳', locale: 'bn-BD' },
-    JP: { currency: 'JPY', symbol: '¥', locale: 'ja-JP' },
-    CN: { currency: 'CNY', symbol: '¥', locale: 'zh-CN' },
-    BR: { currency: 'BRL', symbol: 'R$', locale: 'pt-BR' },
-    MX: { currency: 'MXN', symbol: 'MX$', locale: 'es-MX' },
-    ZA: { currency: 'ZAR', symbol: 'R', locale: 'en-ZA' },
-    NG: { currency: 'NGN', symbol: '₦', locale: 'en-NG' },
-    TR: { currency: 'TRY', symbol: '₺', locale: 'tr-TR' },
-    RU: { currency: 'RUB', symbol: '₽', locale: 'ru-RU' }
-  };
-
-  const currencySelect = document.getElementById('currencySelect');
-  Object.keys(countryData).forEach(code => {
-    const opt = document.createElement('option');
-    opt.value = code;
-    opt.textContent = countryData[code].currency;
-    currencySelect.appendChild(opt);
-  });
-  currencySelect.value = 'US';
-
-  const originalPrice = document.getElementById('originalPrice');
-  const discountPercent = document.getElementById('discountPercent');
-  const discountFixed = document.getElementById('discountFixed');
-  const percentGroup = document.getElementById('percentGroup');
-  const fixedGroup = document.getElementById('fixedGroup');
-  const currencySym1 = document.getElementById('currencySym1');
-  const currencySym2 = document.getElementById('currencySym2');
-  
-  const finalPrice = document.getElementById('finalPrice');
-  const savedAmount = document.getElementById('savedAmount');
-
-  let currentMode = 'percent';
-  let currentSymbol = '$', currentLocale = 'en-US', currentCurrency = 'USD';
-
-  function formatCurrency(amount) {
-    try {
-      return new Intl.NumberFormat(currentLocale, { style: 'currency', currency: currentCurrency, minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount);
-    } catch (e) { return currentSymbol + ' ' + amount.toFixed(2); }
-  }
-
-  function applyCurrency() {
-    const data = countryData[currencySelect.value];
-    if (!data) return;
-    currentSymbol = data.symbol; currentLocale = data.locale; currentCurrency = data.currency;
-    currencySym1.textContent = currentSymbol;
-    currencySym2.textContent = currentSymbol;
-    calculate();
-  }
-
-  currencySelect.addEventListener('change', applyCurrency);
-
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      currentMode = this.dataset.mode;
-      
-      if (currentMode === 'percent') {
-        percentGroup.style.display = 'block';
-        fixedGroup.style.display = 'none';
-      } else {
-        percentGroup.style.display = 'none';
-        fixedGroup.style.display = 'block';
-      }
-      calculate();
-    });
-  });
-
-  [originalPrice, discountPercent, discountFixed].forEach(el => el.addEventListener('input', calculate));
-
-  function calculate() {
-    const price = parseFloat(originalPrice.value) || 0;
-    let saved = 0;
-
-    if (currentMode === 'percent') {
-      const pct = parseFloat(discountPercent.value) || 0;
-      saved = price * (pct / 100);
+  function applyTheme(theme) {
+    var btn = document.getElementById('sp-master-btn');
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      if (btn) btn.textContent = '☀️';
     } else {
-      saved = parseFloat(discountFixed.value) || 0;
+      document.body.classList.remove('dark');
+      if (btn) btn.textContent = '🌙';
     }
-
-    let final = price - saved;
-    if (final < 0) final = 0; // Prevent negative prices
-
-    finalPrice.textContent = formatCurrency(final);
-    savedAmount.textContent = formatCurrency(saved);
+    try { localStorage.setItem('sp_theme', theme); } catch(e) {}
+    try { localStorage.setItem('theme', theme); } catch(e) {}
   }
 
-  const themeToggle = document.getElementById('themeToggle'); if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+  function getTheme() {
+    try {
+      var t = localStorage.getItem('sp_theme');
+      if (t === 'dark' || t === 'light') return t;
+      var old = localStorage.getItem('theme');
+      if (old === 'dark' || old === 'light') return old;
+    } catch(e) {}
+    return 'light';
+  }
 
-  applyCurrency();
+  // Apply on load
+  applyTheme(getTheme());
+
+  // Attach after DOM is ready
+  function attach() {
+    var btn = document.getElementById('sp-master-btn');
+    if (!btn) { setTimeout(attach, 50); return; }
+    // Clone to remove old listeners
+    var fresh = btn.cloneNode(true);
+    btn.parentNode.replaceChild(fresh, btn);
+    fresh.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      var next = document.body.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme(next);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attach);
+  } else {
+    attach();
+  }
 })();
 </script>
-
-<script>
-  // Standardize Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    if(themeToggle) themeToggle.textContent = '☀️';
-  }
-  if(themeToggle) {
-    const newToggle = themeToggle.cloneNode(true);
-    themeToggle.parentNode.replaceChild(newToggle, themeToggle);
-    newToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      newToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script>
-  // Standardized Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-      themeToggle.textContent = '☀️';
-    }
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      themeToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script id="master-theme-script">
-  (function() {
-    var toggle = document.getElementById('themeToggle');
-    if (!toggle) return;
-
-    // Check saved preference
-    var savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      toggle.textContent = '☀️';
-    }
-
-    // Toggle click event
-    toggle.addEventListener('click', function() {
-      document.body.classList.toggle('dark');
-      var isDark = document.body.classList.contains('dark');
-      toggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  })();
-</script>
 </body>
+
 
 
 

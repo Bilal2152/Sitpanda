@@ -263,7 +263,7 @@
       <a href="/#everyday">Everyday</a>
       <a href="/blog/" class="nav-blog">Blog</a>
     </nav>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
   </div>
 </header>
 
@@ -372,156 +372,66 @@
 </footer>
 
 
-<script>
+
+
+
+
+
+
+
+
+<script id="sp-theme-final">
 (function() {
-  const tabs = document.querySelectorAll('.tab-btn');
-  const sections = document.querySelectorAll('.input-section');
-  let currentMode = 'sss';
+  function applyTheme(theme) {
+    var btn = document.getElementById('sp-master-btn');
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      if (btn) btn.textContent = '☀️';
+    } else {
+      document.body.classList.remove('dark');
+      if (btn) btn.textContent = '🌙';
+    }
+    try { localStorage.setItem('sp_theme', theme); } catch(e) {}
+    try { localStorage.setItem('theme', theme); } catch(e) {}
+  }
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-      tabs.forEach(t => t.classList.remove('active'));
-      sections.forEach(s => s.classList.remove('active'));
-      this.classList.add('active');
-      currentMode = this.dataset.target;
-      document.getElementById(currentMode).classList.add('active');
-      calculate();
-    });
-  });
-
-  // Inputs
-  const sssA = document.getElementById('sssA'), sssB = document.getElementById('sssB'), sssC = document.getElementById('sssC');
-  const sasA = document.getElementById('sasA'), sasB = document.getElementById('sasB'), sasC = document.getElementById('sasC');
-  const asaC = document.getElementById('asaC'), asaA = document.getElementById('asaA'), asaB = document.getElementById('asaB');
-
-  // Outputs
-  const resArea = document.getElementById('resArea'), resPerimeter = document.getElementById('resPerimeter'), resSemi = document.getElementById('resSemi');
-  const outA = document.getElementById('outA'), outB = document.getElementById('outB'), outC = document.getElementById('outC');
-  const outAngA = document.getElementById('outAngA'), outAngB = document.getElementById('outAngB'), outAngC = document.getElementById('outAngC');
-
-  const toRad = (deg) => deg * (Math.PI / 180);
-  const toDeg = (rad) => rad * (180 / Math.PI);
-  const fmt = (num) => Number(num.toFixed(2)).toString();
-
-  function calculate() {
-    let a, b, c, A, B, C;
-
+  function getTheme() {
     try {
-      if (currentMode === 'sss') {
-        a = parseFloat(sssA.value); b = parseFloat(sssB.value); c = parseFloat(sssC.value);
-        if (!a || !b || !c) return;
-        if (a + b <= c || a + c <= b || b + c <= a) { reset('Invalid Triangle'); return; }
-
-        // Law of Cosines
-        A = toDeg(Math.acos((b*b + c*c - a*a) / (2 * b * c)));
-        B = toDeg(Math.acos((a*a + c*c - b*b) / (2 * a * c)));
-        C = 180 - A - B;
-      } 
-      else if (currentMode === 'sas') {
-        a = parseFloat(sasA.value); b = parseFloat(sasB.value); C = parseFloat(sasC.value);
-        if (!a || !b || !C) return;
-        c = Math.sqrt(a*a + b*b - 2*a*b*Math.cos(toRad(C)));
-        // Law of Sines (or Cosines) for remaining angles
-        A = toDeg(Math.asin((a * Math.sin(toRad(C))) / c));
-        B = 180 - A - C;
-      } 
-      else if (currentMode === 'asa') {
-        c = parseFloat(asaC.value); A = parseFloat(asaA.value); B = parseFloat(asaB.value);
-        if (!c || !A || !B || A + B >= 180) return;
-        C = 180 - A - B;
-        // Law of Sines
-        a = (c * Math.sin(toRad(A))) / Math.sin(toRad(C));
-        b = (c * Math.sin(toRad(B))) / Math.sin(toRad(C));
-      }
-
-      // Area & Perimeter
-      const perimeter = a + b + c;
-      const s = perimeter / 2;
-      const area = Math.sqrt(Math.max(0, s * (s-a) * (s-b) * (s-c)));
-
-      // Output
-      resArea.textContent = fmt(area);
-      resPerimeter.textContent = fmt(perimeter);
-      resSemi.textContent = fmt(s);
-      
-      outA.textContent = fmt(a); outB.textContent = fmt(b); outC.textContent = fmt(c);
-      outAngA.textContent = fmt(A) + '°'; outAngB.textContent = fmt(B) + '°'; outAngC.textContent = fmt(C) + '°';
-
-    } catch(e) { reset('Error'); }
+      var t = localStorage.getItem('sp_theme');
+      if (t === 'dark' || t === 'light') return t;
+      var old = localStorage.getItem('theme');
+      if (old === 'dark' || old === 'light') return old;
+    } catch(e) {}
+    return 'light';
   }
 
-  function reset(msg) {
-    [resArea, resPerimeter, resSemi, outA, outB, outC, outAngA, outAngB, outAngC].forEach(el => el.textContent = '-');
-    resArea.textContent = msg;
+  // Apply on load
+  applyTheme(getTheme());
+
+  // Attach after DOM is ready
+  function attach() {
+    var btn = document.getElementById('sp-master-btn');
+    if (!btn) { setTimeout(attach, 50); return; }
+    // Clone to remove old listeners
+    var fresh = btn.cloneNode(true);
+    btn.parentNode.replaceChild(fresh, btn);
+    fresh.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      var next = document.body.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme(next);
+    });
   }
 
-  // Attach listeners
-  [sssA, sssB, sssC, sasA, sasB, sasC, asaA, asaB, asaC].forEach(el => el.addEventListener('input', calculate));
-
-  const themeToggle = document.getElementById('themeToggle'); if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
-
-  calculate();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attach);
+  } else {
+    attach();
+  }
 })();
 </script>
-
-<script>
-  // Standardize Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    if(themeToggle) themeToggle.textContent = '☀️';
-  }
-  if(themeToggle) {
-    const newToggle = themeToggle.cloneNode(true);
-    themeToggle.parentNode.replaceChild(newToggle, themeToggle);
-    newToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      newToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script>
-  // Standardized Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-      themeToggle.textContent = '☀️';
-    }
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      themeToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script id="master-theme-script">
-  (function() {
-    var toggle = document.getElementById('themeToggle');
-    if (!toggle) return;
-
-    // Check saved preference
-    var savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      toggle.textContent = '☀️';
-    }
-
-    // Toggle click event
-    toggle.addEventListener('click', function() {
-      document.body.classList.toggle('dark');
-      var isDark = document.body.classList.contains('dark');
-      toggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  })();
-</script>
 </body>
+
 
 
 

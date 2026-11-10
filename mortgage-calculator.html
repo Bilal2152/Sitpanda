@@ -579,7 +579,7 @@
       <a href="/#everyday">Everyday</a>
       <a href="/blog/" class="nav-blog">Blog</a>
     </nav>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
   </div>
 </header>
 
@@ -905,440 +905,67 @@
 </footer>
 
 
-<script>
+
+
+
+
+
+
+
+
+
+<script id="sp-theme-final">
 (function() {
-  const calculators = [
-    { name: 'Mortgage Calculator', url: '/mortgage-calculator.html', keywords: 'mortgage home loan', icon: '🏠', cat: 'Finance' },
-    { name: 'Loan Calculator', url: '/loan-calculator.html', keywords: 'loan emi personal auto student business', icon: '🏦', cat: 'Finance' },
-    { name: 'Compound Interest Calculator', url: '/compound-interest-calculator.html', keywords: 'compound interest savings growth investment', icon: '📈', cat: 'Finance' },
-    { name: 'Salary Calculator', url: '/salary-calculator.html', keywords: 'salary income hourly annual', icon: '💵', cat: 'Finance' },
-    { name: 'Inflation Calculator', url: '/inflation-calculator.html', keywords: 'inflation money value', icon: '📉', cat: 'Finance' },
-    { name: 'Zakat Calculator', url: '/zakat-calculator.html', keywords: 'zakat islamic charity', icon: '🕌', cat: 'Finance' },
-    { name: 'EMI Calculator', url: '/emi-calculator.html', keywords: 'emi equated monthly installment', icon: '📊', cat: 'Finance' },
-    { name: 'Income Tax Calculator', url: '/tax-calculator.html', keywords: 'tax income', icon: '🧾', cat: 'Finance' },
-    { name: 'Savings Goal Calculator', url: '/savings-goal-calculator.html', keywords: 'savings goal target', icon: '🎯', cat: 'Finance' },
-    { name: 'Retirement Calculator', url: '/retirement-calculator.html', keywords: 'retirement pension', icon: '🌴', cat: 'Finance' },
-    { name: 'BMI Calculator', url: '/bmi-calculator.html', keywords: 'bmi body mass index', icon: '⚖️', cat: 'Health' },
-    { name: 'Calorie Calculator', url: '/calorie-calculator.html', keywords: 'calorie diet food', icon: '🍎', cat: 'Health' },
-    { name: 'Body Fat Calculator', url: '/body-fat-calculator.html', keywords: 'body fat percentage', icon: '💪', cat: 'Health' },
-    { name: 'BMR Calculator', url: '/bmr-calculator.html', keywords: 'bmr basal metabolic rate', icon: '🔥', cat: 'Health' },
-    { name: 'Ideal Weight Calculator', url: '/ideal-weight-calculator.html', keywords: 'ideal weight height', icon: '📏', cat: 'Health' },
-    { name: 'Water Intake Calculator', url: '/water-intake-calculator.html', keywords: 'water intake hydration', icon: '💧', cat: 'Health' },
-    { name: 'Heart Rate Calculator', url: '/heart-rate-calculator.html', keywords: 'heart rate exercise zones', icon: '❤️‍🔥', cat: 'Health' },
-    { name: 'Pregnancy Due Date', url: '/pregnancy-calculator.html', keywords: 'pregnancy due date', icon: '👶', cat: 'Health' },
-    { name: 'Percentage Calculator', url: '/percentage-calculator.html', keywords: 'percentage percent', icon: '％', cat: 'Math' },
-    { name: 'Scientific Calculator', url: '/scientific-calculator.html', keywords: 'scientific advanced math', icon: '🔬', cat: 'Math' },
-    { name: 'Fraction Calculator', url: '/fraction-calculator.html', keywords: 'fraction add subtract multiply', icon: '½', cat: 'Math' },
-    { name: 'Average Calculator', url: '/average-calculator.html', keywords: 'average mean median mode', icon: '📊', cat: 'Math' },
-    { name: 'Ratio Calculator', url: '/ratio-calculator.html', keywords: 'ratio proportion', icon: '⚖️', cat: 'Math' },
-    { name: 'Standard Deviation', url: '/standard-deviation-calculator.html', keywords: 'standard deviation statistics', icon: '📈', cat: 'Math' },
-    { name: 'Triangle Calculator', url: '/triangle-calculator.html', keywords: 'triangle area perimeter angles', icon: '🔺', cat: 'Math' },
-    { name: 'Unit Converter', url: '/unit-converter.html', keywords: 'unit converter length weight temperature', icon: '🔄', cat: 'Math' },
-    { name: 'Age Calculator', url: '/age-calculator.html', keywords: 'age birthday date of birth', icon: '🎂', cat: 'Everyday' },
-    { name: 'Date Difference', url: '/date-difference-calculator.html', keywords: 'date difference days between', icon: '📅', cat: 'Everyday' },
-    { name: 'Time Calculator', url: '/time-calculator.html', keywords: 'time add subtract hours', icon: '⏰', cat: 'Everyday' },
-    { name: 'Countdown Calculator', url: '/countdown-calculator.html', keywords: 'countdown event days', icon: '⏳', cat: 'Everyday' },
-    { name: 'Tip Calculator', url: '/tip-calculator.html', keywords: 'tip restaurant bill split', icon: '🍽️', cat: 'Everyday' },
-    { name: 'Discount Calculator', url: '/discount-calculator.html', keywords: 'discount sale price', icon: '🏷️', cat: 'Everyday' },
-    { name: 'GPA Calculator', url: '/gpa-calculator.html', keywords: 'gpa grade point average', icon: '🎓', cat: 'Everyday' },
-    { name: 'Fuel Cost Calculator', url: '/fuel-cost-calculator.html', keywords: 'fuel cost trip petrol', icon: '⛽', cat: 'Everyday' }
-  ];
-
-  const headerSearch = document.getElementById('headerSearch');
-  const searchDropdown = document.getElementById('searchDropdown');
-
-  function renderResults(query) {
-    const q = query.toLowerCase().trim();
-    if (!q) { searchDropdown.classList.remove('open'); return; }
-    const matches = calculators.filter(c => (c.name + ' ' + c.keywords).toLowerCase().includes(q)).slice(0, 8);
-    if (matches.length === 0) {
-      searchDropdown.innerHTML = '<div class="search-empty">No calculators found.</div>';
+  function applyTheme(theme) {
+    var btn = document.getElementById('sp-master-btn');
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      if (btn) btn.textContent = '☀️';
     } else {
-      searchDropdown.innerHTML = matches.map(c =>
-        `<a href="${c.url}" class="search-item">
-          <span class="s-icon">${c.icon}</span>
-          <div class="s-text">
-            <div class="s-name">${c.name}</div>
-            <div class="s-cat">${c.cat}</div>
-          </div>
-        </a>`
-      ).join('');
+      document.body.classList.remove('dark');
+      if (btn) btn.textContent = '🌙';
     }
-    searchDropdown.classList.add('open');
+    try { localStorage.setItem('sp_theme', theme); } catch(e) {}
+    try { localStorage.setItem('theme', theme); } catch(e) {}
   }
 
-  headerSearch.addEventListener('input', e => renderResults(e.target.value));
-  headerSearch.addEventListener('focus', e => { if (e.target.value) renderResults(e.target.value); });
-  document.addEventListener('click', e => {
-    if (!e.target.closest('.header-center')) searchDropdown.classList.remove('open');
-  });
-  document.addEventListener('keydown', e => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); headerSearch.focus(); }
-    if (e.key === 'Escape') { searchDropdown.classList.remove('open'); headerSearch.blur(); }
-  });
-
-  const themeToggle = document.getElementById('themeToggle');
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    themeToggle.textContent = '☀️';
-  }
-  themeToggle.addEventListener('click', function() {
-    document.body.classList.toggle('dark');
-    const isDark = document.body.classList.contains('dark');
-    themeToggle.textContent = isDark ? '☀️' : '🌙';
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  });
-
-  // ===== GLOBAL COUNTRY DATA (Mortgage) =====
-  const countryData = {
-    US: { currency: 'USD', locale: 'en-US', rate: 6.5, term: 30, hint: 'Typical mortgage rate: 6–7%', price: 350000 },
-    GB: { currency: 'GBP', locale: 'en-GB', rate: 5.5, term: 25, hint: 'Typical mortgage rate: 5–6%', price: 250000 },
-    CA: { currency: 'CAD', locale: 'en-CA', rate: 5.5, term: 25, hint: 'Typical mortgage rate: 5–6%', price: 500000 },
-    AU: { currency: 'AUD', locale: 'en-AU', rate: 6.0, term: 30, hint: 'Typical mortgage rate: 5.5–6.5%', price: 600000 },
-    NZ: { currency: 'NZD', locale: 'en-NZ', rate: 6.0, term: 30, hint: 'Typical mortgage rate: 5.5–6.5%', price: 500000 },
-    IE: { currency: 'EUR', locale: 'en-IE', rate: 4.0, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 300000 },
-    DE: { currency: 'EUR', locale: 'de-DE', rate: 3.8, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 300000 },
-    FR: { currency: 'EUR', locale: 'fr-FR', rate: 3.5, term: 25, hint: 'Typical mortgage rate: 3–4%', price: 250000 },
-    ES: { currency: 'EUR', locale: 'es-ES', rate: 3.3, term: 30, hint: 'Typical mortgage rate: 3–4%', price: 200000 },
-    IT: { currency: 'EUR', locale: 'it-IT', rate: 3.5, term: 30, hint: 'Typical mortgage rate: 3–4%', price: 200000 },
-    NL: { currency: 'EUR', locale: 'nl-NL', rate: 3.8, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 350000 },
-    CH: { currency: 'CHF', locale: 'de-CH', rate: 2.5, term: 25, hint: 'Typical mortgage rate: 2–3%', price: 600000 },
-    SE: { currency: 'SEK', locale: 'sv-SE', rate: 4.0, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 3500000 },
-    NO: { currency: 'NOK', locale: 'nb-NO', rate: 5.0, term: 25, hint: 'Typical mortgage rate: 4.5–5.5%', price: 4000000 },
-    DK: { currency: 'DKK', locale: 'da-DK', rate: 4.0, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 2500000 },
-    PL: { currency: 'PLN', locale: 'pl-PL', rate: 7.5, term: 25, hint: 'Typical mortgage rate: 7–8%', price: 400000 },
-    CZ: { currency: 'CZK', locale: 'cs-CZ', rate: 5.5, term: 25, hint: 'Typical mortgage rate: 5–6%', price: 5000000 },
-    HU: { currency: 'HUF', locale: 'hu-HU', rate: 7.0, term: 20, hint: 'Typical mortgage rate: 6.5–7.5%', price: 40000000 },
-    RO: { currency: 'RON', locale: 'ro-RO', rate: 6.5, term: 30, hint: 'Typical mortgage rate: 6–7%', price: 500000 },
-    TR: { currency: 'TRY', locale: 'tr-TR', rate: 40.0, term: 10, hint: 'Typical mortgage rate: 35–45%', price: 2000000 },
-    RU: { currency: 'RUB', locale: 'ru-RU', rate: 15.0, term: 20, hint: 'Typical mortgage rate: 12–18%', price: 5000000 },
-    AE: { currency: 'AED', locale: 'ar-AE', rate: 4.5, term: 25, hint: 'Typical mortgage rate: 4–5%', price: 1500000 },
-    SA: { currency: 'SAR', locale: 'ar-SA', rate: 5.0, term: 25, hint: 'Typical mortgage rate: 4.5–5.5%', price: 1200000 },
-    QA: { currency: 'QAR', locale: 'ar-QA', rate: 4.5, term: 25, hint: 'Typical mortgage rate: 4–5%', price: 1500000 },
-    KW: { currency: 'KWD', locale: 'ar-KW', rate: 4.0, term: 25, hint: 'Typical mortgage rate: 3.5–4.5%', price: 120000 },
-    BH: { currency: 'BHD', locale: 'ar-BH', rate: 5.0, term: 25, hint: 'Typical mortgage rate: 4.5–5.5%', price: 120000 },
-    OM: { currency: 'OMR', locale: 'ar-OM', rate: 4.5, term: 25, hint: 'Typical mortgage rate: 4–5%', price: 100000 },
-    JO: { currency: 'JOD', locale: 'ar-JO', rate: 6.0, term: 25, hint: 'Typical mortgage rate: 5.5–6.5%', price: 150000 },
-    EG: { currency: 'EGP', locale: 'ar-EG', rate: 20.0, term: 20, hint: 'Typical mortgage rate: 18–22%', price: 2000000 },
-    ZA: { currency: 'ZAR', locale: 'en-ZA', rate: 11.0, term: 20, hint: 'Typical mortgage rate: 10–12%', price: 1500000 },
-    NG: { currency: 'NGN', locale: 'en-NG', rate: 20.0, term: 20, hint: 'Typical mortgage rate: 18–22%', price: 30000000 },
-    KE: { currency: 'KES', locale: 'en-KE', rate: 13.0, term: 20, hint: 'Typical mortgage rate: 12–14%', price: 8000000 },
-    GH: { currency: 'GHS', locale: 'en-GH', rate: 25.0, term: 20, hint: 'Typical mortgage rate: 22–28%', price: 500000 },
-    PK: { currency: 'PKR', locale: 'en-PK', rate: 15.0, term: 20, hint: 'Typical mortgage rate: 14–16%', price: 15000000 },
-    IN: { currency: 'INR', locale: 'en-IN', rate: 8.5, term: 20, hint: 'Typical mortgage rate: 8–9%', price: 5000000 },
-    BD: { currency: 'BDT', locale: 'bn-BD', rate: 10.0, term: 20, hint: 'Typical mortgage rate: 9–11%', price: 5000000 },
-    LK: { currency: 'LKR', locale: 'si-LK', rate: 12.0, term: 20, hint: 'Typical mortgage rate: 11–13%', price: 10000000 },
-    NP: { currency: 'NPR', locale: 'ne-NP', rate: 10.0, term: 20, hint: 'Typical mortgage rate: 9–11%', price: 5000000 },
-    CN: { currency: 'CNY', locale: 'zh-CN', rate: 3.5, term: 30, hint: 'Typical mortgage rate: 3–4%', price: 1500000 },
-    JP: { currency: 'JPY', locale: 'ja-JP', rate: 1.5, term: 35, hint: 'Typical mortgage rate: 1–2%', price: 30000000 },
-    KR: { currency: 'KRW', locale: 'ko-KR', rate: 4.0, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 400000000 },
-    SG: { currency: 'SGD', locale: 'en-SG', rate: 3.0, term: 25, hint: 'Typical mortgage rate: 2.5–3.5%', price: 800000 },
-    MY: { currency: 'MYR', locale: 'ms-MY', rate: 4.0, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 500000 },
-    TH: { currency: 'THB', locale: 'th-TH', rate: 5.0, term: 30, hint: 'Typical mortgage rate: 4.5–5.5%', price: 3000000 },
-    ID: { currency: 'IDR', locale: 'id-ID', rate: 8.5, term: 20, hint: 'Typical mortgage rate: 8–9%', price: 1500000000 },
-    PH: { currency: 'PHP', locale: 'en-PH', rate: 6.5, term: 20, hint: 'Typical mortgage rate: 6–7%', price: 3000000 },
-    VN: { currency: 'VND', locale: 'vi-VN', rate: 9.0, term: 20, hint: 'Typical mortgage rate: 8–10%', price: 2000000000 },
-    HK: { currency: 'HKD', locale: 'en-HK', rate: 4.0, term: 30, hint: 'Typical mortgage rate: 3.5–4.5%', price: 5000000 },
-    TW: { currency: 'TWD', locale: 'zh-TW', rate: 2.0, term: 30, hint: 'Typical mortgage rate: 1.5–2.5%', price: 8000000 },
-    BR: { currency: 'BRL', locale: 'pt-BR', rate: 11.0, term: 30, hint: 'Typical mortgage rate: 10–12%', price: 400000 },
-    MX: { currency: 'MXN', locale: 'es-MX', rate: 10.0, term: 20, hint: 'Typical mortgage rate: 9–11%', price: 2000000 },
-    AR: { currency: 'ARS', locale: 'es-AR', rate: 50.0, term: 20, hint: 'Typical mortgage rate: 45–55%', price: 50000000 },
-    CL: { currency: 'CLP', locale: 'es-CL', rate: 5.0, term: 25, hint: 'Typical mortgage rate: 4.5–5.5%', price: 100000000 },
-    CO: { currency: 'COP', locale: 'es-CO', rate: 10.0, term: 20, hint: 'Typical mortgage rate: 9–11%', price: 300000000 },
-    PE: { currency: 'PEN', locale: 'es-PE', rate: 8.0, term: 25, hint: 'Typical mortgage rate: 7–9%', price: 300000 }
-  };
-
-  const countrySelect = document.getElementById('countrySelect');
-  const currencySelect = document.getElementById('currencySelect');
-  const homePrice = document.getElementById('homePrice');
-  const downPayment = document.getElementById('downPayment');
-  const downPercent = document.getElementById('downPercent');
-  const interestRate = document.getElementById('interestRate');
-  const loanTerm = document.getElementById('loanTerm');
-  const termUnit = document.getElementById('termUnit');
-  const propertyTax = document.getElementById('propertyTax');
-  const insurance = document.getElementById('insurance');
-  const mortgageInsurance = document.getElementById('mortgageInsurance');
-  const currencySymbol1 = document.getElementById('currencySymbol1');
-  const currencySymbol2 = document.getElementById('currencySymbol2');
-  const monthlyPayment = document.getElementById('monthlyPayment');
-  const mainResultLabel = document.getElementById('mainResultLabel');
-  const monthlySubLabel = document.getElementById('monthlySubLabel');
-  const totalInterestEl = document.getElementById('totalInterest');
-  const totalCostEl = document.getElementById('totalCost');
-  const loanAmountDisplay = document.getElementById('loanAmountDisplay');
-  const downPaymentDisplay = document.getElementById('downPaymentDisplay');
-  const rateHint = document.getElementById('rateHint');
-  const downHint = document.getElementById('downHint');
-  const extraFields = document.getElementById('extraFields');
-  const amortToggle = document.getElementById('amortToggle');
-  const amortTableWrap = document.getElementById('amortTableWrap');
-  const amortBody = document.getElementById('amortBody');
-  const amortArrow = document.getElementById('amortArrow');
-
-  let currentSymbol = '$';
-  let currentCurrency = 'USD';
-  let currentLocale = 'en-US';
-  let includeExtras = false;
-
-  function formatCurrency(amount) {
+  function getTheme() {
     try {
-      return new Intl.NumberFormat(currentLocale, {
-        style: 'currency', currency: currentCurrency,
-        minimumFractionDigits: 0, maximumFractionDigits: 0
-      }).format(Math.round(amount));
-    } catch (e) {
-      return currentSymbol + ' ' + Math.round(amount).toLocaleString('en-US');
-    }
+      var t = localStorage.getItem('sp_theme');
+      if (t === 'dark' || t === 'light') return t;
+      var old = localStorage.getItem('theme');
+      if (old === 'dark' || old === 'light') return old;
+    } catch(e) {}
+    return 'light';
   }
 
-  async function detectCountry() {
-    try {
-      const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(4000) });
-      const data = await res.json();
-      if (data.country_code && countryData[data.country_code]) {
-        countrySelect.value = data.country_code;
-        applyCountry();
-        return;
-      }
-    } catch (e) {}
-    const lang = (navigator.language || 'en-US').split('-')[1];
-    if (lang && countryData[lang]) {
-      countrySelect.value = lang;
-      applyCountry();
-    } else {
-      applyCountry();
-    }
-  }
+  // Apply on load
+  applyTheme(getTheme());
 
-  function applyCountry() {
-    const code = countrySelect.value;
-    const d = countryData[code];
-    if (!d) return;
-
-    currentCurrency = d.currency;
-    currentLocale = d.locale;
-    currencySelect.value = d.currency;
-
-    try {
-      const parts = new Intl.NumberFormat(currentLocale, {
-        style: 'currency', currency: d.currency
-      }).formatToParts(0);
-      const symPart = parts.find(p => p.type === 'currency');
-      currentSymbol = symPart ? symPart.value : d.currency;
-    } catch (e) { currentSymbol = d.currency; }
-
-    currencySymbol1.textContent = currentSymbol;
-    currencySymbol2.textContent = currentSymbol;
-
-    interestRate.value = d.rate;
-    loanTerm.value = d.term;
-    rateHint.textContent = d.hint;
-
-    homePrice.value = d.price;
-    downPayment.value = Math.round(d.price * 0.2);
-
-    syncDownPercent();
-    calculate();
-  }
-
-  function syncDownPercent() {
-    const price = parseFloat(homePrice.value) || 0;
-    const down = parseFloat(downPayment.value) || 0;
-    if (price > 0) {
-      downPercent.value = ((down / price) * 100).toFixed(1);
-      downHint.textContent = `${((down/price)*100).toFixed(1)}% of home price`;
-    }
-  }
-
-  countrySelect.addEventListener('change', applyCountry);
-  currencySelect.addEventListener('change', function() {
-    currentCurrency = this.value;
-    for (const d of Object.values(countryData)) {
-      if (d.currency === currentCurrency) { currentLocale = d.locale; break; }
-    }
-    try {
-      const parts = new Intl.NumberFormat(currentLocale, {
-        style: 'currency', currency: currentCurrency
-      }).formatToParts(0);
-      const symPart = parts.find(p => p.type === 'currency');
-      currentSymbol = symPart ? symPart.value : currentCurrency;
-    } catch (e) { currentSymbol = currentCurrency; }
-    currencySymbol1.textContent = currentSymbol;
-    currencySymbol2.textContent = currentSymbol;
-    calculate();
-  });
-
-  homePrice.addEventListener('input', function() { syncDownPercent(); calculate(); });
-  downPayment.addEventListener('input', function() { syncDownPercent(); calculate(); });
-  downPercent.addEventListener('input', function() {
-    const price = parseFloat(homePrice.value) || 0;
-    const pct = parseFloat(this.value) || 0;
-    downPayment.value = Math.round(price * pct / 100);
-    downHint.textContent = `${pct}% of home price`;
-    calculate();
-  });
-
-  document.querySelectorAll('.toggle-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      includeExtras = this.dataset.extra === 'full';
-      extraFields.style.display = includeExtras ? 'block' : 'none';
-      calculate();
+  // Attach after DOM is ready
+  function attach() {
+    var btn = document.getElementById('sp-master-btn');
+    if (!btn) { setTimeout(attach, 50); return; }
+    // Clone to remove old listeners
+    var fresh = btn.cloneNode(true);
+    btn.parentNode.replaceChild(fresh, btn);
+    fresh.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      var next = document.body.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme(next);
     });
-  });
-
-  amortToggle.addEventListener('click', function() {
-    amortTableWrap.classList.toggle('open');
-    amortArrow.textContent = amortTableWrap.classList.contains('open') ? '▲' : '▼';
-  });
-
-  function calculate() {
-    const price = parseFloat(homePrice.value) || 0;
-    const down = parseFloat(downPayment.value) || 0;
-    const annualRate = parseFloat(interestRate.value) || 0;
-    const termVal = parseFloat(loanTerm.value) || 1;
-    const termInYears = termUnit.value === 'years' ? termVal : termVal / 12;
-
-    const P = Math.max(0, price - down);
-    const n = termInYears * 12;
-    const r = annualRate / 12 / 100;
-
-    if (P <= 0 || n <= 0) {
-      monthlyPayment.textContent = formatCurrency(0);
-      totalInterestEl.textContent = formatCurrency(0);
-      totalCostEl.textContent = formatCurrency(0);
-      loanAmountDisplay.textContent = formatCurrency(0);
-      downPaymentDisplay.textContent = formatCurrency(0);
-      amortBody.innerHTML = '';
-      return;
-    }
-
-    let emi;
-    if (r === 0) emi = P / n;
-    else emi = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
-
-    const totalPayable = emi * n;
-    const totalInterest = totalPayable - P;
-
-    let monthlyExtra = 0;
-    if (includeExtras) {
-      const taxRate = parseFloat(propertyTax.value) || 0;
-      const ins = parseFloat(insurance.value) || 0;
-      const miPct = parseFloat(mortgageInsurance.value) || 0;
-
-      const monthlyTax = (price * taxRate / 100) / 12;
-      const monthlyIns = ins / 12;
-      let monthlyMI = 0;
-      if (down / price < 0.2 && miPct > 0) {
-        monthlyMI = (P * miPct / 100) / 12;
-      }
-      monthlyExtra = monthlyTax + monthlyIns + monthlyMI;
-    }
-
-    const totalMonthly = emi + monthlyExtra;
-
-    mainResultLabel.textContent = includeExtras ? 'Total Monthly Payment' : 'Monthly Payment (Principal + Interest)';
-    monthlyPayment.textContent = formatCurrency(totalMonthly);
-    monthlySubLabel.textContent = includeExtras
-      ? `Principal & interest: ${formatCurrency(emi)} + extras`
-      : 'Principal & interest only';
-    totalInterestEl.textContent = formatCurrency(totalInterest);
-    totalCostEl.textContent = formatCurrency(totalPayable + (includeExtras ? monthlyExtra * n : 0));
-    loanAmountDisplay.textContent = formatCurrency(P);
-    downPaymentDisplay.textContent = formatCurrency(down);
-
-    buildAmort(P, r, n, emi);
   }
 
-  function buildAmort(P, r, n, emi) {
-    let balance = P;
-    let html = '';
-    const months = Math.min(12, n);
-    for (let m = 1; m <= months; m++) {
-      const interest = balance * r;
-      const principal = emi - interest;
-      balance -= principal;
-      html += `<tr>
-        <td>${m}</td>
-        <td>${formatCurrency(principal)}</td>
-        <td>${formatCurrency(interest)}</td>
-        <td>${formatCurrency(Math.max(0, balance))}</td>
-      </tr>`;
-    }
-    amortBody.innerHTML = html;
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attach);
+  } else {
+    attach();
   }
-
-  [interestRate, loanTerm, propertyTax, insurance, mortgageInsurance].forEach(el => {
-    el.addEventListener('input', calculate);
-  });
-  termUnit.addEventListener('change', calculate);
-
-  detectCountry();
-  setTimeout(calculate, 150);
 })();
 </script>
-
-
-<script>
-  // Standardize Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    if(themeToggle) themeToggle.textContent = '☀️';
-  }
-  if(themeToggle) {
-    const newToggle = themeToggle.cloneNode(true);
-    themeToggle.parentNode.replaceChild(newToggle, themeToggle);
-    newToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      newToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script>
-  // Standardized Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-      themeToggle.textContent = '☀️';
-    }
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      themeToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script id="master-theme-script">
-  (function() {
-    var toggle = document.getElementById('themeToggle');
-    if (!toggle) return;
-
-    // Check saved preference
-    var savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      toggle.textContent = '☀️';
-    }
-
-    // Toggle click event
-    toggle.addEventListener('click', function() {
-      document.body.classList.toggle('dark');
-      var isDark = document.body.classList.contains('dark');
-      toggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  })();
-</script>
 </body>
+
 
 
 

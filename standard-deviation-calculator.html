@@ -257,7 +257,7 @@
       <a href="/#everyday">Everyday</a>
       <a href="/blog/" class="nav-blog">Blog</a>
     </nav>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
   </div>
 </header>
 
@@ -344,129 +344,66 @@
 </footer>
 
 
-<script>
+
+
+
+
+
+
+
+
+<script id="sp-theme-final">
 (function() {
-  const input = document.getElementById('numbersInput');
-  const sampleSD = document.getElementById('sampleSD');
-  const popSD = document.getElementById('popSD');
-  const countValue = document.getElementById('countValue');
-  const meanValue = document.getElementById('meanValue');
-  const sumValue = document.getElementById('sumValue');
-  const sampleVar = document.getElementById('sampleVar');
-  const popVar = document.getElementById('popVar');
-  const rangeValue = document.getElementById('rangeValue');
-
-  function calculate() {
-    const raw = input.value.trim();
-    if (!raw) return;
-
-    const nums = raw.split(/[\s,]+/).map(Number).filter(n => !isNaN(n));
-    const N = nums.length;
-
-    if (N === 0) return;
-
-    // Sum & Mean
-    const sum = nums.reduce((a, b) => a + b, 0);
-    const mean = sum / N;
-
-    // Sum of Squared Differences
-    const sqDiffSum = nums.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0);
-
-    // Population Variance & SD
-    const popVariance = sqDiffSum / N;
-    const popStandardDev = Math.sqrt(popVariance);
-
-    // Sample Variance & SD (if N > 1)
-    let sampleVariance = 0;
-    let sampleStandardDev = 0;
-    if (N > 1) {
-      sampleVariance = sqDiffSum / (N - 1);
-      sampleStandardDev = Math.sqrt(sampleVariance);
+  function applyTheme(theme) {
+    var btn = document.getElementById('sp-master-btn');
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      if (btn) btn.textContent = '☀️';
+    } else {
+      document.body.classList.remove('dark');
+      if (btn) btn.textContent = '🌙';
     }
-
-    // Range
-    const min = Math.min(...nums);
-    const max = Math.max(...nums);
-    const range = max - min;
-
-    // Display formatting (4 decimal places max, trim zeros)
-    const fmt = (num) => num.toFixed(4).replace(/\.?0+$/, '');
-
-    sampleSD.textContent = N > 1 ? fmt(sampleStandardDev) : 'N/A';
-    popSD.textContent = fmt(popStandardDev);
-    countValue.textContent = N;
-    meanValue.textContent = fmt(mean);
-    sumValue.textContent = fmt(sum);
-    sampleVar.textContent = N > 1 ? fmt(sampleVariance) : 'N/A';
-    popVar.textContent = fmt(popVariance);
-    rangeValue.textContent = fmt(range);
+    try { localStorage.setItem('sp_theme', theme); } catch(e) {}
+    try { localStorage.setItem('theme', theme); } catch(e) {}
   }
 
-  input.addEventListener('input', calculate);
+  function getTheme() {
+    try {
+      var t = localStorage.getItem('sp_theme');
+      if (t === 'dark' || t === 'light') return t;
+      var old = localStorage.getItem('theme');
+      if (old === 'dark' || old === 'light') return old;
+    } catch(e) {}
+    return 'light';
+  }
 
-  const themeToggle = document.getElementById('themeToggle'); if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
-  calculate();
+  // Apply on load
+  applyTheme(getTheme());
+
+  // Attach after DOM is ready
+  function attach() {
+    var btn = document.getElementById('sp-master-btn');
+    if (!btn) { setTimeout(attach, 50); return; }
+    // Clone to remove old listeners
+    var fresh = btn.cloneNode(true);
+    btn.parentNode.replaceChild(fresh, btn);
+    fresh.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      var next = document.body.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme(next);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attach);
+  } else {
+    attach();
+  }
 })();
 </script>
-
-<script>
-  // Standardize Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    if(themeToggle) themeToggle.textContent = '☀️';
-  }
-  if(themeToggle) {
-    const newToggle = themeToggle.cloneNode(true);
-    themeToggle.parentNode.replaceChild(newToggle, themeToggle);
-    newToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      newToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script>
-  // Standardized Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-      themeToggle.textContent = '☀️';
-    }
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      themeToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script id="master-theme-script">
-  (function() {
-    var toggle = document.getElementById('themeToggle');
-    if (!toggle) return;
-
-    // Check saved preference
-    var savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      toggle.textContent = '☀️';
-    }
-
-    // Toggle click event
-    toggle.addEventListener('click', function() {
-      document.body.classList.toggle('dark');
-      var isDark = document.body.classList.contains('dark');
-      toggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  })();
-</script>
 </body>
+
 
 
 

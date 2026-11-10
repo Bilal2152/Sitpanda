@@ -291,7 +291,7 @@
       <a href="/#everyday">Everyday</a>
       <a href="/blog/" class="nav-blog">Blog</a>
     </nav>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
   </div>
 </header>
 
@@ -424,155 +424,66 @@
 </footer>
 
 
-<script>
+
+
+
+
+
+
+
+
+<script id="sp-theme-final">
 (function() {
-  const weight = document.getElementById('weight');
-  const weightUnit = document.getElementById('weightUnit');
-  const exercise = document.getElementById('exercise');
-  const climate = document.getElementById('climate');
-  
-  const totalWater = document.getElementById('totalWater');
-  const totalWaterSub = document.getElementById('totalWaterSub');
-  const glassCount = document.getElementById('glassCount');
-  const baseWater = document.getElementById('baseWater');
-  const exWater = document.getElementById('exWater');
-  const clWater = document.getElementById('clWater');
-
-  let currentUnit = 'metric';
-
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      currentUnit = this.dataset.unit;
-
-      if (currentUnit === 'metric') {
-        weightUnit.textContent = 'kg';
-        weight.value = 70;
-      } else {
-        weightUnit.textContent = 'lb';
-        weight.value = 154;
-      }
-      calculate();
-    });
-  });
-
-  [weight, exercise, climate].forEach(el => {
-    el.addEventListener('input', calculate);
-  });
-
-  function calculate() {
-    let weightKg = parseFloat(weight.value) || 0;
-    if (currentUnit === 'imperial') {
-      weightKg = weightKg * 0.453592; // Convert lb to kg
-    }
-
-    if (weightKg <= 0) return;
-
-    // 1. Base Water: 35ml per kg
-    let baseLiters = weightKg * 0.035;
-
-    // 2. Exercise: +350ml (0.35L) per 30 mins
-    const exMins = parseFloat(exercise.value) || 0;
-    let exLiters = (exMins / 30) * 0.35;
-
-    // 3. Climate
-    let clLiters = 0;
-    const clValue = climate.value;
-    if (clValue === 'hot') clLiters = 0.5;
-    else if (clValue === 'cold') clLiters = 0.25;
-
-    const totalLiters = baseLiters + exLiters + clLiters;
-
-    // Calculate glasses (250ml per glass)
-    const glasses = Math.round(totalLiters / 0.25);
-
-    // Formatting based on unit
-    if (currentUnit === 'metric') {
-      totalWater.textContent = totalLiters.toFixed(2) + ' Liters';
-      totalWaterSub.textContent = `About ${glasses} cups (250ml each)`;
-      baseWater.textContent = baseLiters.toFixed(2) + ' L';
-      exWater.textContent = '+ ' + exLiters.toFixed(2) + ' L';
-      clWater.textContent = '+ ' + clLiters.toFixed(2) + ' L';
+  function applyTheme(theme) {
+    var btn = document.getElementById('sp-master-btn');
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      if (btn) btn.textContent = '☀️';
     } else {
-      // Convert Liters to Ounces (1 Liter = 33.814 oz)
-      const totalOz = totalLiters * 33.814;
-      totalWater.textContent = totalOz.toFixed(0) + ' oz';
-      totalWaterSub.textContent = `About ${glasses} cups (8oz each)`;
-      baseWater.textContent = (baseLiters * 33.814).toFixed(0) + ' oz';
-      exWater.textContent = '+ ' + (exLiters * 33.814).toFixed(0) + ' oz';
-      clWater.textContent = '+ ' + (clLiters * 33.814).toFixed(0) + ' oz';
+      document.body.classList.remove('dark');
+      if (btn) btn.textContent = '🌙';
     }
-
-    glassCount.textContent = glasses;
+    try { localStorage.setItem('sp_theme', theme); } catch(e) {}
+    try { localStorage.setItem('theme', theme); } catch(e) {}
   }
 
-  const themeToggle = document.getElementById('themeToggle'); 
-  if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} 
-  themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+  function getTheme() {
+    try {
+      var t = localStorage.getItem('sp_theme');
+      if (t === 'dark' || t === 'light') return t;
+      var old = localStorage.getItem('theme');
+      if (old === 'dark' || old === 'light') return old;
+    } catch(e) {}
+    return 'light';
+  }
 
-  calculate();
+  // Apply on load
+  applyTheme(getTheme());
+
+  // Attach after DOM is ready
+  function attach() {
+    var btn = document.getElementById('sp-master-btn');
+    if (!btn) { setTimeout(attach, 50); return; }
+    // Clone to remove old listeners
+    var fresh = btn.cloneNode(true);
+    btn.parentNode.replaceChild(fresh, btn);
+    fresh.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      var next = document.body.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme(next);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attach);
+  } else {
+    attach();
+  }
 })();
 </script>
-
-<script>
-  // Standardize Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    if(themeToggle) themeToggle.textContent = '☀️';
-  }
-  if(themeToggle) {
-    const newToggle = themeToggle.cloneNode(true);
-    themeToggle.parentNode.replaceChild(newToggle, themeToggle);
-    newToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      newToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script>
-  // Standardized Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-      themeToggle.textContent = '☀️';
-    }
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      themeToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script id="master-theme-script">
-  (function() {
-    var toggle = document.getElementById('themeToggle');
-    if (!toggle) return;
-
-    // Check saved preference
-    var savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      toggle.textContent = '☀️';
-    }
-
-    // Toggle click event
-    toggle.addEventListener('click', function() {
-      document.body.classList.toggle('dark');
-      var isDark = document.body.classList.contains('dark');
-      toggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  })();
-</script>
 </body>
+
 
 
 

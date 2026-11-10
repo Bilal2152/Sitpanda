@@ -561,7 +561,7 @@
       <a href="/#everyday">Everyday</a>
       <a href="/blog/" class="nav-blog">Blog</a>
     </nav>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
   </div>
 </header>
 
@@ -736,133 +736,64 @@
   </div>
 </footer>
 
-  <script>
-    // ================= THEME LOGIC (Toggle + Auto Sunrise/Sunset) =================
-    const themeToggle = document.getElementById('themeToggle');
-    const body = document.body;
+  
 
-    function isNightTime() {
-      const hour = new Date().getHours();
-      return (hour < 6 || hour >= 18);
-    }
 
-    function applyTheme() {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme) {
-        body.classList.toggle('dark', savedTheme === 'dark');
-        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
-      } else {
-        if (isNightTime()) {
-          body.classList.add('dark');
-          themeToggle.textContent = '☀️';
-        } else {
-          body.classList.remove('dark');
-          themeToggle.textContent = '🌙';
-        }
-      }
-    }
 
-    themeToggle.addEventListener('click', () => {
-      body.classList.toggle('dark');
-      const isDark = body.classList.contains('dark');
-      themeToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
 
-    applyTheme();
 
-    // ================= SCROLL PROGRESS BAR =================
-    const scrollProgressBar = document.getElementById('scrollProgressBar');
-    function updateScrollProgress() {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const percentage = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-      scrollProgressBar.style.width = percentage + '%';
-    }
-
-    // ================= BACK TO TOP BUTTON =================
-    const backToTopBtn = document.getElementById('backToTop');
-    function handleBackToTopVisibility() {
-      if (window.scrollY > 300) backToTopBtn.classList.add('show');
-      else backToTopBtn.classList.remove('show');
-    }
-    backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-    window.addEventListener('scroll', () => {
-      updateScrollProgress();
-      handleBackToTopVisibility();
-    }, { passive: true });
-
-    updateScrollProgress();
-    handleBackToTopVisibility();
-
-    // ================= LIVE SEARCH FILTER =================
-    const searchInput = document.getElementById('searchInput');
-    const allCards = document.querySelectorAll('.calc-card');
-    const allSections = document.querySelectorAll('.section');
-
-    function filterCalculators(query) {
-      const q = query.toLowerCase().trim();
-      allCards.forEach(card => {
-        const text = (card.innerText + ' ' + (card.dataset.name || '')).toLowerCase();
-        const match = !q || text.includes(q);
-        card.classList.toggle('hidden', !match);
-      });
-      allSections.forEach(section => {
-        const visibleCards = section.querySelectorAll('.calc-card:not(.hidden)');
-        section.classList.toggle('hidden', q && visibleCards.length === 0);
-      });
-    }
-    searchInput.addEventListener('input', (e) => filterCalculators(e.target.value));
-
-    // ================= KEYBOARD SHORTCUT =================
-    document.addEventListener('keydown', (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        searchInput.focus();
-      }
-    });
-  </script>
-
-<script>
-  // Standardized Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    if (localStorage.getItem('theme') === 'dark') {
+<script id="sp-theme-final">
+(function() {
+  function applyTheme(theme) {
+    var btn = document.getElementById('sp-master-btn');
+    if (theme === 'dark') {
       document.body.classList.add('dark');
-      themeToggle.textContent = '☀️';
+      if (btn) btn.textContent = '☀️';
+    } else {
+      document.body.classList.remove('dark');
+      if (btn) btn.textContent = '🌙';
     }
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      themeToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    try { localStorage.setItem('sp_theme', theme); } catch(e) {}
+    try { localStorage.setItem('theme', theme); } catch(e) {}
+  }
+
+  function getTheme() {
+    try {
+      var t = localStorage.getItem('sp_theme');
+      if (t === 'dark' || t === 'light') return t;
+      var old = localStorage.getItem('theme');
+      if (old === 'dark' || old === 'light') return old;
+    } catch(e) {}
+    return 'light';
+  }
+
+  // Apply on load
+  applyTheme(getTheme());
+
+  // Attach after DOM is ready
+  function attach() {
+    var btn = document.getElementById('sp-master-btn');
+    if (!btn) { setTimeout(attach, 50); return; }
+    // Clone to remove old listeners
+    var fresh = btn.cloneNode(true);
+    btn.parentNode.replaceChild(fresh, btn);
+    fresh.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      var next = document.body.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme(next);
     });
   }
-</script>
 
-<script id="master-theme-script">
-  (function() {
-    var toggle = document.getElementById('themeToggle');
-    if (!toggle) return;
-
-    // Check saved preference
-    var savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      toggle.textContent = '☀️';
-    }
-
-    // Toggle click event
-    toggle.addEventListener('click', function() {
-      document.body.classList.toggle('dark');
-      var isDark = document.body.classList.contains('dark');
-      toggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  })();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attach);
+  } else {
+    attach();
+  }
+})();
 </script>
 </body>
+
 
 
 </html>

@@ -289,7 +289,7 @@
       <a href="/#everyday">Everyday</a>
       <a href="/blog/" class="nav-blog">Blog</a>
     </nav>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
   </div>
 </header>
 
@@ -425,190 +425,66 @@
 </footer>
 
 
-<script>
+
+
+
+
+
+
+
+
+<script id="sp-theme-final">
 (function() {
-  const lmpDate = document.getElementById('lmpDate');
-  const conceptionDate = document.getElementById('conceptionDate');
-  const ivfDate = document.getElementById('ivfDate');
-  const embryoType = document.getElementById('embryoType');
-  
-  const lmpGroup = document.getElementById('lmpGroup');
-  const conceptionGroup = document.getElementById('conceptionGroup');
-  const ivfGroup = document.getElementById('ivfGroup');
-
-  const eddDisplay = document.getElementById('eddDisplay');
-  const currentStatus = document.getElementById('currentStatus');
-  const trimesterDisplay = document.getElementById('trimesterDisplay');
-  const progressPercent = document.getElementById('progressPercent');
-  const progressFill = document.getElementById('progressFill');
-  const ms1 = document.getElementById('ms1');
-  const ms2 = document.getElementById('ms2');
-
-  let currentMethod = 'lmp';
-
-  // Set default dates to today
-  const today = new Date().toISOString().split('T')[0];
-  lmpDate.value = today;
-  conceptionDate.value = today;
-  ivfDate.value = today;
-
-  document.querySelectorAll('.method-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      currentMethod = this.dataset.method;
-
-      lmpGroup.style.display = currentMethod === 'lmp' ? 'block' : 'none';
-      conceptionGroup.style.display = currentMethod === 'conception' ? 'block' : 'none';
-      ivfGroup.style.display = currentMethod === 'ivf' ? 'block' : 'none';
-      calculate();
-    });
-  });
-
-  [lmpDate, conceptionDate, ivfDate, embryoType].forEach(el => {
-    el.addEventListener('change', calculate);
-    el.addEventListener('input', calculate);
-  });
-
-  function calculate() {
-    let baseDate = null;
-    let daysToAdd = 0;
-
-    if (currentMethod === 'lmp' && lmpDate.value) {
-      baseDate = new Date(lmpDate.value);
-      daysToAdd = 280;
-    } else if (currentMethod === 'conception' && conceptionDate.value) {
-      baseDate = new Date(conceptionDate.value);
-      daysToAdd = 266;
-    } else if (currentMethod === 'ivf' && ivfDate.value) {
-      baseDate = new Date(ivfDate.value);
-      const eType = embryoType.value;
-      daysToAdd = eType === '5' ? 261 : 259;
+  function applyTheme(theme) {
+    var btn = document.getElementById('sp-master-btn');
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      if (btn) btn.textContent = '☀️';
+    } else {
+      document.body.classList.remove('dark');
+      if (btn) btn.textContent = '🌙';
     }
-
-    if (!baseDate || isNaN(baseDate.getTime())) return;
-
-    // Calculate EDD
-    const edd = new Date(baseDate);
-    edd.setDate(edd.getDate() + daysToAdd);
-    
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    eddDisplay.textContent = edd.toLocaleDateString('en-US', options);
-
-    // Calculate Current Gestational Age (based on LMP equivalent)
-    // If user enters conception or IVF, we estimate LMP by subtracting 14 days
-    let estimatedLMP = new Date(baseDate);
-    if (currentMethod === 'conception') estimatedLMP.setDate(estimatedLMP.getDate() - 14);
-    else if (currentMethod === 'ivf') {
-      const offset = embryoType.value === '5' ? 19 : 17; // 14 + 5 or 14 + 3
-      estimatedLMP.setDate(estimatedLMP.getDate() - offset);
-    }
-
-    const now = new Date();
-    const diffTime = now - estimatedLMP;
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-    let weeks = Math.floor(diffDays / 7);
-    let days = diffDays % 7;
-
-    if (diffDays < 0) {
-      currentStatus.textContent = 'Due date is in the future.';
-      progressFill.style.width = '0%';
-      progressPercent.textContent = '0% Complete';
-      return;
-    }
-
-    if (weeks > 40) weeks = 40;
-
-    // Trimester Logic
-    let trimester = 1;
-    if (weeks >= 14 && weeks < 28) trimester = 2;
-    else if (weeks >= 28) trimester = 3;
-
-    currentStatus.textContent = `You are ${weeks} weeks and ${days} days pregnant.`;
-    trimesterDisplay.textContent = trimester;
-
-    // Progress Bar (Max 40 weeks)
-    const progress = Math.min(100, (weeks / 40) * 100);
-    progressFill.style.width = progress + '%';
-    progressPercent.textContent = Math.round(progress) + '% Complete';
-
-    // Milestones
-    const endOf1st = new Date(estimatedLMP);
-    endOf1st.setDate(endOf1st.getDate() + (13 * 7 + 6)); // End of week 13
-    ms1.textContent = endOf1st.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-
-    const endOf2nd = new Date(estimatedLMP);
-    endOf2nd.setDate(endOf2nd.getDate() + (27 * 7 + 6)); // End of week 27
-    ms2.textContent = endOf2nd.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    try { localStorage.setItem('sp_theme', theme); } catch(e) {}
+    try { localStorage.setItem('theme', theme); } catch(e) {}
   }
 
-  const themeToggle = document.getElementById('themeToggle'); 
-  if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} 
-  themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
+  function getTheme() {
+    try {
+      var t = localStorage.getItem('sp_theme');
+      if (t === 'dark' || t === 'light') return t;
+      var old = localStorage.getItem('theme');
+      if (old === 'dark' || old === 'light') return old;
+    } catch(e) {}
+    return 'light';
+  }
 
-  calculate();
+  // Apply on load
+  applyTheme(getTheme());
+
+  // Attach after DOM is ready
+  function attach() {
+    var btn = document.getElementById('sp-master-btn');
+    if (!btn) { setTimeout(attach, 50); return; }
+    // Clone to remove old listeners
+    var fresh = btn.cloneNode(true);
+    btn.parentNode.replaceChild(fresh, btn);
+    fresh.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      var next = document.body.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme(next);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attach);
+  } else {
+    attach();
+  }
 })();
 </script>
-
-<script>
-  // Standardize Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    if(themeToggle) themeToggle.textContent = '☀️';
-  }
-  if(themeToggle) {
-    const newToggle = themeToggle.cloneNode(true);
-    themeToggle.parentNode.replaceChild(newToggle, themeToggle);
-    newToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      newToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script>
-  // Standardized Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-      themeToggle.textContent = '☀️';
-    }
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      themeToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script id="master-theme-script">
-  (function() {
-    var toggle = document.getElementById('themeToggle');
-    if (!toggle) return;
-
-    // Check saved preference
-    var savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      toggle.textContent = '☀️';
-    }
-
-    // Toggle click event
-    toggle.addEventListener('click', function() {
-      document.body.classList.toggle('dark');
-      var isDark = document.body.classList.contains('dark');
-      toggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  })();
-</script>
 </body>
+
 
 
 

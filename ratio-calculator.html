@@ -254,7 +254,7 @@
       <a href="/#everyday">Everyday</a>
       <a href="/blog/" class="nav-blog">Blog</a>
     </nav>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
   </div>
 </header>
 
@@ -348,119 +348,66 @@
 </footer>
 
 
-<script>
+
+
+
+
+
+
+
+
+<script id="sp-theme-final">
 (function() {
-  const tabSimplify = document.getElementById('tabSimplify');
-  const tabSolve = document.getElementById('tabSolve');
-  const simplifySection = document.getElementById('simplifySection');
-  const solveSection = document.getElementById('solveSection');
-
-  // Simplify logic
-  const simpA = document.getElementById('simpA'), simpB = document.getElementById('simpB'), simpResult = document.getElementById('simpResult');
-  
-  // Solve logic
-  const solveA = document.getElementById('solveA'), solveB = document.getElementById('solveB'), solveC = document.getElementById('solveC'), solveD = document.getElementById('solveD'), solveResult = document.getElementById('solveResult');
-
-  function gcd(a, b) {
-    return b === 0 ? a : gcd(b, a % b);
+  function applyTheme(theme) {
+    var btn = document.getElementById('sp-master-btn');
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      if (btn) btn.textContent = '☀️';
+    } else {
+      document.body.classList.remove('dark');
+      if (btn) btn.textContent = '🌙';
+    }
+    try { localStorage.setItem('sp_theme', theme); } catch(e) {}
+    try { localStorage.setItem('theme', theme); } catch(e) {}
   }
 
-  function simplifyRatio() {
-    let a = Math.abs(parseInt(simpA.value) || 0);
-    let b = Math.abs(parseInt(simpB.value) || 0);
-    if (a === 0 || b === 0) { simpResult.textContent = 'Invalid'; return; }
-    const divisor = gcd(a, b);
-    simpResult.textContent = `${a/divisor} : ${b/divisor}`;
+  function getTheme() {
+    try {
+      var t = localStorage.getItem('sp_theme');
+      if (t === 'dark' || t === 'light') return t;
+      var old = localStorage.getItem('theme');
+      if (old === 'dark' || old === 'light') return old;
+    } catch(e) {}
+    return 'light';
   }
 
-  function solveProportion() {
-    let a = parseFloat(solveA.value) || 0;
-    let b = parseFloat(solveB.value) || 0;
-    let c = parseFloat(solveC.value) || 0;
+  // Apply on load
+  applyTheme(getTheme());
 
-    if (a === 0) { solveResult.textContent = 'Invalid'; return; }
-    const d = (b * c) / a;
-    solveD.value = d;
-    solveResult.textContent = d;
+  // Attach after DOM is ready
+  function attach() {
+    var btn = document.getElementById('sp-master-btn');
+    if (!btn) { setTimeout(attach, 50); return; }
+    // Clone to remove old listeners
+    var fresh = btn.cloneNode(true);
+    btn.parentNode.replaceChild(fresh, btn);
+    fresh.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      var next = document.body.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme(next);
+    });
   }
 
-  tabSimplify.addEventListener('click', () => {
-    tabSimplify.classList.add('active'); tabSolve.classList.remove('active');
-    simplifySection.style.display = 'block'; solveSection.style.display = 'none';
-  });
-
-  tabSolve.addEventListener('click', () => {
-    tabSolve.classList.add('active'); tabSimplify.classList.remove('active');
-    solveSection.style.display = 'block'; simplifySection.style.display = 'none';
-  });
-
-  [simpA, simpB].forEach(el => el.addEventListener('input', simplifyRatio));
-  [solveA, solveB, solveC].forEach(el => el.addEventListener('input', solveProportion));
-
-  const themeToggle = document.getElementById('themeToggle'); if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeToggle.textContent='☀️'} themeToggle.onclick=()=>{document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');themeToggle.textContent=d?'☀️':'🌙';localStorage.setItem('theme',d?'dark':'light')};
-  
-  simplifyRatio(); solveProportion();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attach);
+  } else {
+    attach();
+  }
 })();
 </script>
-
-<script>
-  // Standardize Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    if(themeToggle) themeToggle.textContent = '☀️';
-  }
-  if(themeToggle) {
-    const newToggle = themeToggle.cloneNode(true);
-    themeToggle.parentNode.replaceChild(newToggle, themeToggle);
-    newToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      newToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script>
-  // Standardized Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-      themeToggle.textContent = '☀️';
-    }
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      themeToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  }
-</script>
-
-<script id="master-theme-script">
-  (function() {
-    var toggle = document.getElementById('themeToggle');
-    if (!toggle) return;
-
-    // Check saved preference
-    var savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      toggle.textContent = '☀️';
-    }
-
-    // Toggle click event
-    toggle.addEventListener('click', function() {
-      document.body.classList.toggle('dark');
-      var isDark = document.body.classList.contains('dark');
-      toggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-  })();
-</script>
 </body>
+
 
 
 
