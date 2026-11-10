@@ -161,26 +161,68 @@
       .back-btn .back-text { display: none; }
     }
   </style>
+
+<style id="global-nav-style">
+  .nav-blog {
+    background: var(--brand) !important;
+    color: #fff !important;
+    padding: 6px 14px !important;
+    border-radius: 999px;
+    font-weight: 700;
+    box-shadow: 0 2px 8px var(--brand-glow);
+    margin-left: 4px;
+  }
+  .nav-blog:hover {
+    background: var(--brand-hover) !important;
+    color: #fff !important;
+  }
+  @media (max-width: 768px) {
+    .header-nav {
+      display: flex !important;
+      overflow-x: auto;
+      white-space: nowrap;
+      width: 100%;
+      padding-top: 10px;
+      gap: 8px;
+      order: 3;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .header-nav::-webkit-scrollbar { display: none; }
+    .nav-blog { margin-left: 0; }
+  }
+</style>
+
 </head>
 <body>
 
 <header class="site-header">
   <div class="container header-inner">
-    <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
-    <div class="header-center">
-      <div class="header-search-box">
-        <span class="icon">🔍</span>
-        <input type="text" id="headerSearch" placeholder="Search calculators..." autocomplete="off">
-        <kbd>⌘ K</kbd>
-      </div>
-      <div class="search-dropdown" id="searchDropdown"></div>
-    </div>
+    <a href="/" class="logo">
+      <span class="logo-icon">🐼</span>
+      <span>SitPanda</span>
+    </a>
+    <nav class="header-nav">
+      <a href="/#finance">Finance</a>
+      <a href="/#health">Health</a>
+      <a href="/#math">Math</a>
+      <a href="/#everyday">Everyday</a>
+      <a href="/blog/" class="nav-blog">Blog</a>
+    </nav>
     <div class="header-actions">
-      <a href="/" class="back-btn">← <span class="back-text">Back</span></a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
     </div>
   </div>
 </header>
+<!-- Search Bar Injected Below Header -->
+<div class="container" style="padding-top: 24px; padding-bottom: 8px;">
+  <div class="hero-search" style="max-width: 560px; margin: 0 auto;">
+    <div class="search-box">
+      <span class="icon">🔍</span>
+      <input type="text" placeholder="Search calculators — try “mortgage” or “BMI”..." autocomplete="off" onfocus="window.location.href='/'">
+    </div>
+  </div>
+</div>
 
 <main class="container">
 
@@ -301,10 +343,44 @@
 
 <footer class="site-footer">
   <div class="container">
-    © 2026 SitPanda. All rights reserved. |
-    <a href="/privacy.html">Privacy</a> | <a href="/about.html">About</a> | <a href="/contact.html">Contact</a>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+        <p>Free, fast, and accurate online calculators for finance, health, and everyday life. No signup. No clutter. Just answers.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Finance</h5>
+        <ul>
+          <li><a href="/mortgage-calculator.html">Mortgage</a></li>
+          <li><a href="/loan-calculator.html">Loan</a></li>
+          <li><a href="/compound-interest-calculator.html">Compound Interest</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Health</h5>
+        <ul>
+          <li><a href="/bmi-calculator.html">BMI</a></li>
+          <li><a href="/calorie-calculator.html">Calorie</a></li>
+          <li><a href="/bmr-calculator.html">BMR</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/privacy.html">Privacy Policy</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 SitPanda. All rights reserved.</span>
+      <span>Calculators are for informational purposes only.</span>
+    </div>
   </div>
 </footer>
+
 
 <script>
 (function() {
@@ -538,5 +614,25 @@
 })();
 </script>
 
+
+<script>
+  // Standardize Theme Toggle
+  const themeToggle = document.getElementById('themeToggle');
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark');
+    if(themeToggle) themeToggle.textContent = '☀️';
+  }
+  if(themeToggle) {
+    const newToggle = themeToggle.cloneNode(true);
+    themeToggle.parentNode.replaceChild(newToggle, themeToggle);
+    newToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      newToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+  }
+</script>
 </body>
+
 </html>
