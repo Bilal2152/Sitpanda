@@ -44,6 +44,21 @@
     }
 
     body.dark {
+     /* Dark mode readability boost — Gemini feedback */
+body.dark .calc-card p,
+body.dark .instant-item p,
+body.dark .section-desc,
+body.dark .hero-sub,
+body.dark .trust-bar {
+  color: #94A3B8;
+}
+body.dark .calc-card h3,
+body.dark .instant-item h4 {
+  color: #F1F5F9;
+}
+body.dark .calc-tag {
+  color: var(--brand-hover);
+}
       --bg: #0D1117;
       --surface: #161B22;
       --surface-2: #1F2631;
@@ -360,7 +375,12 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
       width: 100%; max-width: 540px; height: auto;
       filter: drop-shadow(0 30px 60px rgba(26,24,20,0.08));
     }
-
+    .hero-illustration,
+.hero-illustration svg {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
     /* ============ INSTANT STRIP ============ */
     .instant-strip {
       display: grid;
@@ -641,13 +661,17 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
     </a>
 
     <nav class="header-nav">
-      <a href="#finance">Finance</a>
-      <a href="#health">Health</a>
-      <a href="#math">Math</a>
-      <a href="#everyday">Everyday</a>
-      <span class="nav-divider"></span>
-      <a href="/blog/" class="nav-blog">Blog</a>
-    </nav>
+  <a href="#finance">Finance</a>
+  <a href="#health">Health</a>
+  <a href="#math">Math</a>
+  <a href="#everyday">Everyday</a>
+</nav>
+
+<div class="header-actions">
+  <a href="/blog/" class="btn-blog">Blog</a>
+  <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
+  <a href="#finance" class="btn-cta">Browse →</a>
+</div>
 
     <div class="header-actions">
       <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
