@@ -5,12 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="SitPanda — Free, fast, and accurate online calculators for finance, health, and everyday life. Instant results, no signup, dark mode included.">
   <meta name="msvalidate.01" content="5E004E36E19B2DC62D59569E4DED136D" />
+  <meta name="theme-color" content="#FBFAF7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0D1117" media="(prefers-color-scheme: dark)">
   <title>SitPanda — Calculate Anything. Instantly.</title>
   <link rel="canonical" href="https://sitpanda.com/">
 
+  <!-- Social sharing (WhatsApp, Facebook, X, LinkedIn) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SitPanda">
+  <meta property="og:title" content="SitPanda — Calculate Anything. Instantly.">
+  <meta property="og:description" content="Free, fast, and accurate online calculators for finance, health, and everyday life. No signup, instant results.">
+  <meta property="og:url" content="https://sitpanda.com/">
+  <meta property="og:image" content="https://sitpanda.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SitPanda — Calculate Anything. Instantly.">
+  <meta name="twitter:description" content="Free, fast, and accurate online calculators for finance, health, and everyday life.">
+  <meta name="twitter:image" content="https://sitpanda.com/og-image.png">
+
+  <!-- Favicon (panda emoji, no extra file needed) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%BC%3C/text%3E%3C/svg%3E">
+
+  <!-- Apply saved theme BEFORE first paint (no white flash in dark mode) -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('sp_theme');
+        if (t !== 'dark' && t !== 'light') {
+          t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+        }
+        if (t === 'dark') document.documentElement.classList.add('dark');
+      } catch (e) {}
+    })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Only the font weights actually used on this page -->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     /* ============ DESIGN TOKENS ============ */
@@ -23,7 +56,7 @@
       --surface-2: #F5F3EE;
       --ink: #1A1814;
       --ink-secondary: #4A4742;
-      --muted: #8B8880;
+      --muted: #6B6860;
       --border: #E8E4DC;
       --border-hover: #D4CFC4;
 
@@ -43,14 +76,15 @@
       --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* ============ DARK MODE VARIABLES (only variables here) ============ */
-    body.dark {
+    /* ============ DARK MODE VARIABLES ============ */
+    html.dark {
+      color-scheme: dark;
       --bg: #0D1117;
       --surface: #161B22;
       --surface-2: #1F2631;
       --ink: #F1F5F9;
       --ink-secondary: #CBD5E1;
-      --muted: #64748B;
+      --muted: #94A3B8;
       --border: #21262D;
       --border-hover: #30363D;
       --brand: #2DD4BF;
@@ -61,26 +95,11 @@
       --shadow: 0 4px 16px rgba(0,0,0,0.4);
       --shadow-lg: 0 20px 45px rgba(0,0,0,0.55);
     }
-
-    /* ============ DARK MODE READABILITY BOOST (Gemini feedback) ============ */
-    body.dark .calc-card p,
-    body.dark .instant-item p,
-    body.dark .section-desc,
-    body.dark .hero-sub,
-    body.dark .trust-bar {
-      color: #94A3B8;
-    }
-    body.dark .calc-card h3,
-    body.dark .instant-item h4 {
-      color: #F1F5F9;
-    }
-    body.dark .calc-tag {
-      color: var(--brand-hover);
-    }
+    html.dark .calc-tag { color: var(--brand-hover); }
 
     /* ============ RESET ============ */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
     body {
       font-family: var(--font-sans);
       background: var(--bg);
@@ -98,17 +117,20 @@
     input { font-family: inherit; }
     .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 32px; }
 
+    :focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 6px; }
+
+    /* Soft background glows (gradient is already soft, no blur filter needed = smoother scroll on phones) */
     body::before {
       content: ""; position: fixed; top: -300px; left: -200px;
-      width: 700px; height: 700px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(20,184,166,0.10), transparent 70%);
-      filter: blur(80px); z-index: 0; pointer-events: none;
+      width: 900px; height: 900px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(20,184,166,0.10), transparent 68%);
+      z-index: 0; pointer-events: none;
     }
     body::after {
-      content: ""; position: fixed; top: 200px; right: -250px;
-      width: 650px; height: 650px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(139,92,246,0.08), transparent 70%);
-      filter: blur(80px); z-index: 0; pointer-events: none;
+      content: ""; position: fixed; top: 100px; right: -300px;
+      width: 850px; height: 850px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,92,246,0.08), transparent 68%);
+      z-index: 0; pointer-events: none;
     }
     .site-header, .hero, .section, .site-footer, .instant-strip, .request-banner {
       position: relative; z-index: 1;
@@ -147,7 +169,7 @@
       border-bottom: 1px solid var(--border);
       transition: background 0.3s, border 0.3s;
     }
-    body.dark .site-header { background: rgba(13, 17, 23, 0.85); }
+    html.dark .site-header { background: rgba(13, 17, 23, 0.85); }
     .header-inner {
       display: flex; align-items: center; justify-content: space-between;
       padding: 18px 0; gap: 32px;
@@ -182,19 +204,19 @@
       background: var(--surface-2);
     }
 
-    /* Blog accent button (right side) */
+    /* Blog = secondary (outlined) button, so "Browse" stays the one main CTA */
     .btn-blog {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 9px 18px;
+      gap: 8px;
+      padding: 8px 16px;
       border-radius: var(--radius-pill);
-      background: var(--brand);
-      color: #FFFFFF;
+      background: transparent;
+      border: 1.5px solid var(--brand);
+      color: var(--brand);
       font-size: 0.88rem;
       font-weight: 600;
       transition: all var(--transition);
-      box-shadow: 0 2px 8px var(--brand-glow);
       white-space: nowrap;
     }
     .btn-blog::before {
@@ -203,19 +225,15 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: #FFFFFF;
-      box-shadow: 0 0 0 2px rgba(255,255,255,0.25);
+      background: currentColor;
     }
     .btn-blog:hover {
-      background: var(--brand-hover);
+      background: var(--brand);
+      color: #FFFFFF;
       transform: translateY(-1px);
       box-shadow: 0 6px 18px rgba(15,118,110,0.35);
     }
-    body.dark .btn-blog {
-      background: var(--brand);
-      color: #042F2E;
-    }
-    body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,47,46,0.3); }
+    html.dark .btn-blog:hover { color: #042F2E; }
 
     .header-actions {
       display: flex; align-items: center; gap: 12px;
@@ -316,14 +334,16 @@
     .search-box .icon { color: var(--muted); font-size: 1rem; margin-right: 10px; }
     .search-box input {
       flex: 1; border: none; outline: none; background: transparent;
-      color: var(--ink); font-size: 0.98rem; padding: 12px 0;
+      color: var(--ink); font-size: 0.98rem; padding: 12px 0; min-width: 0;
+      -webkit-appearance: none; appearance: none;
     }
+    .search-box input::-webkit-search-cancel-button { -webkit-appearance: none; }
     .search-box input::placeholder { color: var(--muted); }
     .search-box kbd {
       display: none; padding: 4px 8px;
       background: var(--surface-2); border: 1px solid var(--border);
       border-radius: 6px; font-size: 0.7rem; color: var(--muted);
-      font-weight: 600; margin-right: 6px;
+      font-weight: 600; margin-right: 6px; font-family: inherit;
     }
     @media (min-width: 640px) { .search-box kbd { display: inline-block; } }
 
@@ -479,7 +499,7 @@
       border-color: rgba(15, 118, 110, 0.25);
       background: linear-gradient(160deg, rgba(204,251,241,0.3) 0%, var(--surface) 60%);
     }
-    body.dark .calc-card.featured {
+    html.dark .calc-card.featured {
       background: linear-gradient(160deg, rgba(4,47,46,0.5) 0%, var(--surface) 60%);
     }
 
@@ -487,10 +507,27 @@
     .card-health .calc-icon { background: #FCE7F3; color: #9D174D; }
     .card-math .calc-icon { background: #E0E7FF; color: #3730A3; }
     .card-everyday .calc-icon { background: #FEF3C7; color: #92400E; }
-    body.dark .card-finance .calc-icon { background: #052E22; color: #6EE7B7; }
-    body.dark .card-health .calc-icon { background: #2A1620; color: #F9A8D4; }
-    body.dark .card-math .calc-icon { background: #1E1B4B; color: #A5B4FC; }
-    body.dark .card-everyday .calc-icon { background: #2A1E0A; color: #FCD34D; }
+    html.dark .card-finance .calc-icon { background: #052E22; color: #6EE7B7; }
+    html.dark .card-health .calc-icon { background: #2A1620; color: #F9A8D4; }
+    html.dark .card-math .calc-icon { background: #1E1B4B; color: #A5B4FC; }
+    html.dark .card-everyday .calc-icon { background: #2A1E0A; color: #FCD34D; }
+
+    /* ============ NO RESULTS ============ */
+    .no-results {
+      display: none;
+      text-align: center;
+      padding: 64px 20px;
+      position: relative; z-index: 1;
+    }
+    .no-results.show { display: block; }
+    .no-results .emoji { font-size: 2.5rem; margin-bottom: 12px; }
+    .no-results h3 {
+      font-family: var(--font-serif); font-weight: 500;
+      font-size: 1.4rem; margin-bottom: 8px;
+    }
+    .no-results p { color: var(--ink-secondary); font-size: 0.95rem; }
+    .no-results a { color: var(--brand); font-weight: 600; }
+    .no-results a:hover { text-decoration: underline; }
 
     /* ============ REQUEST BANNER ============ */
     .request-banner {
@@ -611,8 +648,16 @@
     @media (max-width: 480px) {
       .container { padding: 0 16px; }
       .hero h1 { font-size: 2.1rem; }
+      .btn-blog { padding: 8px 12px; }
+      .btn-cta { padding: 10px 14px; }
     }
     .hidden { display: none !important; }
+
+    /* Respect users who prefer less motion */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
   </style>
 
   <script type="application/ld+json">
@@ -622,26 +667,75 @@
     "name": "SitPanda",
     "url": "https://sitpanda.com/",
     "description": "Free online calculators for finance, health, maths, dates and everyday life.",
-    "publisher": { "@type": "Organization", "name": "SitPanda", "url": "https://sitpanda.com/" }
+    "publisher": { "@type": "Organization", "name": "SitPanda", "url": "https://sitpanda.com/" },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": { "@type": "EntryPoint", "urlTemplate": "https://sitpanda.com/?q={search_term_string}" },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "SitPanda Free Online Calculators",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Mortgage Calculator", "url": "https://sitpanda.com/mortgage-calculator" },
+      { "@type": "ListItem", "position": 2, "name": "Loan Calculator", "url": "https://sitpanda.com/loan-calculator" },
+      { "@type": "ListItem", "position": 3, "name": "Compound Interest Calculator", "url": "https://sitpanda.com/compound-interest-calculator" },
+      { "@type": "ListItem", "position": 4, "name": "Salary Calculator", "url": "https://sitpanda.com/salary-calculator" },
+      { "@type": "ListItem", "position": 5, "name": "Inflation Calculator", "url": "https://sitpanda.com/inflation-calculator" },
+      { "@type": "ListItem", "position": 6, "name": "Zakat Calculator", "url": "https://sitpanda.com/zakat-calculator" },
+      { "@type": "ListItem", "position": 7, "name": "EMI Calculator", "url": "https://sitpanda.com/emi-calculator" },
+      { "@type": "ListItem", "position": 8, "name": "Income Tax Calculator", "url": "https://sitpanda.com/tax-calculator" },
+      { "@type": "ListItem", "position": 9, "name": "Savings Goal Calculator", "url": "https://sitpanda.com/savings-goal-calculator" },
+      { "@type": "ListItem", "position": 10, "name": "Retirement Calculator", "url": "https://sitpanda.com/retirement-calculator" },
+      { "@type": "ListItem", "position": 11, "name": "BMI Calculator", "url": "https://sitpanda.com/bmi-calculator" },
+      { "@type": "ListItem", "position": 12, "name": "Calorie Calculator", "url": "https://sitpanda.com/calorie-calculator" },
+      { "@type": "ListItem", "position": 13, "name": "Body Fat Calculator", "url": "https://sitpanda.com/body-fat-calculator" },
+      { "@type": "ListItem", "position": 14, "name": "BMR Calculator", "url": "https://sitpanda.com/bmr-calculator" },
+      { "@type": "ListItem", "position": 15, "name": "Ideal Weight Calculator", "url": "https://sitpanda.com/ideal-weight-calculator" },
+      { "@type": "ListItem", "position": 16, "name": "Water Intake Calculator", "url": "https://sitpanda.com/water-intake-calculator" },
+      { "@type": "ListItem", "position": 17, "name": "Heart Rate Zones Calculator", "url": "https://sitpanda.com/heart-rate-calculator" },
+      { "@type": "ListItem", "position": 18, "name": "Pregnancy Due Date Calculator", "url": "https://sitpanda.com/pregnancy-calculator" },
+      { "@type": "ListItem", "position": 19, "name": "Percentage Calculator", "url": "https://sitpanda.com/percentage-calculator" },
+      { "@type": "ListItem", "position": 20, "name": "Scientific Calculator", "url": "https://sitpanda.com/scientific-calculator" },
+      { "@type": "ListItem", "position": 21, "name": "Fraction Calculator", "url": "https://sitpanda.com/fraction-calculator" },
+      { "@type": "ListItem", "position": 22, "name": "Average Calculator", "url": "https://sitpanda.com/average-calculator" },
+      { "@type": "ListItem", "position": 23, "name": "Ratio Calculator", "url": "https://sitpanda.com/ratio-calculator" },
+      { "@type": "ListItem", "position": 24, "name": "Standard Deviation Calculator", "url": "https://sitpanda.com/standard-deviation-calculator" },
+      { "@type": "ListItem", "position": 25, "name": "Triangle Calculator", "url": "https://sitpanda.com/triangle-calculator" },
+      { "@type": "ListItem", "position": 26, "name": "Unit Converter", "url": "https://sitpanda.com/unit-converter" },
+      { "@type": "ListItem", "position": 27, "name": "Age Calculator", "url": "https://sitpanda.com/age-calculator" },
+      { "@type": "ListItem", "position": 28, "name": "Date Difference Calculator", "url": "https://sitpanda.com/date-difference-calculator" },
+      { "@type": "ListItem", "position": 29, "name": "Time Calculator", "url": "https://sitpanda.com/time-calculator" },
+      { "@type": "ListItem", "position": 30, "name": "Countdown Calculator", "url": "https://sitpanda.com/countdown-calculator" },
+      { "@type": "ListItem", "position": 31, "name": "Tip Calculator", "url": "https://sitpanda.com/tip-calculator" },
+      { "@type": "ListItem", "position": 32, "name": "Discount Calculator", "url": "https://sitpanda.com/discount-calculator" },
+      { "@type": "ListItem", "position": 33, "name": "GPA Calculator", "url": "https://sitpanda.com/gpa-calculator" },
+      { "@type": "ListItem", "position": 34, "name": "Fuel Cost Calculator", "url": "https://sitpanda.com/fuel-cost-calculator" }
+    ]
   }
   </script>
 </head>
 <body>
 
-<div class="scroll-progress-container">
+<div class="scroll-progress-container" aria-hidden="true">
   <div class="scroll-progress-bar" id="scrollProgressBar"></div>
 </div>
 <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
 
-<!-- ================= HEADER (single actions block, no duplicate) ================= -->
+<!-- ================= HEADER ================= -->
 <header class="site-header">
   <div class="container header-inner">
-    <a href="/" class="logo">
-      <span class="logo-icon">🐼</span>
+    <a href="/" class="logo" aria-label="SitPanda home">
+      <span class="logo-icon" aria-hidden="true">🐼</span>
       <span>SitPanda</span>
     </a>
 
-    <nav class="header-nav">
+    <nav class="header-nav" aria-label="Main">
       <a href="#finance">Finance</a>
       <a href="#health">Health</a>
       <a href="#math">Math</a>
@@ -650,7 +744,7 @@
 
     <div class="header-actions">
       <a href="/blog/" class="btn-blog">Blog</a>
-      <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
+      <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode" aria-pressed="false">🌙</button>
       <a href="#finance" class="btn-cta">Browse →</a>
     </div>
   </div>
@@ -663,17 +757,17 @@
     <div class="container hero-grid">
       <div class="hero-content">
         <div class="hero-badge">
-          <span class="dot"></span>
-          100+ free calculators — no signup
+          <span class="dot" aria-hidden="true"></span>
+          30+ free calculators — no signup
         </div>
         <h1>Calculate anything.<br><em>Instantly.</em></h1>
         <p class="hero-sub">Free, fast, and accurate online calculators for finance, health, and everyday life. Results update as you type — no waiting, no signup.</p>
 
         <div class="hero-search">
-          <div class="search-box">
-            <span class="icon">🔍</span>
-            <input type="text" id="searchInput" placeholder="Search calculators — try “mortgage” or “BMI”…" autocomplete="off">
-            <kbd>⌘ K</kbd>
+          <div class="search-box" role="search">
+            <span class="icon" aria-hidden="true">🔍</span>
+            <input type="search" id="searchInput" aria-label="Search calculators" placeholder="Search calculators — try “mortgage” or “BMI”…" autocomplete="off" enterkeyhint="search">
+            <kbd id="kbdHint" aria-hidden="true">Ctrl K</kbd>
           </div>
         </div>
 
@@ -685,15 +779,15 @@
         </div>
 
         <div class="trust-bar">
-          <div class="trust-item"><span class="check">✓</span> 100% Free</div>
-          <div class="trust-item"><span class="check">✓</span> No Signup</div>
-          <div class="trust-item"><span class="check">✓</span> Instant Results</div>
-          <div class="trust-item"><span class="check">✓</span> Dark Mode</div>
+          <div class="trust-item"><span class="check" aria-hidden="true">✓</span> 100% Free</div>
+          <div class="trust-item"><span class="check" aria-hidden="true">✓</span> No Signup</div>
+          <div class="trust-item"><span class="check" aria-hidden="true">✓</span> Instant Results</div>
+          <div class="trust-item"><span class="check" aria-hidden="true">✓</span> Dark Mode</div>
         </div>
       </div>
 
       <div class="hero-illustration">
-        <svg viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <svg viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#14B8A6"/>
@@ -777,17 +871,26 @@
   <div class="container">
     <div class="instant-strip">
       <div class="instant-item">
-        <div class="i-icon">⚡</div>
+        <div class="i-icon" aria-hidden="true">⚡</div>
         <div><h4>Live as you type</h4><p>No "Calculate" button. Results update instantly.</p></div>
       </div>
       <div class="instant-item">
-        <div class="i-icon">🔒</div>
+        <div class="i-icon" aria-hidden="true">🔒</div>
         <div><h4>Private by design</h4><p>Calculations run in your browser. Inputs are not stored.</p></div>
       </div>
       <div class="instant-item">
-        <div class="i-icon">📱</div>
+        <div class="i-icon" aria-hidden="true">📱</div>
         <div><h4>Built for mobile</h4><p>Touch-friendly inputs. No zooming or sideways scrolling.</p></div>
       </div>
+    </div>
+  </div>
+
+  <!-- ================= NO RESULTS (shown by search) ================= -->
+  <div class="container">
+    <div class="no-results" id="noResults" role="status" aria-live="polite">
+      <div class="emoji" aria-hidden="true">🐼</div>
+      <h3>No calculators found</h3>
+      <p>Try a different word, or <a href="/request">request this calculator</a> and we'll build it.</p>
     </div>
   </div>
 
@@ -799,16 +902,16 @@
         <p class="section-desc">Plan loans, savings, and investments with confidence.</p>
       </div>
       <div class="calc-grid">
-        <a href="/mortgage-calculator" class="calc-card card-finance featured" data-name="mortgage home loan"><div class="calc-icon">🏠</div><div class="calc-text"><h3>Mortgage Calculator</h3><p>Estimate monthly payments, interest, and total cost.</p><span class="calc-tag">Finance</span></div></a>
-        <a href="/loan-calculator" class="calc-card card-finance featured" data-name="loan emi personal auto"><div class="calc-icon">🏦</div><div class="calc-text"><h3>Loan Calculator</h3><p>Calculate EMIs and total interest for any loan type.</p><span class="calc-tag">Finance</span></div></a>
-        <a href="/compound-interest-calculator" class="calc-card card-finance featured" data-name="compound interest savings growth"><div class="calc-icon">📈</div><div class="calc-text"><h3>Compound Interest</h3><p>See how your savings grow over time with compounding.</p><span class="calc-tag">Finance</span></div></a>
-        <a href="/salary-calculator" class="calc-card card-finance featured" data-name="salary income hourly annual"><div class="calc-icon">💵</div><div class="calc-text"><h3>Salary Calculator</h3><p>Convert hourly, monthly, and annual pay instantly.</p><span class="calc-tag">Finance</span></div></a>
-        <a href="/inflation-calculator" class="calc-card card-finance" data-name="inflation money value"><div class="calc-icon">📉</div><div class="calc-text"><h3>Inflation Calculator</h3><p>Understand how inflation changes your money's value.</p><span class="calc-tag">Finance</span></div></a>
-        <a href="/zakat-calculator" class="calc-card card-finance" data-name="zakat islamic charity"><div class="calc-icon">🕌</div><div class="calc-text"><h3>Zakat Calculator</h3><p>Calculate your annual Zakat on savings and gold.</p><span class="calc-tag">Finance</span></div></a>
-        <a href="/emi-calculator" class="calc-card card-finance" data-name="emi equated monthly installment"><div class="calc-icon">📊</div><div class="calc-text"><h3>EMI Calculator</h3><p>Break down your monthly loan instalment in detail.</p><span class="calc-tag">Finance</span></div></a>
-        <a href="/tax-calculator" class="calc-card card-finance" data-name="tax income pakistan india"><div class="calc-icon">🧾</div><div class="calc-text"><h3>Income Tax Calculator</h3><p>Estimate your tax for Pakistan and India.</p><span class="calc-tag">Finance</span></div></a>
-        <a href="/savings-goal-calculator" class="calc-card card-finance" data-name="savings goal target"><div class="calc-icon">🎯</div><div class="calc-text"><h3>Savings Goal</h3><p>Find out how long until you reach your target.</p><span class="calc-tag">Finance</span></div></a>
-        <a href="/retirement-calculator" class="calc-card card-finance" data-name="retirement pension"><div class="calc-icon">🌴</div><div class="calc-text"><h3>Retirement Calculator</h3><p>Plan how much you need for a comfortable retirement.</p><span class="calc-tag">Finance</span></div></a>
+        <a href="/mortgage-calculator" class="calc-card card-finance featured" data-name="mortgage home loan"><div class="calc-icon" aria-hidden="true">🏠</div><div class="calc-text"><h3>Mortgage Calculator</h3><p>Estimate monthly payments, interest, and total cost.</p><span class="calc-tag">Finance</span></div></a>
+        <a href="/loan-calculator" class="calc-card card-finance featured" data-name="loan emi personal auto"><div class="calc-icon" aria-hidden="true">🏦</div><div class="calc-text"><h3>Loan Calculator</h3><p>Calculate EMIs and total interest for any loan type.</p><span class="calc-tag">Finance</span></div></a>
+        <a href="/compound-interest-calculator" class="calc-card card-finance featured" data-name="compound interest savings growth"><div class="calc-icon" aria-hidden="true">📈</div><div class="calc-text"><h3>Compound Interest</h3><p>See how your savings grow over time with compounding.</p><span class="calc-tag">Finance</span></div></a>
+        <a href="/salary-calculator" class="calc-card card-finance featured" data-name="salary income hourly annual"><div class="calc-icon" aria-hidden="true">💵</div><div class="calc-text"><h3>Salary Calculator</h3><p>Convert hourly, monthly, and annual pay instantly.</p><span class="calc-tag">Finance</span></div></a>
+        <a href="/inflation-calculator" class="calc-card card-finance" data-name="inflation money value"><div class="calc-icon" aria-hidden="true">📉</div><div class="calc-text"><h3>Inflation Calculator</h3><p>Understand how inflation changes your money's value.</p><span class="calc-tag">Finance</span></div></a>
+        <a href="/zakat-calculator" class="calc-card card-finance" data-name="zakat islamic charity"><div class="calc-icon" aria-hidden="true">🕌</div><div class="calc-text"><h3>Zakat Calculator</h3><p>Calculate your annual Zakat on savings and gold.</p><span class="calc-tag">Finance</span></div></a>
+        <a href="/emi-calculator" class="calc-card card-finance" data-name="emi equated monthly installment"><div class="calc-icon" aria-hidden="true">📊</div><div class="calc-text"><h3>EMI Calculator</h3><p>Break down your monthly loan instalment in detail.</p><span class="calc-tag">Finance</span></div></a>
+        <a href="/tax-calculator" class="calc-card card-finance" data-name="tax income pakistan india"><div class="calc-icon" aria-hidden="true">🧾</div><div class="calc-text"><h3>Income Tax Calculator</h3><p>Estimate your tax for Pakistan and India.</p><span class="calc-tag">Finance</span></div></a>
+        <a href="/savings-goal-calculator" class="calc-card card-finance" data-name="savings goal target"><div class="calc-icon" aria-hidden="true">🎯</div><div class="calc-text"><h3>Savings Goal</h3><p>Find out how long until you reach your target.</p><span class="calc-tag">Finance</span></div></a>
+        <a href="/retirement-calculator" class="calc-card card-finance" data-name="retirement pension"><div class="calc-icon" aria-hidden="true">🌴</div><div class="calc-text"><h3>Retirement Calculator</h3><p>Plan how much you need for a comfortable retirement.</p><span class="calc-tag">Finance</span></div></a>
       </div>
     </div>
   </section>
@@ -821,14 +924,14 @@
         <p class="section-desc">Track your body and wellness metrics.</p>
       </div>
       <div class="calc-grid">
-        <a href="/bmi-calculator" class="calc-card card-health" data-name="bmi body mass index"><div class="calc-icon">⚖️</div><div class="calc-text"><h3>BMI Calculator</h3><p>Check your body mass index and healthy range.</p><span class="calc-tag">Health</span></div></a>
-        <a href="/calorie-calculator" class="calc-card card-health" data-name="calorie diet food"><div class="calc-icon">🍎</div><div class="calc-text"><h3>Calorie Calculator</h3><p>Find your daily calorie needs based on activity.</p><span class="calc-tag">Health</span></div></a>
-        <a href="/body-fat-calculator" class="calc-card card-health" data-name="body fat percentage"><div class="calc-icon">💪</div><div class="calc-text"><h3>Body Fat Calculator</h3><p>Estimate body fat percentage with simple measurements.</p><span class="calc-tag">Health</span></div></a>
-        <a href="/bmr-calculator" class="calc-card card-health" data-name="bmr basal metabolic rate"><div class="calc-icon">🔥</div><div class="calc-text"><h3>BMR Calculator</h3><p>Calculate your basal metabolic rate for diet planning.</p><span class="calc-tag">Health</span></div></a>
-        <a href="/ideal-weight-calculator" class="calc-card card-health" data-name="ideal weight height"><div class="calc-icon">📏</div><div class="calc-text"><h3>Ideal Weight</h3><p>Find the healthy weight range for your height.</p><span class="calc-tag">Health</span></div></a>
-        <a href="/water-intake-calculator" class="calc-card card-health" data-name="water intake hydration"><div class="calc-icon">💧</div><div class="calc-text"><h3>Water Intake</h3><p>How much water should you drink daily?</p><span class="calc-tag">Health</span></div></a>
-        <a href="/heart-rate-calculator" class="calc-card card-health" data-name="heart rate exercise zones"><div class="calc-icon">❤️‍🔥</div><div class="calc-text"><h3>Heart Rate Zones</h3><p>Find your optimal exercise heart rate zones.</p><span class="calc-tag">Health</span></div></a>
-        <a href="/pregnancy-calculator" class="calc-card card-health" data-name="pregnancy due date"><div class="calc-icon">👶</div><div class="calc-text"><h3>Pregnancy Due Date</h3><p>Estimate your baby's arrival date.</p><span class="calc-tag">Health</span></div></a>
+        <a href="/bmi-calculator" class="calc-card card-health" data-name="bmi body mass index"><div class="calc-icon" aria-hidden="true">⚖️</div><div class="calc-text"><h3>BMI Calculator</h3><p>Check your body mass index and healthy range.</p><span class="calc-tag">Health</span></div></a>
+        <a href="/calorie-calculator" class="calc-card card-health" data-name="calorie diet food"><div class="calc-icon" aria-hidden="true">🍎</div><div class="calc-text"><h3>Calorie Calculator</h3><p>Find your daily calorie needs based on activity.</p><span class="calc-tag">Health</span></div></a>
+        <a href="/body-fat-calculator" class="calc-card card-health" data-name="body fat percentage"><div class="calc-icon" aria-hidden="true">💪</div><div class="calc-text"><h3>Body Fat Calculator</h3><p>Estimate body fat percentage with simple measurements.</p><span class="calc-tag">Health</span></div></a>
+        <a href="/bmr-calculator" class="calc-card card-health" data-name="bmr basal metabolic rate"><div class="calc-icon" aria-hidden="true">🔥</div><div class="calc-text"><h3>BMR Calculator</h3><p>Calculate your basal metabolic rate for diet planning.</p><span class="calc-tag">Health</span></div></a>
+        <a href="/ideal-weight-calculator" class="calc-card card-health" data-name="ideal weight height"><div class="calc-icon" aria-hidden="true">📏</div><div class="calc-text"><h3>Ideal Weight</h3><p>Find the healthy weight range for your height.</p><span class="calc-tag">Health</span></div></a>
+        <a href="/water-intake-calculator" class="calc-card card-health" data-name="water intake hydration"><div class="calc-icon" aria-hidden="true">💧</div><div class="calc-text"><h3>Water Intake</h3><p>How much water should you drink daily?</p><span class="calc-tag">Health</span></div></a>
+        <a href="/heart-rate-calculator" class="calc-card card-health" data-name="heart rate exercise zones"><div class="calc-icon" aria-hidden="true">❤️‍🔥</div><div class="calc-text"><h3>Heart Rate Zones</h3><p>Find your optimal exercise heart rate zones.</p><span class="calc-tag">Health</span></div></a>
+        <a href="/pregnancy-calculator" class="calc-card card-health" data-name="pregnancy due date"><div class="calc-icon" aria-hidden="true">👶</div><div class="calc-text"><h3>Pregnancy Due Date</h3><p>Estimate your baby's arrival date.</p><span class="calc-tag">Health</span></div></a>
       </div>
     </div>
   </section>
@@ -841,14 +944,14 @@
         <p class="section-desc">Quick solutions for everyday calculations.</p>
       </div>
       <div class="calc-grid">
-        <a href="/percentage-calculator" class="calc-card card-math" data-name="percentage percent"><div class="calc-icon">％</div><div class="calc-text"><h3>Percentage Calculator</h3><p>Solve any percentage problem in seconds.</p><span class="calc-tag">Math</span></div></a>
-        <a href="/scientific-calculator" class="calc-card card-math" data-name="scientific advanced math"><div class="calc-icon">🔬</div><div class="calc-text"><h3>Scientific Calculator</h3><p>Advanced math functions in your browser.</p><span class="calc-tag">Math</span></div></a>
-        <a href="/fraction-calculator" class="calc-card card-math" data-name="fraction add subtract multiply"><div class="calc-icon">½</div><div class="calc-text"><h3>Fraction Calculator</h3><p>Add, subtract, multiply, and divide fractions.</p><span class="calc-tag">Math</span></div></a>
-        <a href="/average-calculator" class="calc-card card-math" data-name="average mean median mode"><div class="calc-icon">📊</div><div class="calc-text"><h3>Average Calculator</h3><p>Find mean, median, and mode instantly.</p><span class="calc-tag">Math</span></div></a>
-        <a href="/ratio-calculator" class="calc-card card-math" data-name="ratio proportion"><div class="calc-icon">⚖️</div><div class="calc-text"><h3>Ratio Calculator</h3><p>Simplify ratios and solve proportions.</p><span class="calc-tag">Math</span></div></a>
-        <a href="/standard-deviation-calculator" class="calc-card card-math" data-name="standard deviation statistics"><div class="calc-icon">📈</div><div class="calc-text"><h3>Standard Deviation</h3><p>Calculate statistical spread with ease.</p><span class="calc-tag">Math</span></div></a>
-        <a href="/triangle-calculator" class="calc-card card-math" data-name="triangle area perimeter angles"><div class="calc-icon">🔺</div><div class="calc-text"><h3>Triangle Calculator</h3><p>Find area, perimeter, and angles.</p><span class="calc-tag">Math</span></div></a>
-        <a href="/unit-converter" class="calc-card card-math" data-name="unit converter length weight temperature"><div class="calc-icon">🔄</div><div class="calc-text"><h3>Unit Converter</h3><p>Convert length, weight, temperature, and more.</p><span class="calc-tag">Math</span></div></a>
+        <a href="/percentage-calculator" class="calc-card card-math" data-name="percentage percent"><div class="calc-icon" aria-hidden="true">％</div><div class="calc-text"><h3>Percentage Calculator</h3><p>Solve any percentage problem in seconds.</p><span class="calc-tag">Math</span></div></a>
+        <a href="/scientific-calculator" class="calc-card card-math" data-name="scientific advanced math"><div class="calc-icon" aria-hidden="true">🔬</div><div class="calc-text"><h3>Scientific Calculator</h3><p>Advanced math functions in your browser.</p><span class="calc-tag">Math</span></div></a>
+        <a href="/fraction-calculator" class="calc-card card-math" data-name="fraction add subtract multiply"><div class="calc-icon" aria-hidden="true">½</div><div class="calc-text"><h3>Fraction Calculator</h3><p>Add, subtract, multiply, and divide fractions.</p><span class="calc-tag">Math</span></div></a>
+        <a href="/average-calculator" class="calc-card card-math" data-name="average mean median mode"><div class="calc-icon" aria-hidden="true">📊</div><div class="calc-text"><h3>Average Calculator</h3><p>Find mean, median, and mode instantly.</p><span class="calc-tag">Math</span></div></a>
+        <a href="/ratio-calculator" class="calc-card card-math" data-name="ratio proportion"><div class="calc-icon" aria-hidden="true">⚖️</div><div class="calc-text"><h3>Ratio Calculator</h3><p>Simplify ratios and solve proportions.</p><span class="calc-tag">Math</span></div></a>
+        <a href="/standard-deviation-calculator" class="calc-card card-math" data-name="standard deviation statistics"><div class="calc-icon" aria-hidden="true">📈</div><div class="calc-text"><h3>Standard Deviation</h3><p>Calculate statistical spread with ease.</p><span class="calc-tag">Math</span></div></a>
+        <a href="/triangle-calculator" class="calc-card card-math" data-name="triangle area perimeter angles"><div class="calc-icon" aria-hidden="true">🔺</div><div class="calc-text"><h3>Triangle Calculator</h3><p>Find area, perimeter, and angles.</p><span class="calc-tag">Math</span></div></a>
+        <a href="/unit-converter" class="calc-card card-math" data-name="unit converter length weight temperature"><div class="calc-icon" aria-hidden="true">🔄</div><div class="calc-text"><h3>Unit Converter</h3><p>Convert length, weight, temperature, and more.</p><span class="calc-tag">Math</span></div></a>
       </div>
     </div>
   </section>
@@ -861,14 +964,14 @@
         <p class="section-desc">Calculators for daily life, dates, and money.</p>
       </div>
       <div class="calc-grid">
-        <a href="/age-calculator" class="calc-card card-everyday" data-name="age birthday date of birth"><div class="calc-icon">🎂</div><div class="calc-text"><h3>Age Calculator</h3><p>Find your exact age in years, months, and days.</p><span class="calc-tag">Everyday</span></div></a>
-        <a href="/date-difference-calculator" class="calc-card card-everyday" data-name="date difference days between"><div class="calc-icon">📅</div><div class="calc-text"><h3>Date Difference</h3><p>Calculate days between any two dates.</p><span class="calc-tag">Everyday</span></div></a>
-        <a href="/time-calculator" class="calc-card card-everyday" data-name="time add subtract hours"><div class="calc-icon">⏰</div><div class="calc-text"><h3>Time Calculator</h3><p>Add or subtract hours, minutes, and seconds.</p><span class="calc-tag">Everyday</span></div></a>
-        <a href="/countdown-calculator" class="calc-card card-everyday" data-name="countdown event days"><div class="calc-icon">⏳</div><div class="calc-text"><h3>Countdown Calculator</h3><p>See how many days until any event.</p><span class="calc-tag">Everyday</span></div></a>
-        <a href="/tip-calculator" class="calc-card card-everyday" data-name="tip restaurant bill split"><div class="calc-icon">🍽️</div><div class="calc-text"><h3>Tip Calculator</h3><p>Split the bill and calculate the perfect tip.</p><span class="calc-tag">Everyday</span></div></a>
-        <a href="/discount-calculator" class="calc-card card-everyday" data-name="discount sale price"><div class="calc-icon">🏷️</div><div class="calc-text"><h3>Discount Calculator</h3><p>Find the final price after any discount.</p><span class="calc-tag">Everyday</span></div></a>
-        <a href="/gpa-calculator" class="calc-card card-everyday" data-name="gpa grade point average"><div class="calc-icon">🎓</div><div class="calc-text"><h3>GPA Calculator</h3><p>Calculate your grade point average easily.</p><span class="calc-tag">Everyday</span></div></a>
-        <a href="/fuel-cost-calculator" class="calc-card card-everyday" data-name="fuel cost trip petrol"><div class="calc-icon">⛽</div><div class="calc-text"><h3>Fuel Cost Calculator</h3><p>Estimate fuel costs for any trip.</p><span class="calc-tag">Everyday</span></div></a>
+        <a href="/age-calculator" class="calc-card card-everyday" data-name="age birthday date of birth"><div class="calc-icon" aria-hidden="true">🎂</div><div class="calc-text"><h3>Age Calculator</h3><p>Find your exact age in years, months, and days.</p><span class="calc-tag">Everyday</span></div></a>
+        <a href="/date-difference-calculator" class="calc-card card-everyday" data-name="date difference days between"><div class="calc-icon" aria-hidden="true">📅</div><div class="calc-text"><h3>Date Difference</h3><p>Calculate days between any two dates.</p><span class="calc-tag">Everyday</span></div></a>
+        <a href="/time-calculator" class="calc-card card-everyday" data-name="time add subtract hours"><div class="calc-icon" aria-hidden="true">⏰</div><div class="calc-text"><h3>Time Calculator</h3><p>Add or subtract hours, minutes, and seconds.</p><span class="calc-tag">Everyday</span></div></a>
+        <a href="/countdown-calculator" class="calc-card card-everyday" data-name="countdown event days"><div class="calc-icon" aria-hidden="true">⏳</div><div class="calc-text"><h3>Countdown Calculator</h3><p>See how many days until any event.</p><span class="calc-tag">Everyday</span></div></a>
+        <a href="/tip-calculator" class="calc-card card-everyday" data-name="tip restaurant bill split"><div class="calc-icon" aria-hidden="true">🍽️</div><div class="calc-text"><h3>Tip Calculator</h3><p>Split the bill and calculate the perfect tip.</p><span class="calc-tag">Everyday</span></div></a>
+        <a href="/discount-calculator" class="calc-card card-everyday" data-name="discount sale price"><div class="calc-icon" aria-hidden="true">🏷️</div><div class="calc-text"><h3>Discount Calculator</h3><p>Find the final price after any discount.</p><span class="calc-tag">Everyday</span></div></a>
+        <a href="/gpa-calculator" class="calc-card card-everyday" data-name="gpa grade point average"><div class="calc-icon" aria-hidden="true">🎓</div><div class="calc-text"><h3>GPA Calculator</h3><p>Calculate your grade point average easily.</p><span class="calc-tag">Everyday</span></div></a>
+        <a href="/fuel-cost-calculator" class="calc-card card-everyday" data-name="fuel cost trip petrol"><div class="calc-icon" aria-hidden="true">⛽</div><div class="calc-text"><h3>Fuel Cost Calculator</h3><p>Estimate fuel costs for any trip.</p><span class="calc-tag">Everyday</span></div></a>
       </div>
     </div>
   </section>
@@ -877,7 +980,7 @@
   <div class="container">
     <div class="request-banner">
       <p>Missing the calculator you need?<br>Tell us and we'll build it.</p>
-      <a href="/request.html">Request a calculator →</a>
+      <a href="/request">Request a calculator →</a>
     </div>
   </div>
 
@@ -888,34 +991,34 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+        <a href="/" class="logo" aria-label="SitPanda home"><span class="logo-icon" aria-hidden="true">🐼</span><span>SitPanda</span></a>
         <p>Free, fast, and accurate online calculators for finance, health, and everyday life.</p>
       </div>
-      <div class="footer-col">
+      <nav class="footer-col" aria-label="Finance calculators">
         <h5>Finance</h5>
         <ul>
-          <li><a href="/mortgage-calculator.html">Mortgage</a></li>
-          <li><a href="/loan-calculator.html">Loan</a></li>
-          <li><a href="/compound-interest-calculator.html">Compound Interest</a></li>
+          <li><a href="/mortgage-calculator">Mortgage</a></li>
+          <li><a href="/loan-calculator">Loan</a></li>
+          <li><a href="/compound-interest-calculator">Compound Interest</a></li>
         </ul>
-      </div>
-      <div class="footer-col">
+      </nav>
+      <nav class="footer-col" aria-label="Health calculators">
         <h5>Health</h5>
         <ul>
-          <li><a href="/bmi-calculator.html">BMI</a></li>
-          <li><a href="/calorie-calculator.html">Calorie</a></li>
-          <li><a href="/bmr-calculator.html">BMR</a></li>
+          <li><a href="/bmi-calculator">BMI</a></li>
+          <li><a href="/calorie-calculator">Calorie</a></li>
+          <li><a href="/bmr-calculator">BMR</a></li>
         </ul>
-      </div>
-      <div class="footer-col">
+      </nav>
+      <nav class="footer-col" aria-label="Company">
         <h5>Company</h5>
         <ul>
-          <li><a href="/about.html">About</a></li>
+          <li><a href="/about">About</a></li>
           <li><a href="/blog/">Blog</a></li>
-          <li><a href="/privacy.html">Privacy</a></li>
-          <li><a href="/contact.html">Contact</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/contact">Contact</a></li>
         </ul>
-      </div>
+      </nav>
     </div>
     <div class="footer-bottom">
       <span>© 2026 SitPanda. All rights reserved.</span>
@@ -925,63 +1028,94 @@
 </footer>
 
 <script>
-(function() {
-  function applyTheme(theme) {
-    var btn = document.getElementById('sp-master-btn');
-    if (theme === 'dark') {
-      document.body.classList.add('dark');
-      if (btn) btn.textContent = '☀️';
-    } else {
-      document.body.classList.remove('dark');
-      if (btn) btn.textContent = '🌙';
-    }
-    try { localStorage.setItem('sp_theme', theme); } catch(e) {}
-  }
-  function getTheme() {
-    try {
-      var t = localStorage.getItem('sp_theme');
-      if (t === 'dark' || t === 'light') return t;
-    } catch(e) {}
-    return 'light';
-  }
-  applyTheme(getTheme());
+(function () {
+  var root = document.documentElement;
 
-  var btn = document.getElementById('sp-master-btn');
-  if (btn) {
-    btn.addEventListener('click', function() {
-      applyTheme(document.body.classList.contains('dark') ? 'light' : 'dark');
+  /* ---------- Theme toggle ---------- */
+  var themeBtn = document.getElementById('sp-master-btn');
+  function syncThemeBtn() {
+    var dark = root.classList.contains('dark');
+    if (themeBtn) {
+      themeBtn.textContent = dark ? '☀️' : '🌙';
+      themeBtn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    }
+  }
+  syncThemeBtn();
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function () {
+      var goDark = !root.classList.contains('dark');
+      root.classList.toggle('dark', goDark);
+      syncThemeBtn();
+      try { localStorage.setItem('sp_theme', goDark ? 'dark' : 'light'); } catch (e) {}
     });
   }
 
+  /* ---------- Scroll progress + back to top (throttled with rAF) ---------- */
   var bar = document.getElementById('scrollProgressBar');
   var back = document.getElementById('backToTop');
-  function onScroll() {
-    var h = document.documentElement;
-    var scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight || 1) * 100;
-    if (bar) bar.style.width = scrolled + '%';
+  var ticking = false;
+  function updateScroll() {
+    var h = root;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (bar) bar.style.width = pct + '%';
     if (back) back.classList.toggle('show', h.scrollTop > 400);
+    ticking = false;
   }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-  if (back) back.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(updateScroll); }
+  }, { passive: true });
+  updateScroll();
+  if (back) back.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
+  /* ---------- Search ---------- */
   var search = document.getElementById('searchInput');
-  if (search) {
-    search.addEventListener('input', function() {
-      var q = this.value.trim().toLowerCase();
-      document.querySelectorAll('.calc-card').forEach(function(card) {
-        var name = (card.dataset.name || '') + ' ' + card.textContent.toLowerCase();
-        card.classList.toggle('hidden', q.length > 0 && name.indexOf(q) === -1);
-      });
-      document.querySelectorAll('.section').forEach(function(section) {
-        var anyVisible = Array.from(section.querySelectorAll('.calc-card'))
-          .some(function(c) { return !c.classList.contains('hidden'); });
-        section.style.display = (q.length > 0 && !anyVisible) ? 'none' : '';
-      });
+  var noResults = document.getElementById('noResults');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.calc-card'));
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.section'));
+  var haystacks = cards.map(function (c) { return ((c.dataset.name || '') + ' ' + c.textContent).toLowerCase(); });
+
+  function runSearch() {
+    var q = search.value.trim().toLowerCase();
+    var shown = 0;
+    cards.forEach(function (card, i) {
+      var hide = q.length > 0 && haystacks[i].indexOf(q) === -1;
+      card.classList.toggle('hidden', hide);
+      if (!hide) shown++;
     });
+    sections.forEach(function (section) {
+      var any = section.querySelector('.calc-card:not(.hidden)');
+      section.style.display = (q.length > 0 && !any) ? 'none' : '';
+    });
+    if (noResults) noResults.classList.toggle('show', q.length > 0 && shown === 0);
   }
-  document.addEventListener('keydown', function(e) {
+
+  if (search) {
+    search.addEventListener('input', runSearch);
+    search.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { search.value = ''; runSearch(); search.blur(); }
+    });
+
+    // Support ?q=mortgage (used by the SearchAction in the page's structured data)
+    try {
+      var qp = new URLSearchParams(window.location.search).get('q');
+      if (qp) { search.value = qp; runSearch(); }
+    } catch (e) {}
+  }
+
+  /* ---------- Keyboard hint + shortcuts (Ctrl/⌘ + K, or "/") ---------- */
+  var kbd = document.getElementById('kbdHint');
+  var isMac = /Mac|iPhone|iPad|iPod/i.test(navigator.platform || navigator.userAgent || '');
+  if (kbd) kbd.textContent = isMac ? '⌘ K' : 'Ctrl K';
+
+  document.addEventListener('keydown', function (e) {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (search) search.focus();
+      return;
+    }
+    var tag = (document.activeElement && document.activeElement.tagName) || '';
+    if (e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA' && !e.metaKey && !e.ctrlKey && !e.altKey) {
       e.preventDefault();
       if (search) search.focus();
     }
