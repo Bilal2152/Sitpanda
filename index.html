@@ -43,22 +43,8 @@
       --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    /* ============ DARK MODE VARIABLES (only variables here) ============ */
     body.dark {
-     /* Dark mode readability boost — Gemini feedback */
-body.dark .calc-card p,
-body.dark .instant-item p,
-body.dark .section-desc,
-body.dark .hero-sub,
-body.dark .trust-bar {
-  color: #94A3B8;
-}
-body.dark .calc-card h3,
-body.dark .instant-item h4 {
-  color: #F1F5F9;
-}
-body.dark .calc-tag {
-  color: var(--brand-hover);
-}
       --bg: #0D1117;
       --surface: #161B22;
       --surface-2: #1F2631;
@@ -74,6 +60,22 @@ body.dark .calc-tag {
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
       --shadow: 0 4px 16px rgba(0,0,0,0.4);
       --shadow-lg: 0 20px 45px rgba(0,0,0,0.55);
+    }
+
+    /* ============ DARK MODE READABILITY BOOST (Gemini feedback) ============ */
+    body.dark .calc-card p,
+    body.dark .instant-item p,
+    body.dark .section-desc,
+    body.dark .hero-sub,
+    body.dark .trust-bar {
+      color: #94A3B8;
+    }
+    body.dark .calc-card h3,
+    body.dark .instant-item h4 {
+      color: #F1F5F9;
+    }
+    body.dark .calc-tag {
+      color: var(--brand-hover);
     }
 
     /* ============ RESET ============ */
@@ -96,7 +98,6 @@ body.dark .calc-tag {
     input { font-family: inherit; }
     .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 32px; }
 
-    /* Subtle page background */
     body::before {
       content: ""; position: fixed; top: -300px; left: -200px;
       width: 700px; height: 700px; border-radius: 50%;
@@ -137,7 +138,7 @@ body.dark .calc-tag {
     .back-to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
     .back-to-top:hover { background: var(--brand); color: #fff; transform: translateY(-4px); }
 
-    /* ============ HEADER (Claude-style) ============ */
+    /* ============ HEADER ============ */
     .site-header {
       position: sticky; top: 0; z-index: 100;
       background: rgba(251, 250, 247, 0.85);
@@ -163,7 +164,6 @@ body.dark .calc-tag {
       box-shadow: 0 4px 14px rgba(20,184,166,0.3);
     }
 
-    /* Organized nav: category links + divider + blog + actions */
     .header-nav {
       display: flex; align-items: center; gap: 4px;
       flex: 1; justify-content: center;
@@ -181,45 +181,41 @@ body.dark .calc-tag {
       color: var(--ink);
       background: var(--surface-2);
     }
-    .header-nav .nav-divider {
-      width: 1px; height: 20px;
-      background: var(--border);
-      margin: 0 8px;
+
+    /* Blog accent button (right side) */
+    .btn-blog {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: var(--radius-pill);
+      background: var(--brand);
+      color: #FFFFFF;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all var(--transition);
+      box-shadow: 0 2px 8px var(--brand-glow);
+      white-space: nowrap;
     }
-    /* Blog moved to right side as accent CTA */
-.btn-blog {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 18px;
-  border-radius: var(--radius-pill);
-  background: var(--brand);
-  color: #FFFFFF;
-  font-size: 0.88rem;
-  font-weight: 600;
-  transition: all var(--transition);
-  box-shadow: 0 2px 8px var(--brand-glow);
-  white-space: nowrap;
-}
-.btn-blog::before {
-  content: '';
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #FFFFFF;
-  box-shadow: 0 0 0 2px rgba(255,255,255,0.25);
-}
-.btn-blog:hover {
-  background: var(--brand-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(15,118,110,0.35);
-}
-body.dark .btn-blog {
-  background: var(--brand);
-  color: #042F2E;
-}
-body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,47,46,0.3); }
+    .btn-blog::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.25);
+    }
+    .btn-blog:hover {
+      background: var(--brand-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(15,118,110,0.35);
+    }
+    body.dark .btn-blog {
+      background: var(--brand);
+      color: #042F2E;
+    }
+    body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,47,46,0.3); }
 
     .header-actions {
       display: flex; align-items: center; gap: 12px;
@@ -253,19 +249,15 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
       box-shadow: 0 6px 20px rgba(15, 118, 110, 0.3);
     }
 
-    /* ============ HERO (2-column) ============ */
-    .hero {
-      padding: 96px 0 80px;
-    }
+    /* ============ HERO ============ */
+    .hero { padding: 96px 0 80px; }
     .hero-grid {
       display: grid;
       grid-template-columns: 1.1fr 1fr;
       gap: 72px;
       align-items: center;
     }
-    .hero-content {
-      max-width: 580px;
-    }
+    .hero-content { max-width: 580px; }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 10px;
       padding: 6px 14px 6px 12px;
@@ -321,9 +313,7 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
       border-color: var(--brand);
       box-shadow: 0 0 0 4px var(--brand-glow), var(--shadow);
     }
-    .search-box .icon {
-      color: var(--muted); font-size: 1rem; margin-right: 10px;
-    }
+    .search-box .icon { color: var(--muted); font-size: 1rem; margin-right: 10px; }
     .search-box input {
       flex: 1; border: none; outline: none; background: transparent;
       color: var(--ink); font-size: 0.98rem; padding: 12px 0;
@@ -366,21 +356,18 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
       font-size: 0.65rem; font-weight: 700;
     }
 
-    /* Hero illustration */
     .hero-illustration {
       position: relative;
       display: flex; justify-content: center; align-items: center;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
     .hero-illustration svg {
       width: 100%; max-width: 540px; height: auto;
       filter: drop-shadow(0 30px 60px rgba(26,24,20,0.08));
     }
-    .hero-illustration,
-.hero-illustration svg {
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-select: none;
-}
+
     /* ============ INSTANT STRIP ============ */
     .instant-strip {
       display: grid;
@@ -407,13 +394,8 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
     .instant-item p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
 
     /* ============ SECTIONS ============ */
-    .section {
-      padding: 64px 0;
-    }
-    .section-header {
-      margin-bottom: 40px;
-      max-width: 680px;
-    }
+    .section { padding: 64px 0; }
+    .section-header { margin-bottom: 40px; max-width: 680px; }
     .section-title {
       font-family: var(--font-serif);
       font-size: clamp(1.75rem, 3vw, 2.25rem);
@@ -613,7 +595,6 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
         padding-top: 12px;
       }
       .header-nav::-webkit-scrollbar { display: none; }
-      .header-nav .nav-divider { display: none; }
       .hero { padding: 56px 0 48px; }
       .hero-grid { grid-template-columns: 1fr; gap: 48px; }
       .hero-content { max-width: 100%; }
@@ -652,7 +633,7 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
 </div>
 <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
 
-<!-- ================= HEADER ================= -->
+<!-- ================= HEADER (single actions block, no duplicate) ================= -->
 <header class="site-header">
   <div class="container header-inner">
     <a href="/" class="logo">
@@ -661,19 +642,14 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
     </a>
 
     <nav class="header-nav">
-  <a href="#finance">Finance</a>
-  <a href="#health">Health</a>
-  <a href="#math">Math</a>
-  <a href="#everyday">Everyday</a>
-</nav>
-
-<div class="header-actions">
-  <a href="/blog/" class="btn-blog">Blog</a>
-  <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
-  <a href="#finance" class="btn-cta">Browse →</a>
-</div>
+      <a href="#finance">Finance</a>
+      <a href="#health">Health</a>
+      <a href="#math">Math</a>
+      <a href="#everyday">Everyday</a>
+    </nav>
 
     <div class="header-actions">
+      <a href="/blog/" class="btn-blog">Blog</a>
       <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
       <a href="#finance" class="btn-cta">Browse →</a>
     </div>
@@ -736,11 +712,9 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
             </filter>
           </defs>
 
-          <!-- Background blob -->
           <circle cx="280" cy="260" r="230" fill="url(#heroGrad)" opacity="0.08"/>
           <circle cx="280" cy="260" r="170" fill="url(#heroGrad)" opacity="0.06"/>
 
-          <!-- Main calculator device -->
           <g filter="url(#heroShadow)">
             <rect x="150" y="60" width="240" height="400" rx="32" fill="#FFFFFF" stroke="#E8E4DC" stroke-width="1.5"/>
             <path d="M150 92 Q150 60 182 60 L358 60 Q390 60 390 92 L390 130 L150 130 Z" fill="url(#heroGrad)"/>
@@ -766,7 +740,6 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
             <text x="348" y="386" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" font-weight="600" fill="#FFFFFF">=</text>
           </g>
 
-          <!-- Floating card 1: BMI -->
           <g filter="url(#floatShadow)" transform="translate(28, 130)">
             <rect width="120" height="74" rx="14" fill="#FFFFFF"/>
             <text x="14" y="24" font-family="Inter, sans-serif" font-size="9" font-weight="600" fill="#8B8880" letter-spacing="0.5">BMI</text>
@@ -775,7 +748,6 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
             <text x="96" y="43" text-anchor="middle" font-size="14">❤️</text>
           </g>
 
-          <!-- Floating card 2: Growth chart -->
           <g filter="url(#floatShadow)" transform="translate(340, 180)">
             <rect width="145" height="96" rx="14" fill="#FFFFFF"/>
             <text x="16" y="26" font-family="Inter, sans-serif" font-size="9" font-weight="600" fill="#8B8880" letter-spacing="0.5">GROWTH</text>
@@ -784,7 +756,6 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
             <circle cx="132" cy="46" r="3.5" fill="#14B8A6"/>
           </g>
 
-          <!-- Floating math symbols -->
           <g>
             <circle cx="440" cy="105" r="26" fill="#FEF3C7"/>
             <text x="440" y="114" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="24" font-weight="500" fill="#92400E">%</text>
@@ -955,7 +926,6 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
 
 <script>
 (function() {
-  // ===== THEME =====
   function applyTheme(theme) {
     var btn = document.getElementById('sp-master-btn');
     if (theme === 'dark') {
@@ -983,7 +953,6 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
     });
   }
 
-  // ===== SCROLL PROGRESS + BACK TO TOP =====
   var bar = document.getElementById('scrollProgressBar');
   var back = document.getElementById('backToTop');
   function onScroll() {
@@ -996,7 +965,6 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
   onScroll();
   if (back) back.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-  // ===== LIVE SEARCH =====
   var search = document.getElementById('searchInput');
   if (search) {
     search.addEventListener('input', function() {
@@ -1022,4 +990,4 @@ body.dark .btn-blog::before { background: #042F2E; box-shadow: 0 0 0 2px rgba(4,
 </script>
 
 </body>
-      </html>
+</html>
