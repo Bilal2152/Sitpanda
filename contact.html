@@ -6,384 +6,280 @@
   <title>Contact Us — SitPanda</title>
   <meta name="description" content="Contact SitPanda for questions, corrections, suggestions, or business enquiries. We reply within a few business days.">
   <link rel="canonical" href="https://sitpanda.com/contact.html">
+  
+  <!-- Anti-FOUC Theme Script -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('sp_theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
+    /* ============ DESIGN TOKENS (Same as index.html) ============ */
     :root {
-      --brand: #0F766E; --brand-hover: #0D9488; --brand-glow: rgba(15, 118, 110, 0.15);
-      --bg: #F8FAFC; --card: #FFFFFF; --ink: #0F172A; --ink-secondary: #475569; --muted: #94A3B8;
-      --border: #E2E8F0; --radius: 16px;
-      --shadow: 0 4px 16px rgba(15,23,42,0.08);
-      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-serif: 'Fraunces', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --bg: #FBFAF7;
+      --surface: #FFFFFF;
+      --surface-2: #F5F3EE;
+      --ink: #1A1814;
+      --ink-secondary: #4A4742;
+      --muted: #6B6860;
+      --border: #E8E4DC;
+      --brand: #0F766E;
+      --brand-hover: #0D9488;
+      --brand-glow: rgba(15, 118, 110, 0.15);
+      --gradient: linear-gradient(135deg, #14B8A6 0%, #3B82F6 50%, #8B5CF6 100%);
+      --radius-pill: 999px;
+      --radius: 20px;
+      --shadow-sm: 0 1px 3px rgba(26,24,20,0.05);
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    body.dark {
-      --bg: #0B1120; --card: #1E293B; --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #64748B;
-      --border: #334155; --brand: #2DD4BF; --brand-hover: #5EEAD4; --brand-glow: rgba(45,212,191,0.12);
-      --shadow: 0 4px 16px rgba(0,0,0,0.4);
+
+    html.dark {
+      color-scheme: dark;
+      --bg: #0D1117; --surface: #161B22; --surface-2: #1F2631;
+      --ink: #F1F5F9; --ink-secondary: #CBD5E1; --muted: #94A3B8;
+      --border: #21262D; --brand: #2DD4BF; --brand-hover: #5EEAD4;
+      --brand-glow: rgba(45, 212, 191, 0.12);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
     }
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg); color: var(--ink); line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-      transition: background var(--transition), color var(--transition);
-      min-height: 100vh;
-    }
-    a { text-decoration: none; color: var(--brand); }
-    a:hover { text-decoration: underline; }
+
+    /* ============ RESET & BASE ============ */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-sans); background: var(--bg); color: var(--ink); line-height: 1.7; transition: background 0.3s, color 0.3s; }
+    a { text-decoration: none; color: inherit; }
     button { font-family: inherit; cursor: pointer; border: none; background: none; }
     input, textarea { font-family: inherit; }
-    .container { width: 100%; max-width: 720px; margin: 0 auto; padding: 0 24px; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-    /* HEADER */
-    .site-header {
-      position: sticky; top: 0; z-index: 100;
-      background: var(--bg); border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(12px);
-    }
-    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
-    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; color: var(--ink); }
-    .logo-icon {
-      width: 38px; height: 38px; border-radius: 11px;
-      background: linear-gradient(135deg, var(--brand), var(--brand-hover));
-      display: grid; place-items: center; font-size: 1.15rem;
-      box-shadow: 0 4px 12px var(--brand-glow); color: #fff;
-    }
-    .theme-toggle {
-      width: 42px; height: 42px; border-radius: 50%;
-      background: var(--card); border: 1px solid var(--border);
-      display: grid; place-items: center; font-size: 1.2rem;
-      cursor: pointer; transition: all var(--transition);
-    }
-    .theme-toggle:hover { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); }
+    /* ============ HEADER ============ */
+    .site-header { position: sticky; top: 0; z-index: 100; background: rgba(251, 250, 247, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+    html.dark .site-header { background: rgba(13, 17, 23, 0.85); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; gap: 32px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-family: var(--font-serif); font-weight: 600; font-size: 1.35rem; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 11px; background: var(--gradient); display: grid; place-items: center; font-size: 1.05rem; color: #fff; }
+    .header-nav { display: flex; gap: 4px; flex: 1; justify-content: center; }
+    .header-nav a { padding: 8px 14px; font-size: 0.92rem; font-weight: 500; color: var(--ink-secondary); border-radius: 8px; transition: all 0.2s; }
+    .header-nav a:hover { color: var(--ink); background: var(--surface-2); }
+    .btn-blog { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: var(--radius-pill); border: 1.5px solid var(--brand); color: var(--brand); font-size: 0.88rem; font-weight: 600; }
+    .btn-blog:hover { background: var(--brand); color: #fff; }
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+    .theme-toggle { width: 42px; height: 42px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: grid; place-items: center; font-size: 1.05rem; }
+    .btn-cta { padding: 10px 20px; border-radius: var(--radius-pill); background: var(--ink); color: var(--bg); font-size: 0.88rem; font-weight: 600; }
 
-    /* PAGE CONTENT */
-    .page-title {
-      font-size: clamp(1.8rem, 4vw, 2.4rem);
-      font-weight: 800; letter-spacing: -0.5px;
-      margin: 40px 0 10px; line-height: 1.2;
-    }
-    .page-title .highlight { color: var(--brand); }
-    .page-sub { color: var(--ink-secondary); font-size: 1rem; margin-bottom: 32px; }
-    
-    .form-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 40px;
-      box-shadow: var(--shadow); margin-bottom: 40px;
-    }
-    .input-group { margin-bottom: 22px; }
-    .input-group label {
-      display: block; font-size: 0.88rem; font-weight: 600;
-      margin-bottom: 6px; color: var(--ink-secondary);
-    }
-    .input-group input,
-    .input-group textarea {
-      width: 100%; padding: 14px 16px;
-      border: 1.5px solid var(--border); border-radius: 10px;
-      background: var(--bg); color: var(--ink);
-      font-size: 1rem; outline: none;
-      transition: border .15s, box-shadow .15s;
-    }
-    .input-group input:focus,
-    .input-group textarea:focus {
-      border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow);
-    }
-    .input-group textarea { resize: vertical; min-height: 140px; }
-    .input-hint { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+    /* ============ PAGE CONTENT ============ */
+    .page-content { padding: 80px 0; max-width: 640px; margin: 0 auto; }
+    h1 { font-family: var(--font-serif); font-size: 2.8rem; font-weight: 600; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .subtitle { font-size: 1.1rem; color: var(--muted); margin-bottom: 48px; }
 
-    .submit-btn {
-      width: 100%; padding: 14px;
-      background: var(--brand); color: #fff;
-      border-radius: 10px; font-size: 1rem; font-weight: 700;
-      cursor: pointer; transition: background .15s;
-    }
-    .submit-btn:hover { background: var(--brand-hover); }
-    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    /* Form Card */
+    .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow-sm); }
+    .input-group { margin-bottom: 24px; }
+    .input-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
+    .input-group input, .input-group textarea { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--ink); font-size: 1rem; outline: none; transition: border .2s, box-shadow .2s; }
+    .input-group input:focus, .input-group textarea:focus { border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-glow); }
+    .input-group textarea { resize: vertical; min-height: 160px; }
+    .input-hint { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
 
-    .info-box {
-      margin-top: 16px; padding: 16px;
-      background: var(--brand-glow); border: 1px solid var(--brand);
-      border-radius: 12px; font-size: 0.85rem;
-      color: var(--ink-secondary); line-height: 1.6;
-    }
+    .submit-btn { width: 100%; padding: 16px; background: var(--ink); color: var(--bg); border-radius: 12px; font-size: 1rem; font-weight: 600; transition: all 0.2s; }
+    .submit-btn:hover { background: var(--brand); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15,118,110,0.25); }
+
+    .info-box { margin-top: 24px; padding: 20px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; font-size: 0.9rem; color: var(--ink-secondary); }
     .info-box strong { color: var(--brand); }
 
-    .success-msg {
-      display: none; padding: 16px;
-      background: #F0FDF4; border: 1px solid #A7F3D0;
-      border-radius: 10px; font-size: 0.9rem;
-      color: #166534; margin-bottom: 20px;
-    }
-    body.dark .success-msg { background: rgba(22,101,52,0.2); border-color: #166534; color: #86EFAC; }
+    .success-msg { display: none; padding: 16px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 10px; font-size: 0.95rem; color: #166534; margin-bottom: 24px; text-align: center; }
+    html.dark .success-msg { background: rgba(34, 197, 94, 0.15); color: #86EFAC; }
     .success-msg.show { display: block; }
 
-    .site-footer {
-      background: var(--card); border-top: 1px solid var(--border);
-      padding: 36px 0 20px; margin-top: 40px;
-      text-align: center; font-size: 0.82rem; color: var(--muted);
-    }
-    .site-footer a { color: var(--ink-secondary); margin: 0 6px; }
-    .site-footer a:hover { color: var(--brand); }
+    /* ============ FOOTER ============ */
+    .site-footer { background: var(--surface); border-top: 1px solid var(--border); padding: 64px 0 32px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 40px; }
+    .footer-brand p { font-size: 0.88rem; color: var(--ink-secondary); margin-top: 14px; }
+    .footer-col h5 { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+    .footer-col ul { list-style: none; padding: 0; }
+    .footer-col li { margin-bottom: 12px; }
+    .footer-col a { font-size: 0.9rem; color: var(--ink-secondary); transition: color 0.2s; }
+    .footer-col a:hover { color: var(--brand); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 28px; display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--muted); }
 
-    @media (max-width: 600px) {
-      .container { padding: 0 16px; }
+    @media (max-width: 768px) {
+      .header-inner { flex-wrap: wrap; }
+      .header-nav { order: 3; width: 100%; overflow-x: auto; white-space: nowrap; padding-top: 10px; border-top: 1px solid var(--border); margin-top: 4px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      h1 { font-size: 2.2rem; }
       .form-card { padding: 24px; }
-      .page-title { margin-top: 28px; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 10px; }
     }
   </style>
-
-<style id="master-standardization">
-  /* Force Font and Colors Globally */
-  :root {
-    --brand: #0F766E !important;
-    --brand-hover: #0D9488 !important;
-    --bg: #F8FAFC !important;
-    --bg-elevated: #FFFFFF !important;
-    --card: #FFFFFF !important;
-    --ink: #0F172A !important;
-    --ink-secondary: #475569 !important;
-    --muted: #94A3B8 !important;
-    --border: #E2E8F0 !important;
-    --radius: 16px !important;
-    --shadow-sm: 0 1px 3px rgba(15,23,42,0.06) !important;
-    --shadow: 0 4px 16px rgba(15,23,42,0.08) !important;
-  }
-  body.dark {
-    --bg: #0B1120 !important;
-    --bg-elevated: #111827 !important;
-    --card: #1E293B !important;
-    --ink: #F1F5F9 !important;
-    --ink-secondary: #CBD5E1 !important;
-    --muted: #64748B !important;
-    --border: #1E293B !important;
-    --brand: #2DD4BF !important;
-    --brand-hover: #5EEAD4 !important;
-  }
-
-  body {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif !important;
-    background: var(--bg) !important;
-    color: var(--ink) !important;
-  }
-
-  /* Header Standardization */
-  .site-header {
-    position: sticky !important; top: 0 !important; z-index: 100 !important;
-    background: var(--bg) !important; border-bottom: 1px solid var(--border) !important;
-    backdrop-filter: blur(12px) !important;
-  }
-  .header-inner {
-    display: flex !important; align-items: center !important; justify-content: space-between !important;
-    padding: 14px 0 !important; gap: 20px !important;
-  }
-  .logo { display: flex !important; align-items: center !important; gap: 10px !important; font-weight: 800 !important; font-size: 1.3rem !important; color: var(--ink) !important; text-decoration: none !important; }
-  .logo-icon {
-    width: 38px !important; height: 38px !important; border-radius: 11px !important;
-    background: linear-gradient(135deg, var(--brand), var(--brand-hover)) !important;
-    display: grid !important; place-items: center !important; font-size: 1.15rem !important; color: #fff !important;
-  }
-  .header-nav { display: flex !important; align-items: center !important; gap: 8px !important; }
-  .header-nav a {
-    padding: 8px 16px !important; border-radius: 999px !important;
-    font-size: 0.9rem !important; font-weight: 500 !important; color: var(--ink-secondary) !important;
-    text-decoration: none !important; transition: all 0.2s !important;
-  }
-  .header-nav a:hover { background: rgba(15,118,110,0.1) !important; color: var(--brand) !important; }
-  .nav-blog {
-    background: var(--brand) !important; color: #fff !important;
-    font-weight: 700 !important; box-shadow: 0 2px 8px rgba(15,118,110,0.2) !important;
-  }
-  .nav-blog:hover { background: var(--brand-hover) !important; color: #fff !important; }
-  
-  .theme-toggle {
-    width: 42px !important; height: 42px !important; border-radius: 50% !important;
-    background: var(--bg-elevated) !important; border: 1px solid var(--border) !important;
-    display: grid !important; place-items: center !important; font-size: 1.2rem !important; cursor: pointer !important;
-    transition: all 0.2s !important;
-  }
-  .theme-toggle:hover { border-color: var(--brand) !important; transform: rotate(15deg) !important; }
-
-  /* Footer Standardization */
-  .site-footer {
-    background: var(--card) !important; border-top: 1px solid var(--border) !important;
-    padding: 48px 0 28px !important; margin-top: 24px !important;
-  }
-  .footer-grid { display: grid !important; grid-template-columns: 2fr 1fr 1fr 1fr !important; gap: 40px !important; margin-bottom: 36px !important; }
-  .footer-brand p { font-size: 0.86rem !important; color: var(--ink-secondary) !important; margin-top: 10px !important; }
-  .footer-col h5 { font-size: 0.82rem !important; font-weight: 700 !important; text-transform: uppercase !important; color: var(--muted) !important; margin-bottom: 14px !important; }
-  .footer-col ul { list-style: none !important; padding: 0 !important; margin: 0 !important; }
-  .footer-col li { margin-bottom: 10px !important; }
-  .footer-col a { font-size: 0.88rem !important; color: var(--ink-secondary) !important; text-decoration: none !important; }
-  .footer-col a:hover { color: var(--brand) !important; }
-  .footer-bottom { border-top: 1px solid var(--border) !important; padding-top: 24px !important; display: flex !important; justify-content: space-between !important; font-size: 0.8rem !important; color: var(--muted) !important; }
-
-  /* Mobile Responsiveness for Header/Footer */
-  @media (max-width: 768px) {
-    .header-inner { flex-wrap: wrap !important; }
-    .header-nav { order: 3 !important; width: 100% !important; overflow-x: auto !important; white-space: nowrap !important; padding-top: 10px !important; scrollbar-width: none !important; }
-    .header-nav::-webkit-scrollbar { display: none !important; }
-    .footer-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
-    .footer-bottom { flex-direction: column !important; text-align: center !important; gap: 10px !important; }
-  }
-</style>
-
 </head>
 <body>
 
-<header class="site-header">
-  <div class="container header-inner">
-    <a href="/" class="logo">
-      <span class="logo-icon">🐼</span>
-      <span>SitPanda</span>
-    </a>
-    <nav class="header-nav">
-      <a href="/#finance">Finance</a>
-      <a href="/#health">Health</a>
-      <a href="/#math">Math</a>
-      <a href="/#everyday">Everyday</a>
-      <a href="/blog/" class="nav-blog">Blog</a>
-    </nav>
-    <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
-  </div>
-</header>
-
-<main class="container">
-
-  <h1 class="page-title">Contact <span class="highlight">SitPanda</span></h1>
-  <p class="page-sub">
-    Have a question, spotted an error, or want to suggest a new calculator? Fill in the form below and we'll get back to you as soon as possible.
-  </p>
-
-  <div class="success-msg" id="successMsg">
-    ✅ Thank you! Your message has been sent. We'll reply within a few business days.
-  </div>
-
-  <div class="form-card">
-    <!-- APNI FORMSPREE ID YAHAN DAALEIN -->
-    <form id="contactForm" action="https://formspree.io/f/xoeebzvj" method="POST">
-
-      <div class="input-group">
-        <label for="name">Your Name</label>
-        <input type="text" id="name" name="name" required placeholder="e.g. Ahmed Khan">
-      </div>
-
-      <div class="input-group">
-        <label for="email">Your Email</label>
-        <input type="email" id="email" name="email" required placeholder="you@example.com">
-        <div class="input-hint">We'll use this to reply to you. We never share it.</div>
-      </div>
-
-      <div class="input-group">
-        <label for="message">Your Message</label>
-        <textarea id="message" name="message" required placeholder="Please describe your question, correction, or suggestion."></textarea>
-      </div>
-
-      <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
-
-    </form>
-
-    <div class="info-box">
-      <strong>📌 A quick note:</strong> We read every message. For corrections, please include the calculator name, the values you entered, and what you expected to see — this helps us fix issues faster.
-    </div>
-  </div>
-
-</main>
-
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
-        <p>Free, fast, and accurate online calculators for finance, health, and everyday life.</p>
-      </div>
-      <div class="footer-col">
-        <h5>Finance</h5>
-        <ul>
-          <li><a href="/mortgage-calculator.html">Mortgage</a></li>
-          <li><a href="/loan-calculator.html">Loan</a></li>
-          <li><a href="/compound-interest-calculator.html">Compound Interest</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h5>Health</h5>
-        <ul>
-          <li><a href="/bmi-calculator.html">BMI</a></li>
-          <li><a href="/calorie-calculator.html">Calorie</a></li>
-          <li><a href="/bmr-calculator.html">BMR</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h5>Company</h5>
-        <ul>
-          <li><a href="/about.html">About</a></li>
-          <li><a href="/blog/">Blog</a></li>
-          <li><a href="/privacy.html">Privacy</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-        </ul>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+      <nav class="header-nav">
+        <a href="/#finance">Finance</a>
+        <a href="/#health">Health</a>
+        <a href="/#math">Math</a>
+        <a href="/#everyday">Everyday</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/blog/" class="btn-blog">Blog</a>
+        <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
+        <a href="/#finance" class="btn-cta">Browse →</a>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 SitPanda. All rights reserved.</span>
-      <span>Calculators are for informational purposes only.</span>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="container page-content">
+    <h1>Contact SitPanda</h1>
+    <p class="subtitle">Have a question, spotted an error, or want to suggest a new calculator? Drop us a message below.</p>
+
+    <div class="success-msg" id="successMsg">
+      ✅ Thank you! Your message has been sent. We'll reply within a few business days.
     </div>
-  </div>
-</footer>
 
+    <div class="form-card">
+      <!-- FORMSPREE ID PRESERVED -->
+      <form id="contactForm" action="https://formspree.io/f/xoeebzvj" method="POST">
+        
+        <div class="input-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" required placeholder="e.g. Ahmed Khan">
+        </div>
 
+        <div class="input-group">
+          <label for="email">Your Email</label>
+          <input type="email" id="email" name="email" required placeholder="you@example.com">
+          <div class="input-hint">We'll use this to reply to you. We never share it.</div>
+        </div>
 
+        <div class="input-group">
+          <label for="message">Your Message</label>
+          <textarea id="message" name="message" required placeholder="Please describe your question, correction, or suggestion."></textarea>
+        </div>
 
+        <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
+      </form>
 
+      <div class="info-box">
+        <strong>📌 A quick note:</strong> We read every message. For corrections, please include the calculator name, the values you entered, and what you expected to see — this helps us fix issues faster.
+      </div>
+    </div>
+  </main>
 
-<script id="sp-theme-final">
-(function() {
-  function applyTheme(theme) {
-    var btn = document.getElementById('sp-master-btn');
-    if (theme === 'dark') {
-      document.body.classList.add('dark');
-      if (btn) btn.textContent = '☀️';
-    } else {
-      document.body.classList.remove('dark');
-      if (btn) btn.textContent = '🌙';
-    }
-    try { localStorage.setItem('sp_theme', theme); } catch(e) {}
-    try { localStorage.setItem('theme', theme); } catch(e) {}
-  }
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+          <p>Free, fast, and accurate online calculators for finance, health, and everyday life.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Finance</h5>
+          <ul>
+            <li><a href="/mortgage-calculator">Mortgage</a></li>
+            <li><a href="/loan-calculator">Loan</a></li>
+            <li><a href="/compound-interest-calculator">Compound Interest</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Health</h5>
+          <ul>
+            <li><a href="/bmi-calculator">BMI</a></li>
+            <li><a href="/calorie-calculator">Calorie</a></li>
+            <li><a href="/bmr-calculator">BMR</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/privacy">Privacy</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SitPanda. All rights reserved.</span>
+        <span>Calculators are for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
 
-  function getTheme() {
-    try {
-      var t = localStorage.getItem('sp_theme');
-      if (t === 'dark' || t === 'light') return t;
-      var old = localStorage.getItem('theme');
-      if (old === 'dark' || old === 'light') return old;
-    } catch(e) {}
-    return 'light';
-  }
+  <!-- THEME & FORM SCRIPT -->
+  <script>
+    (function() {
+      // Theme Toggle
+      var btn = document.getElementById('sp-master-btn');
+      function applyTheme(theme) {
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          if (btn) btn.textContent = '☀️';
+        } else {
+          document.documentElement.classList.remove('dark');
+          if (btn) btn.textContent = '🌙';
+        }
+        try { localStorage.setItem('sp_theme', theme); } catch(e) {}
+      }
+      try {
+        var saved = localStorage.getItem('sp_theme') || 'light';
+        applyTheme(saved);
+      } catch(e) {}
+      
+      if (btn) {
+        btn.addEventListener('click', function() {
+          var isDark = document.documentElement.classList.contains('dark');
+          applyTheme(isDark ? 'light' : 'dark');
+        });
+      }
 
-  // Apply on load
-  applyTheme(getTheme());
+      // Form Submit via AJAX (Same as before, to show success message without reload)
+      var form = document.getElementById('contactForm');
+      var successMsg = document.getElementById('successMsg');
+      var submitBtn = document.getElementById('submitBtn');
 
-  // Attach after DOM is ready
-  function attach() {
-    var btn = document.getElementById('sp-master-btn');
-    if (!btn) { setTimeout(attach, 50); return; }
-    // Clone to remove old listeners
-    var fresh = btn.cloneNode(true);
-    btn.parentNode.replaceChild(fresh, btn);
-    fresh.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      var next = document.body.classList.contains('dark') ? 'light' : 'dark';
-      applyTheme(next);
-    });
-  }
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          submitBtn.textContent = 'Sending...';
+          submitBtn.disabled = true;
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', attach);
-  } else {
-    attach();
-  }
-})();
-</script>
+          var data = new FormData(form);
+          fetch(form.action, {
+            method: form.method,
+            body: data,
+            headers: { 'Accept': 'application/json' }
+          }).then(function(response) {
+            if (response.ok) {
+              form.style.display = 'none';
+              successMsg.classList.add('show');
+            } else {
+              alert('Oops! There was a problem submitting your form.');
+              submitBtn.textContent = 'Send Message';
+              submitBtn.disabled = false;
+            }
+          }).catch(function(error) {
+            alert('Oops! There was a problem submitting your form.');
+            submitBtn.textContent = 'Send Message';
+            submitBtn.disabled = false;
+          });
+        });
+      }
+    })();
+  </script>
 </body>
-
-
 </html>
