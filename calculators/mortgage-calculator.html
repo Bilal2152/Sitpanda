@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mortgage Calculator — Monthly Payment & Interest | SitPanda</title>
+  <meta name="description" content="Free mortgage calculator for any country and currency. Get your monthly payment, total interest and amortization schedule in seconds. No signup.">
+  <link rel="canonical" href="https://sitpanda.com/calculators/mortgage-calculator">
+  
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sp_theme') === 'dark') document.documentElement.classList.add('dark'); } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/main.css">
+
+  <style>
+    .breadcrumb { padding: 24px 0 0; font-size: 0.9rem; color: var(--muted); display: flex; gap: 8px; }
+    .breadcrumb a { color: var(--ink-secondary); transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--brand); }
+    .breadcrumb span { color: var(--muted); }
+    
+    .calc-header { text-align: center; padding: 40px 0 32px; }
+    .calc-header h1 { font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 3rem); font-weight: 600; margin-bottom: 12px; }
+    .calc-header p { color: var(--ink-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+    
+    .calc-layout { display: grid; grid-template-columns: 1fr; gap: 32px; max-width: 1000px; margin: 0 auto 80px; }
+    @media (min-width: 860px) { .calc-layout { grid-template-columns: 1fr 1fr; align-items: start; } }
+    
+    .calc-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-sm); }
+    
+    .settings-bar { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+    .setting-group { flex: 1; min-width: 200px; }
+    .setting-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
+    .setting-group select { width: 100%; padding: 10px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--ink); font-size: 0.9rem; outline: none; }
+    
+    .input-group { margin-bottom: 20px; }
+    .input-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
+    .input-row { display: flex; gap: 8px; align-items: center; }
+    .input-row input, .input-row select { padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--ink); font-size: 1rem; outline: none; transition: border 0.2s, box-shadow 0.2s; }
+    .input-row input:focus, .input-row select:focus, .full-input:focus { border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-glow); }
+    .input-row input { flex: 1; min-width: 0; }
+    .full-input { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--ink); font-size: 1rem; }
+    .unit { font-size: 0.9rem; color: var(--muted); font-weight: 600; }
+    
+    .toggle-group { display: flex; gap: 8px; margin-bottom: 20px; background: var(--surface-2); padding: 4px; border-radius: var(--radius-pill); }
+    .toggle-btn { flex: 1; padding: 10px; border-radius: var(--radius-pill); font-weight: 600; font-size: 0.9rem; color: var(--ink-secondary); transition: all 0.2s; }
+    .toggle-btn.active { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); }
+    
+    .result-box { display: flex; flex-direction: column; text-align: center; background: linear-gradient(160deg, var(--brand-glow), var(--surface) 60%); border-color: var(--brand); }
+    .result-label { font-size: 0.9rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+    .result-value { font-family: var(--font-serif); font-size: 3.5rem; font-weight: 600; color: var(--brand); line-height: 1.1; margin: 8px 0; word-break: break-word; }
+    .result-sub { font-size: 0.9rem; color: var(--ink-secondary); margin-bottom: 24px; }
+    
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; padding-top: 24px; border-top: 1px solid var(--border); text-align: left; }
+    .res-item .label { font-size: 0.8rem; color: var(--muted); }
+    .res-item .val { font-size: 1.1rem; font-weight: 700; color: var(--ink); }
+    
+    .amort-section { margin-top: 32px; }
+    .amort-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+    .amort-tabs button { flex: 1; padding: 10px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.85rem; font-weight: 600; color: var(--ink-secondary); background: var(--bg); }
+    .amort-tabs button.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+    .table-wrap { overflow-x: auto; max-height: 400px; overflow-y: auto; border: 1px solid var(--border); border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td { padding: 12px; text-align: right; border-bottom: 1px solid var(--border); }
+    th { font-weight: 700; color: var(--muted); text-transform: uppercase; font-size: 0.75rem; position: sticky; top: 0; background: var(--surface); }
+    th:first-child, td:first-child { text-align: left; }
+    
+    .ymyl-disclaimer { margin-top: 32px; padding: 16px; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); border-radius: 12px; font-size: 0.88rem; color: var(--ink-secondary); }
+    .ymyl-disclaimer strong { color: #B91C1C; }
+    
+    .seo-content { max-width: 800px; margin: 0 auto; padding-bottom: 80px; }
+    .seo-content h2 { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 600; margin: 40px 0 16px; }
+    .seo-content p, .seo-content li { color: var(--ink-secondary); font-size: 1.1rem; margin-bottom: 16px; }
+    .seo-content ul { padding-left: 20px; }
+    .formula { text-align: center; font-family: monospace; background: var(--surface-2); padding: 16px; border-radius: 8px; border: 1px solid var(--border); margin: 20px 0; font-size: 1.1rem; }
+    
+    details.faq { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; padding: 0 20px; }
+    details.faq summary { cursor: pointer; padding: 20px 0; font-weight: 600; font-size: 1.05rem; color: var(--ink); list-style: none; display: flex; justify-content: space-between; }
+    details.faq summary::-webkit-details-marker { display: none; }
+    details.faq summary::after { content: "+"; color: var(--brand); font-size: 1.2rem; font-weight: 700; }
+    details.faq[open] summary::after { content: "−"; }
+    details.faq p { padding-bottom: 20px; margin: 0; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+      <nav class="header-nav">
+        <a href="/#finance">Finance</a>
+        <a href="/#health">Health</a>
+        <a href="/#math">Math</a>
+        <a href="/#everyday">Everyday</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/blog/" class="btn-blog">Blog</a>
+        <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
+        <a href="/#finance" class="btn-cta">Browse →</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span>›</span> <a href="/#finance">Finance</a> <span>›</span> <span>Mortgage Calculator</span>
+    </nav>
+
+    <div class="calc-header">
+      <h1>Mortgage Calculator</h1>
+      <p>Estimate your monthly home loan payment, total interest, and amortization schedule in any currency.</p>
+    </div>
+
+    <div class="calc-layout">
+      
+      <!-- INPUT FORM -->
+      <div class="calc-card">
+        
+        <div class="settings-bar">
+          <div class="setting-group">
+            <label for="countrySelect">🌍 Country</label>
+            <select id="countrySelect"></select>
+          </div>
+          <div class="setting-group">
+            <label for="currencySelect">💱 Currency</label>
+            <select id="currencySelect"></select>
+          </div>
+        </div>
+
+        <form id="calcForm" onsubmit="return false">
+          
+          <div class="input-group">
+            <label for="homePrice">Home Price</label>
+            <div class="input-row">
+              <input type="number" id="homePrice" placeholder="e.g. 350000" min="0" oninput="syncFromPercent(); calculate()">
+              <span class="unit" id="curSymbol1">$</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="downPayment">Down Payment</label>
+            <div class="input-row">
+              <input type="number" id="downPayment" placeholder="e.g. 70000" min="0" oninput="syncFromAmount(); calculate()">
+              <span class="unit" id="curSymbol2">$</span>
+              <input type="number" id="downPercent" placeholder="20" min="0" max="100" style="max-width: 80px;" oninput="syncFromPercent(); calculate()">
+              <span class="unit">%</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="interestRate">Annual Interest Rate (%)</label>
+            <div class="input-row">
+              <input type="number" id="interestRate" placeholder="e.g. 6.5" step="0.01" min="0" oninput="calculate()">
+              <span class="unit">%</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="loanTerm">Loan Term</label>
+            <div class="input-row">
+              <input type="number" id="loanTerm" placeholder="e.g. 30" min="1" max="50" oninput="calculate()">
+              <select id="termUnit" onchange="calculate()">
+                <option value="years">Years</option>
+                <option value="months">Months</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn active" onclick="setMode('pi')">Principal & Interest</button>
+            <button type="button" class="toggle-btn" onclick="setMode('full')">Full Monthly Cost</button>
+          </div>
+
+          <div id="extraFields" style="display: none; padding-top: 10px; border-top: 1px solid var(--border);">
+            <div class="input-group">
+              <label for="propertyTax">Annual Property Tax (%)</label>
+              <input type="number" id="propertyTax" class="full-input" placeholder="e.g. 1.1" step="0.01" min="0" oninput="calculate()">
+            </div>
+            <div class="input-group">
+              <label for="insurance">Annual Home Insurance</label>
+              <div class="input-row">
+                <input type="number" id="insurance" placeholder="e.g. 1500" min="0" oninput="calculate()">
+                <span class="unit" id="curSymbol3">$</span>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="mortgageInsurance">Mortgage Insurance (% per year)</label>
+              <input type="number" id="mortgageInsurance" class="full-input" placeholder="e.g. 0.5" step="0.01" min="0" oninput="calculate()">
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- RESULT CARD -->
+      <div class="calc-card result-box">
+        <div class="result-label" id="mainLabel">Monthly Payment (P&I)</div>
+        <div class="result-value" id="monthlyPayment">--</div>
+        <div class="result-sub" id="subLabel">Enter loan details to calculate</div>
+
+        <div class="result-grid">
+          <div class="res-item">
+            <div class="label">Total Interest</div>
+            <div class="val" id="totalInterest">--</div>
+          </div>
+          <div class="res-item">
+            <div class="label">Total Cost (incl. Down)</div>
+            <div class="val" id="totalCost">--</div>
+          </div>
+          <div class="res-item">
+            <div class="label">Loan Amount</div>
+            <div class="val" id="loanAmount">--</div>
+          </div>
+          <div class="res-item">
+            <div class="label">Payoff Time</div>
+            <div class="val" id="payoffTime">--</div>
+          </div>
+        </div>
+
+        <div class="amort-section">
+          <div class="amort-tabs">
+            <button type="button" class="active" onclick="setView('monthly')">First 12 Months</button>
+            <button type="button" onclick="setView('yearly')">Year by Year</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th id="thPeriod">Month</th>
+                  <th>Principal</th>
+                  <th>Interest</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody id="amortBody">
+                <tr><td colspan="4" style="text-align: center; padding: 20px;">Fill the form above to see schedule</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="ymyl-disclaimer" style="max-width: 1000px; margin: 0 auto 40px;">
+      <strong>⚠️ Financial Disclaimer:</strong> This calculator provides estimates for educational purposes only. It is not financial advice. Rates, taxes, fees, and insurance rules differ by country and lender, so confirm real terms with your lender before making any decisions.
+    </div>
+
+    <!-- SEO CONTENT -->
+    <article class="seo-content">
+      <h2>How to Use This Mortgage Calculator</h2>
+      <p>This free mortgage calculator works for home loans in <strong>any country and currency</strong>. Enter your loan details to see your estimated monthly payment, total interest, and total repayment cost.</p>
+      <p>Switch to <strong>Full Monthly Cost</strong> to add property tax, home insurance, and mortgage insurance for a more realistic monthly figure. Scroll down to see the full amortization schedule.</p>
+
+      <h2>Mortgage Payment Formula</h2>
+      <p>The calculator uses the standard reducing-balance formula:</p>
+      <div class="formula">M = P × r × (1 + r)<sup>n</sup> ÷ ((1 + r)<sup>n</sup> − 1)</div>
+      <ul>
+        <li><strong>M</strong> is the monthly payment (principal + interest)</li>
+        <li><strong>P</strong> is the loan amount (home price − down payment)</li>
+        <li><strong>r</strong> is the monthly interest rate (annual rate ÷ 12 ÷ 100)</li>
+        <li><strong>n</strong> is the number of monthly payments (years × 12)</li>
+      </ul>
+
+      <h2>What is an Amortization Schedule?</h2>
+      <p>An amortization schedule shows how each payment is split between interest and principal. In the early years, most of your payment goes toward interest. As the loan matures, more goes toward the principal. This calculator generates the first 12 months and a year-by-year breakdown automatically.</p>
+
+      <h2>Frequently Asked Questions</h2>
+      
+      <details class="faq" open>
+        <summary>Does this mortgage calculator work for any country?</summary>
+        <p>Yes. Choose your country to automatically load its currency, or type in your own numbers. All major currencies are supported using standard ISO codes.</p>
+      </details>
+      
+      <details class="faq">
+        <summary>How much down payment do I need?</summary>
+        <p>It varies by country and lender, commonly between 5% and 20% of the home price. A larger down payment lowers your loan amount, monthly payment, and total interest.</p>
+      </details>
+      
+      <details class="faq">
+        <summary>How does the loan term affect my payment?</summary>
+        <p>A longer term lowers the monthly payment but increases total interest. A shorter term raises the monthly payment but can save a large amount of interest over the life of the loan.</p>
+      </details>
+
+      <details class="faq">
+        <summary>Is my data saved?</summary>
+        <p>No. All calculations run entirely in your browser. We do not store, save, or transmit any of the numbers you enter.</p>
+      </details>
+
+      <h2>Related Calculators</h2>
+      <p>Explore other tools from our finance category:</p>
+      <ul>
+        <li><a href="/calculators/loan-calculator">Loan Calculator</a> — For personal, auto, or student loans.</li>
+        <li><a href="/calculators/compound-interest-calculator">Compound Interest Calculator</a> — To see how investments grow.</li>
+        <li><a href="/calculators/emi-calculator">EMI Calculator</a> — For Equated Monthly Installments.</li>
+        <li><a href="/calculators">View all calculators →</a></li>
+      </ul>
+    </article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+          <p>Free, fast, and accurate online calculators for finance, health, and everyday life.</p>
+        </div>
+        <nav class="footer-col">
+          <h5>Finance</h5>
+          <ul>
+            <li><a href="/calculators/mortgage-calculator">Mortgage</a></li>
+            <li><a href="/calculators/loan-calculator">Loan</a></li>
+            <li><a href="/calculators/compound-interest-calculator">Compound Interest</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Health</h5>
+          <ul>
+            <li><a href="/calculators/bmi-calculator">BMI</a></li>
+            <li><a href="/calculators/calorie-calculator">Calorie</a></li>
+            <li><a href="/calculators/bmr-calculator">BMR</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="/pages/about">About</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/pages/privacy">Privacy</a></li>
+            <li><a href="/pages/contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SitPanda. All rights reserved.</span>
+        <span>Calculators are for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const COUNTRIES = {
+      US:['United States','USD'], GB:['United Kingdom','GBP'], CA:['Canada','CAD'], AU:['Australia','AUD'],
+      NZ:['New Zealand','NZD'], IE:['Ireland','EUR'], DE:['Germany','EUR'], FR:['France','EUR'],
+      ES:['Spain','EUR'], IT:['Italy','EUR'], NL:['Netherlands','EUR'], CH:['Switzerland','CHF'],
+      SE:['Sweden','SEK'], NO:['Norway','NOK'], DK:['Denmark','DKK'], PL:['Poland','PLN'],
+      CZ:['Czech Republic','CZK'], HU:['Hungary','HUF'], RO:['Romania','RON'], TR:['Turkey','TRY'],
+      RU:['Russia','RUB'], AE:['UAE','AED'], SA:['Saudi Arabia','SAR'], QA:['Qatar','QAR'],
+      KW:['Kuwait','KWD'], BH:['Bahrain','BHD'], OM:['Oman','OMR'], JO:['Jordan','JOD'],
+      EG:['Egypt','EGP'], ZA:['South Africa','ZAR'], NG:['Nigeria','NGN'], KE:['Kenya','KES'],
+      GH:['Ghana','GHS'], PK:['Pakistan','PKR'], IN:['India','INR'], BD:['Bangladesh','BDT'],
+      LK:['Sri Lanka','LKR'], NP:['Nepal','NPR'], CN:['China','CNY'], JP:['Japan','JPY'],
+      KR:['South Korea','KRW'], SG:['Singapore','SGD'], MY:['Malaysia','MYR'], TH:['Thailand','THB'],
+      ID:['Indonesia','IDR'], PH:['Philippines','PHP'], VN:['Vietnam','VND'], HK:['Hong Kong','HKD'],
+      TW:['Taiwan','TWD'], BR:['Brazil','BRL'], MX:['Mexico','MXN'], AR:['Argentina','ARS']
+    };
+    const CURRENCIES = ['USD','GBP','EUR','CAD','AUD','NZD','CHF','SEK','NOK','DKK','PLN','CZK','HUF','RON','TRY','RUB','AED','SAR','QAR','KWD','BHD','OMR','JOD','EGP','ZAR','NGN','KES','GHS','PKR','INR','BDT','LKR','NPR','CNY','JPY','KRW','SGD','MYR','THB','IDR','PHP','VND','HKD','TWD','BRL','MXN','ARS'];
+
+    let currentMode = 'pi';
+    let currentView = 'monthly';
+    let scheduleData = null;
+
+    const $ = id => document.getElementById(id);
+    const getVal = id => parseFloat($(id).value) || 0;
+    const locale = navigator.language || 'en-US';
+
+    // Format Currency
+    function fmt(val) {
+      let cur = $('currencySelect').value;
+      try {
+        return new Intl.NumberFormat(locale, { style: 'currency', currency: cur, maximumFractionDigits: 2 }).format(val);
+      } catch(e) { return cur + ' ' + val.toFixed(2); }
+    }
+    
+    function updateCurSymbols() {
+      let cur = $('currencySelect').value;
+      let symbol = cur;
+      try {
+        let parts = new Intl.NumberFormat(locale, { style: 'currency', currency: cur, currencyDisplay: 'narrowSymbol' }).formatToParts(0);
+        symbol = parts.find(p => p.type === 'currency').value;
+      } catch(e) {}
+      $('curSymbol1').textContent = symbol;
+      $('curSymbol2').textContent = symbol;
+      $('curSymbol3').textContent = symbol;
+    }
+
+    // Init Dropdowns
+    function initDropdowns() {
+      let cSel = $('countrySelect'), curSel = $('currencySelect');
+      Object.keys(COUNTRIES).forEach(k => {
+        let o = document.createElement('option');
+        o.value = k; o.textContent = COUNTRIES[k][0];
+        cSel.appendChild(o);
+      });
+      CURRENCIES.forEach(c => {
+        let o = document.createElement('option');
+        o.value = c; o.textContent = c;
+        curSel.appendChild(o);
+      });
+
+      // Default to PK since user is from Pakistan
+      cSel.value = 'PK';
+      curSel.value = 'PKR';
+      
+      cSel.addEventListener('change', function() {
+        curSel.value = COUNTRIES[this.value][1];
+        updateCurSymbols(); calculate();
+      });
+      curSel.addEventListener('change', function() {
+        updateCurSymbols(); calculate();
+      });
+    }
+
+    // Sync Down Payment
+    function syncFromPercent() {
+      let price = getVal('homePrice');
+      let pct = getVal('downPercent');
+      if(price > 0) $('downPayment').value = Math.round(price * (pct/100));
+    }
+    function syncFromAmount() {
+      let price = getVal('homePrice');
+      let amt = getVal('downPayment');
+      if(price > 0) $('downPercent').value = ((amt / price) * 100).toFixed(1);
+    }
+
+    // Mode Switch
+    function setMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      $('extraFields').style.display = mode === 'full' ? 'block' : 'none';
+      calculate();
+    }
+
+    // View Switch
+    function setView(view) {
+      currentView = view;
+      document.querySelectorAll('.amort-tabs button').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      renderTable();
+    }
+
+    // Calculate Logic
+    function calculate() {
+      let price = getVal('homePrice');
+      let down = Math.min(getVal('downPayment'), price);
+      let rate = getVal('interestRate');
+      let term = getVal('loanTerm');
+      let n = $('termUnit').value === 'years' ? term * 12 : term;
+      let loan = Math.max(price - down, 0);
+      let r = rate / 1200;
+
+      if (loan === 0 || n === 0 || rate === 0) {
+        $('monthlyPayment').textContent = '--';
+        $('subLabel').textContent = 'Enter loan details to calculate';
+        $('totalInterest').textContent = '--';
+        $('totalCost').textContent = '--';
+        $('loanAmount').textContent = '--';
+        $('payoffTime').textContent = '--';
+        $('amortBody').innerHTML = '<tr><td colspan="4" style="text-align:center;">Fill the form above</td></tr>';
+        return;
+      }
+
+      // Formula: M = P * r * (1+r)^n / ((1+r)^n - 1)
+      let pmt = loan * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
+      let totalPI = pmt * n;
+      let totalInterest = Math.max(totalPI - loan, 0);
+
+      let extraMonthly = 0;
+      if (currentMode === 'full') {
+        let tax = (price * getVal('propertyTax') / 100) / 12;
+        let ins = getVal('insurance') / 12;
+        let lowDown = (down / price) < 0.2;
+        let mi = lowDown ? (loan * getVal('mortgageInsurance') / 100) / 12 : 0;
+        extraMonthly = tax + ins + mi;
+      }
+
+      let finalMonthly = pmt + extraMonthly;
+
+      // Update UI
+      $('mainLabel').textContent = currentMode === 'full' ? 'Total Monthly Payment' : 'Monthly Payment (P&I)';
+      $('monthlyPayment').textContent = fmt(finalMonthly);
+      $('subLabel').textContent = currentMode === 'full' 
+        ? `Includes P&I (${fmt(pmt)}) + Extras (${fmt(extraMonthly)})`
+        : 'Principal & Interest only';
+      
+      $('totalInterest').textContent = fmt(totalInterest);
+      $('totalCost').textContent = fmt((finalMonthly * n) + down);
+      $('loanAmount').textContent = fmt(loan);
+      
+      let yrs = Math.floor(n / 12), mos = n % 12;
+      $('payoffTime').textContent = `${yrs} yr ${mos} mo`;
+
+      buildSchedule(loan, r, pmt, n);
+    }
+
+    // Build Amortization Schedule
+    function buildSchedule(loan, r, pmt, n) {
+      let bal = loan;
+      let monthlyRows = [], yearlyRows = [];
+      let yp = 0, yi = 0;
+
+      for (let m = 1; m <= n; m++) {
+        let interest = bal * r;
+        let principal = Math.min(pmt - interest, bal);
+        bal = Math.max(bal - principal, 0);
+
+        if (m <= 12) monthlyRows.push([m, principal, interest, bal]);
+        
+        yp += principal; yi += interest;
+        if (m % 12 === 0 || m === n) {
+          yearlyRows.push([Math.ceil(m / 12), yp, yi, bal]);
+          yp = 0; yi = 0;
+        }
+      }
+      scheduleData = { monthly: monthlyRows, yearly: yearlyRows };
+      renderTable();
+    }
+
+    // Render Table
+    function renderTable() {
+      if (!scheduleData) return;
+      let rows = scheduleData[currentView];
+      $('thPeriod').textContent = currentView === 'monthly' ? 'Month' : 'Year';
+      
+      let html = '';
+      rows.forEach(r => {
+        html += `<tr>
+          <td>${r[0]}</td>
+          <td>${fmt(r[1])}</td>
+          <td>${fmt(r[2])}</td>
+          <td>${fmt(r[3])}</td>
+        </tr>`;
+      });
+      $('amortBody').innerHTML = html;
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      initDropdowns();
+      updateCurSymbols();
+      calculate();
+    });
+
+  </script>
+</body>
+</html>
