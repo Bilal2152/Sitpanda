@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — SitPanda</title>
+  <meta name="description" content="Contact SitPanda for questions, corrections, suggestions, or business enquiries. We reply within a few business days.">
+  <link rel="canonical" href="https://sitpanda.com/pages/contact">
+  
+  <!-- Anti-FOUC Theme Script -->
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sp_theme') === 'dark') document.documentElement.classList.add('dark'); } catch (e) {}
+    })();
+  </script>
+
+  <!-- Fonts & Main CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/main.css">
+
+  <!-- Page Specific Styles -->
+  <style>
+    .page-wrap { padding: 80px 0; max-width: 640px; margin: 0 auto; }
+    .page-title { font-family: var(--font-serif); font-size: 2.8rem; font-weight: 600; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .page-subtitle { font-size: 1.1rem; color: var(--muted); margin-bottom: 48px; }
+    
+    .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow-sm); }
+    .input-group { margin-bottom: 24px; }
+    .input-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
+    .input-group input, .input-group textarea { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--ink); font-size: 1rem; outline: none; transition: border .2s, box-shadow .2s; }
+    .input-group input:focus, .input-group textarea:focus { border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-glow); }
+    .input-group textarea { resize: vertical; min-height: 160px; }
+    .input-hint { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+
+    .submit-btn { width: 100%; padding: 16px; background: var(--ink); color: var(--bg); border-radius: 12px; font-size: 1rem; font-weight: 600; transition: all 0.2s; }
+    .submit-btn:hover { background: var(--brand); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15,118,110,0.25); }
+
+    .info-box { margin-top: 24px; padding: 20px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; font-size: 0.9rem; color: var(--ink-secondary); }
+    .info-box strong { color: var(--brand); }
+
+    .success-msg { display: none; padding: 16px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 10px; font-size: 0.95rem; color: #166534; margin-bottom: 24px; text-align: center; }
+    html.dark .success-msg { background: rgba(34, 197, 94, 0.15); color: #86EFAC; }
+    .success-msg.show { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+      <nav class="header-nav">
+        <a href="/#finance">Finance</a>
+        <a href="/#health">Health</a>
+        <a href="/#math">Math</a>
+        <a href="/#everyday">Everyday</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/blog/" class="btn-blog">Blog</a>
+        <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
+        <a href="/#finance" class="btn-cta">Browse →</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="container page-wrap">
+    <h1 class="page-title">Contact SitPanda</h1>
+    <p class="page-subtitle">Have a question, spotted an error, or want to suggest a new calculator? Drop us a message below.</p>
+
+    <div class="success-msg" id="successMsg">
+      ✅ Thank you! Your message has been sent. We'll reply within a few business days.
+    </div>
+
+    <div class="form-card">
+      <!-- Aapki Formspree ID waisi hi hai -->
+      <form id="contactForm" action="https://formspree.io/f/xoeebzvj" method="POST">
+        
+        <div class="input-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" required placeholder="e.g. Ahmed Khan">
+        </div>
+
+        <div class="input-group">
+          <label for="email">Your Email</label>
+          <input type="email" id="email" name="email" required placeholder="you@example.com">
+          <div class="input-hint">We'll use this to reply to you. We never share it.</div>
+        </div>
+
+        <div class="input-group">
+          <label for="message">Your Message</label>
+          <textarea id="message" name="message" required placeholder="Please describe your question, correction, or suggestion."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
+      </form>
+
+      <div class="info-box">
+        <strong>📌 A quick note:</strong> We read every message. For corrections, please include the calculator name, the values you entered, and what you expected to see — this helps us fix issues faster.
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+          <p>Free, fast, and accurate online calculators for finance, health, and everyday life.</p>
+        </div>
+        <nav class="footer-col">
+          <h5>Finance</h5>
+          <ul>
+            <li><a href="/calculators/mortgage-calculator">Mortgage</a></li>
+            <li><a href="/calculators/loan-calculator">Loan</a></li>
+            <li><a href="/calculators/compound-interest-calculator">Compound Interest</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Health</h5>
+          <ul>
+            <li><a href="/calculators/bmi-calculator">BMI</a></li>
+            <li><a href="/calculators/calorie-calculator">Calorie</a></li>
+            <li><a href="/calculators/bmr-calculator">BMR</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="/pages/about">About</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/pages/privacy">Privacy</a></li>
+            <li><a href="/pages/contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SitPanda. All rights reserved.</span>
+        <span>Calculators are for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js"></script>
+  
+  <!-- Contact Form AJAX Script -->
+  <script>
+    (function() {
+      var form = document.getElementById('contactForm');
+      var successMsg = document.getElementById('successMsg');
+      var submitBtn = document.getElementById('submitBtn');
+
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          submitBtn.textContent = 'Sending...';
+          submitBtn.disabled = true;
+
+          var data = new FormData(form);
+          fetch(form.action, {
+            method: form.method,
+            body: data,
+            headers: { 'Accept': 'application/json' }
+          }).then(function(response) {
+            if (response.ok) {
+              form.style.display = 'none';
+              successMsg.classList.add('show');
+            } else {
+              alert('Oops! There was a problem submitting your form.');
+              submitBtn.textContent = 'Send Message';
+              submitBtn.disabled = false;
+            }
+          }).catch(function(error) {
+            alert('Oops! There was a problem submitting your form.');
+            submitBtn.textContent = 'Send Message';
+            submitBtn.disabled = false;
+          });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
