@@ -1,0 +1,78 @@
+/* =========================================
+   CALCULATORS - SPECIFIC STYLES
+   (Used by Mortgage, BMI, Loan, etc.)
+   ========================================= */
+
+.breadcrumb { padding: 24px 0 0; font-size: 0.9rem; color: var(--muted); display: flex; gap: 8px; }
+.breadcrumb a { color: var(--ink-secondary); transition: color 0.2s; }
+.breadcrumb a:hover { color: var(--brand); }
+.breadcrumb span { color: var(--muted); }
+
+.calc-header { text-align: center; padding: 40px 0 32px; }
+.calc-header h1 { font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 3rem); font-weight: 600; margin-bottom: 12px; }
+.calc-header p { color: var(--ink-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+.calc-layout { display: grid; grid-template-columns: 1fr; gap: 32px; max-width: 1000px; margin: 0 auto 80px; }
+@media (min-width: 860px) { .calc-layout { grid-template-columns: 1fr 1fr; align-items: start; } }
+
+/* Main Calculator Box */
+.calc-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-sm); }
+
+/* Settings Bar (Country/Currency) */
+.settings-bar { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.setting-group { flex: 1; min-width: 150px; }
+.setting-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
+.setting-group select { width: 100%; padding: 10px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--ink); font-size: 0.9rem; outline: none; }
+
+/* Form Inputs */
+.input-group { margin-bottom: 20px; }
+.input-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
+.input-row { display: flex; gap: 8px; align-items: center; }
+.input-row input, .input-row select { padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--ink); font-size: 1rem; outline: none; transition: border 0.2s, box-shadow 0.2s; }
+.input-row input:focus, .input-row select:focus, .full-input:focus { border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-glow); }
+.input-row input { flex: 1; min-width: 0; }
+.full-input { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--ink); font-size: 1rem; }
+.unit { font-size: 0.9rem; color: var(--muted); font-weight: 600; min-width: 30px; text-align: center; }
+
+/* Toggle Buttons */
+.toggle-group { display: flex; gap: 8px; margin-bottom: 20px; background: var(--surface-2); padding: 4px; border-radius: var(--radius-pill); }
+.toggle-btn { flex: 1; padding: 10px; border-radius: var(--radius-pill); font-weight: 600; font-size: 0.9rem; color: var(--ink-secondary); transition: all 0.2s; }
+.toggle-btn.active { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); }
+
+/* Result Box */
+.result-box { display: flex; flex-direction: column; text-align: center; background: linear-gradient(160deg, var(--brand-glow), var(--surface) 60%); border-color: var(--brand); }
+.result-label { font-size: 0.9rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+.result-value { font-family: var(--font-serif); font-size: 3.5rem; font-weight: 600; color: var(--brand); line-height: 1.1; margin: 8px 0; word-break: break-word; }
+.result-sub { font-size: 0.9rem; color: var(--ink-secondary); margin-bottom: 24px; }
+
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; padding-top: 24px; border-top: 1px solid var(--border); text-align: left; }
+.res-item .label { font-size: 0.8rem; color: var(--muted); }
+.res-item .val { font-size: 1.1rem; font-weight: 700; color: var(--ink); }
+
+/* Amortization Table */
+.amort-section { margin-top: 32px; }
+.amort-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.amort-tabs button { flex: 1; padding: 10px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.85rem; font-weight: 600; color: var(--ink-secondary); background: var(--bg); }
+.amort-tabs button.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+.table-wrap { overflow-x: auto; max-height: 400px; overflow-y: auto; border: 1px solid var(--border); border-radius: 12px; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th, td { padding: 12px; text-align: right; border-bottom: 1px solid var(--border); }
+th { font-weight: 700; color: var(--muted); text-transform: uppercase; font-size: 0.75rem; position: sticky; top: 0; background: var(--surface); }
+th:first-child, td:first-child { text-align: left; }
+
+/* Disclaimers & SEO Content */
+.ymyl-disclaimer { margin-top: 32px; padding: 16px; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); border-radius: 12px; font-size: 0.88rem; color: var(--ink-secondary); }
+.ymyl-disclaimer strong { color: #B91C1C; }
+
+.seo-content { max-width: 800px; margin: 0 auto; padding-bottom: 80px; }
+.seo-content h2 { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 600; margin: 40px 0 16px; }
+.seo-content p, .seo-content li { color: var(--ink-secondary); font-size: 1.1rem; margin-bottom: 16px; }
+.seo-content ul { padding-left: 20px; }
+.formula { text-align: center; font-family: monospace; background: var(--surface-2); padding: 16px; border-radius: 8px; border: 1px solid var(--border); margin: 20px 0; font-size: 1.1rem; }
+
+details.faq { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; padding: 0 20px; }
+details.faq summary { cursor: pointer; padding: 20px 0; font-weight: 600; font-size: 1.05rem; color: var(--ink); list-style: none; display: flex; justify-content: space-between; }
+details.faq summary::-webkit-details-marker { display: none; }
+details.faq summary::after { content: "+"; color: var(--brand); font-size: 1.2rem; font-weight: 700; }
+details.faq[open] summary::after { content: "−"; }
+details.faq p { padding-bottom: 20px; margin: 0; }
