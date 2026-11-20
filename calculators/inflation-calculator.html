@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inflation Calculator — Value of Money Over Time | SitPanda</title>
+  <meta name="description" content="Free inflation calculator. See how inflation changes the value of your money over time and what your current savings will be worth in the future.">
+  <link rel="canonical" href="https://sitpanda.com/calculators/inflation-calculator">
+  
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sp_theme') === 'dark') document.documentElement.classList.add('dark'); } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Main CSS & Calculator CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/calculator.css">
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Inflation Calculator",
+    "url": "https://sitpanda.com/calculators/inflation-calculator",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "description": "Free inflation calculator to see how the value of money changes over time.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+      <nav class="header-nav">
+        <a href="/#finance">Finance</a>
+        <a href="/#health">Health</a>
+        <a href="/#math">Math</a>
+        <a href="/#everyday">Everyday</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/blog/" class="btn-blog">Blog</a>
+        <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
+        <a href="/#finance" class="btn-cta">Browse →</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span>›</span> <a href="/#finance">Finance</a> <span>›</span> <span>Inflation Calculator</span>
+    </nav>
+
+    <div class="calc-header">
+      <h1>Inflation Calculator</h1>
+      <p>See how inflation changes the purchasing power of your money over time.</p>
+    </div>
+
+    <div class="calc-layout">
+      
+      <!-- INPUT FORM -->
+      <div class="calc-box">
+        
+        <div class="settings-bar">
+          <div class="setting-group">
+            <label for="countrySelect">🌍 Country</label>
+            <select id="countrySelect"></select>
+          </div>
+          <div class="setting-group">
+            <label for="currencySelect">💱 Currency</label>
+            <select id="currencySelect"></select>
+          </div>
+        </div>
+
+        <form id="calcForm" onsubmit="return false">
+          
+          <div class="input-group">
+            <label for="amount">Amount</label>
+            <div class="input-row">
+              <input type="number" id="amount" placeholder="e.g. 100000" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol1">PKR</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="inflationRate">Average Annual Inflation Rate (%)</label>
+            <div class="input-row">
+              <input type="number" id="inflationRate" placeholder="e.g. 8" step="0.01" min="0" oninput="calculate()">
+              <span class="unit">%</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="timeYears">Time Period (Years)</label>
+            <div class="input-row">
+              <input type="number" id="timeYears" placeholder="e.g. 10" min="1" max="100" oninput="calculate()">
+              <span class="unit">Years</span>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- RESULT CARD -->
+      <div class="calc-box result-box">
+        <div class="result-label" id="mainLabel">Future Value Needed</div>
+        <div class="result-value" id="futureValue">--</div>
+        <div class="result-sub" id="subLabel">Enter details to calculate</div>
+
+        <div class="result-grid" style="grid-template-columns: 1fr;">
+          <div class="res-item">
+            <div class="label">Purchasing Power Loss</div>
+            <div class="val" id="purchasingPower" style="color: #B91C1C;">--</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="ymyl-disclaimer" style="max-width: 1000px; margin: 0 auto 40px;">
+      <strong>⚠️ Financial Disclaimer:</strong> This calculator provides estimates based on a constant inflation rate. Actual inflation rates vary year by year. This is not financial advice.
+    </div>
+
+    <!-- SEO CONTENT -->
+    <article class="seo-content">
+      <h2>What is Inflation?</h2>
+      <p>Inflation is the rate at which the general level of prices for goods and services rises, and subsequently, the purchasing power of currency falls. In simple terms, it means that <strong>your money buys less tomorrow than it does today.</strong></p>
+      <p>For example, if you have $100 today and inflation is 5% per year, you will need $105 next year to buy the exact same basket of goods.</p>
+
+      <h2>Inflation Formula</h2>
+      <p>The calculator uses the standard compound inflation formula:</p>
+      <div class="formula">Future Value = Present Value × (1 + Inflation Rate)<sup>Years</sup></div>
+      <ul>
+        <li><strong>Future Value</strong> = What your current amount will need to be in the future to maintain the same purchasing power.</li>
+        <li><strong>Present Value</strong> = The amount you have today.</li>
+        <li><strong>Inflation Rate</strong> = The assumed average annual inflation rate (as a decimal).</li>
+        <li><strong>Years</strong> = Number of years into the future.</li>
+      </ul>
+
+      <h2>How to Protect Against Inflation</h2>
+      <ul>
+        <li><strong>Invest:</strong> Keeping money in a savings account with low interest means it loses value over time. Investing in stocks, mutual funds, or real estate historically outpaces inflation.</li>
+        <li><strong>Gold & Commodities:</strong> These are often used as a hedge against inflation.</li>
+        <li><strong>Negotiate Salary:</strong> Ensure your income grows at least at the rate of inflation to maintain your standard of living.</li>
+      </ul>
+
+      <h2>Related Calculators</h2>
+      <p>Explore other tools from our finance category:</p>
+      <ul>
+        <li><a href="/calculators/compound-interest-calculator">Compound Interest Calculator</a> — See how investments grow.</li>
+        <li><a href="/calculators/salary-calculator">Salary Calculator</a> — Convert hourly to annual pay.</li>
+        <li><a href="/calculators/savings-goal-calculator">Savings Goal Calculator</a> — Plan your financial targets.</li>
+        <li><a href="/calculators">View all calculators →</a></li>
+      </ul>
+    </article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+          <p>Free, fast, and accurate online calculators for finance, health, and everyday life.</p>
+        </div>
+        <nav class="footer-col">
+          <h5>Finance</h5>
+          <ul>
+            <li><a href="/calculators/mortgage-calculator">Mortgage</a></li>
+            <li><a href="/calculators/loan-calculator">Loan</a></li>
+            <li><a href="/calculators/compound-interest-calculator">Compound Interest</a></li>
+            <li><a href="/calculators/salary-calculator">Salary</a></li>
+            <li><a href="/calculators/inflation-calculator">Inflation</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Health</h5>
+          <ul>
+            <li><a href="/calculators/bmi-calculator">BMI</a></li>
+            <li><a href="/calculators/calorie-calculator">Calorie</a></li>
+            <li><a href="/calculators/bmr-calculator">BMR</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="/pages/about">About</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/pages/privacy">Privacy</a></li>
+            <li><a href="/pages/contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SitPanda. All rights reserved.</span>
+        <span>Calculators are for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js"></script>
+
+  <script>
+    const COUNTRIES = {
+      US:['United States','USD'], GB:['United Kingdom','GBP'], CA:['Canada','CAD'], AU:['Australia','AUD'],
+      NZ:['New Zealand','NZD'], IE:['Ireland','EUR'], DE:['Germany','EUR'], FR:['France','EUR'],
+      ES:['Spain','EUR'], IT:['Italy','EUR'], NL:['Netherlands','EUR'], CH:['Switzerland','CHF'],
+      SE:['Sweden','SEK'], NO:['Norway','NOK'], DK:['Denmark','DKK'], PL:['Poland','PLN'],
+      CZ:['Czech Republic','CZK'], HU:['Hungary','HUF'], RO:['Romania','RON'], TR:['Turkey','TRY'],
+      RU:['Russia','RUB'], AE:['UAE','AED'], SA:['Saudi Arabia','SAR'], QA:['Qatar','QAR'],
+      KW:['Kuwait','KWD'], BH:['Bahrain','BHD'], OM:['Oman','OMR'], JO:['Jordan','JOD'],
+      EG:['Egypt','EGP'], ZA:['South Africa','ZAR'], NG:['Nigeria','NGN'], KE:['Kenya','KES'],
+      GH:['Ghana','GHS'], PK:['Pakistan','PKR'], IN:['India','INR'], BD:['Bangladesh','BDT'],
+      LK:['Sri Lanka','LKR'], NP:['Nepal','NPR'], CN:['China','CNY'], JP:['Japan','JPY'],
+      KR:['South Korea','KRW'], SG:['Singapore','SGD'], MY:['Malaysia','MYR'], TH:['Thailand','THB'],
+      ID:['Indonesia','IDR'], PH:['Philippines','PHP'], VN:['Vietnam','VND'], HK:['Hong Kong','HKD'],
+      TW:['Taiwan','TWD'], BR:['Brazil','BRL'], MX:['Mexico','MXN'], AR:['Argentina','ARS']
+    };
+    const CURRENCIES = ['USD','GBP','EUR','CAD','AUD','NZD','CHF','SEK','NOK','DKK','PLN','CZK','HUF','RON','TRY','RUB','AED','SAR','QAR','KWD','BHD','OMR','JOD','EGP','ZAR','NGN','KES','GHS','PKR','INR','BDT','LKR','NPR','CNY','JPY','KRW','SGD','MYR','THB','IDR','PHP','VND','HKD','TWD','BRL','MXN','ARS'];
+
+    const $ = id => document.getElementById(id);
+    const getVal = id => parseFloat($(id).value) || 0;
+    const locale = navigator.language || 'en-US';
+
+    function fmt(val) {
+      let cur = $('currencySelect').value;
+      try {
+        return new Intl.NumberFormat(locale, { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(val);
+      } catch(e) { return cur + ' ' + val.toFixed(0); }
+    }
+    
+    function updateCurSymbols() {
+      let cur = $('currencySelect').value;
+      let symbol = cur;
+      try {
+        let parts = new Intl.NumberFormat(locale, { style: 'currency', currency: cur, currencyDisplay: 'narrowSymbol' }).formatToParts(0);
+        symbol = parts.find(p => p.type === 'currency').value;
+      } catch(e) {}
+      $('curSymbol1').textContent = symbol;
+    }
+
+    function initDropdowns() {
+      let cSel = $('countrySelect'), curSel = $('currencySelect');
+      Object.keys(COUNTRIES).forEach(k => {
+        let o = document.createElement('option');
+        o.value = k; o.textContent = COUNTRIES[k][0];
+        cSel.appendChild(o);
+      });
+      CURRENCIES.forEach(c => {
+        let o = document.createElement('option');
+        o.value = c; o.textContent = c;
+        curSel.appendChild(o);
+      });
+
+      cSel.value = 'PK';
+      curSel.value = 'PKR';
+      
+      cSel.addEventListener('change', function() {
+        curSel.value = COUNTRIES[this.value][1];
+        updateCurSymbols(); calculate();
+      });
+      curSel.addEventListener('change', function() {
+        updateCurSymbols(); calculate();
+      });
+    }
+
+    function calculate() {
+      let amount = getVal('amount');
+      let rate = getVal('inflationRate');
+      let years = getVal('timeYears');
+
+      if (amount === 0 || years === 0) {
+        $('futureValue').textContent = '--';
+        $('subLabel').textContent = 'Enter details to calculate';
+        $('purchasingPower').textContent = '--';
+        return;
+      }
+
+      let r = rate / 100;
+      
+      // Future Value Needed = Present Value * (1 + r)^years
+      let futureValue = amount * Math.pow((1 + r), years);
+      let loss = futureValue - amount;
+
+      $('mainLabel').textContent = 'Future Value Needed in ' + years + ' Years';
+      $('futureValue').textContent = fmt(futureValue);
+      $('subLabel').textContent = `To buy what ${fmt(amount)} buys today, you will need ${fmt(futureValue)}.`;
+      $('purchasingPower').textContent = fmt(loss);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initDropdowns();
+      updateCurSymbols();
+      calculate();
+    });
+  </script>
+</body>
+</html>
