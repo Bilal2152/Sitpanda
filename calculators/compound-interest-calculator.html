@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compound Interest Calculator — Investment Growth | SitPanda</title>
+  <meta name="description" content="Free compound interest calculator. See how your savings or investments grow over time with monthly, quarterly, or annual compounding.">
+  <link rel="canonical" href="https://sitpanda.com/calculators/compound-interest-calculator">
+  
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sp_theme') === 'dark') document.documentElement.classList.add('dark'); } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Main CSS & Calculator CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/calculator.css">
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Compound Interest Calculator",
+    "url": "https://sitpanda.com/calculators/compound-interest-calculator",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "description": "Free compound interest calculator to see how investments grow over time.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+      "@type": "Question",
+      "name": "What is compound interest?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Compound interest is the interest you earn on both your original money and on the interest you've accumulated over time. It's often called 'interest on interest'." }
+    },{
+      "@type": "Question",
+      "name": "How does compounding frequency affect my investment?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The more frequently interest is compounded (e.g., monthly vs annually), the faster your investment grows because you start earning interest on the interest sooner." }
+    }]
+  }
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+      <nav class="header-nav">
+        <a href="/#finance">Finance</a>
+        <a href="/#health">Health</a>
+        <a href="/#math">Math</a>
+        <a href="/#everyday">Everyday</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/blog/" class="btn-blog">Blog</a>
+        <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
+        <a href="/#finance" class="btn-cta">Browse →</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span>›</span> <a href="/#finance">Finance</a> <span>›</span> <span>Compound Interest Calculator</span>
+    </nav>
+
+    <div class="calc-header">
+      <h1>Compound Interest Calculator</h1>
+      <p>See how your savings or investments grow over time with the power of compounding.</p>
+    </div>
+
+    <div class="calc-layout">
+      
+      <!-- INPUT FORM -->
+      <div class="calc-box">
+        
+        <div class="settings-bar">
+          <div class="setting-group">
+            <label for="countrySelect">🌍 Country</label>
+            <select id="countrySelect"></select>
+          </div>
+          <div class="setting-group">
+            <label for="currencySelect">💱 Currency</label>
+            <select id="currencySelect"></select>
+          </div>
+        </div>
+
+        <form id="calcForm" onsubmit="return false">
+          
+          <div class="input-group">
+            <label for="principal">Initial Investment (Principal)</label>
+            <div class="input-row">
+              <input type="number" id="principal" placeholder="e.g. 100000" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol1">PKR</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="monthlyContribution">Monthly Contribution (Optional)</label>
+            <div class="input-row">
+              <input type="number" id="monthlyContribution" placeholder="e.g. 5000" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol2">PKR</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="interestRate">Annual Interest Rate (%)</label>
+            <div class="input-row">
+              <input type="number" id="interestRate" placeholder="e.g. 10" step="0.01" min="0" oninput="calculate()">
+              <span class="unit">%</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="timeYears">Time Period (Years)</label>
+            <div class="input-row">
+              <input type="number" id="timeYears" placeholder="e.g. 10" min="0.1" step="0.1" max="100" oninput="calculate()">
+              <span class="unit">Years</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="compoundFreq">Compound Frequency</label>
+            <select id="compoundFreq" class="full-input" onchange="calculate()">
+              <option value="12">Monthly (12/year)</option>
+              <option value="4">Quarterly (4/year)</option>
+              <option value="2">Semi-Annually (2/year)</option>
+              <option value="1" selected>Annually (1/year)</option>
+            </select>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- RESULT CARD -->
+      <div class="calc-box result-box">
+        <div class="result-label">Future Value</div>
+        <div class="result-value" id="futureValue">--</div>
+        <div class="result-sub" id="subLabel">Enter investment details to calculate</div>
+
+        <div class="result-grid" style="grid-template-columns: 1fr;">
+          <div class="res-item">
+            <div class="label">Total Principal Invested</div>
+            <div class="val" id="totalPrincipal">--</div>
+          </div>
+          <div class="res-item">
+            <div class="label">Total Interest Earned</div>
+            <div class="val" id="totalInterest" style="color: var(--brand);">--</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="ymyl-disclaimer" style="max-width: 1000px; margin: 0 auto 40px;">
+      <strong>⚠️ Financial Disclaimer:</strong> This calculator provides estimates for educational purposes only. It is not financial advice. Actual investment returns may vary based on market conditions and fees.
+    </div>
+
+    <!-- SEO CONTENT -->
+    <article class="seo-content">
+      <h2>What is Compound Interest?</h2>
+      <p>Compound interest is the interest you earn on both your original money and on the interest you've accumulated over time. It is often called <strong>"interest on interest."</strong></p>
+      <p>For example, if you invest $1,000 at a 10% annual return, you earn $100 in the first year. In the second year, you earn 10% on $1,100, which is $110. Over decades, this snowball effect can turn small investments into significant wealth.</p>
+
+      <h2>Compound Interest Formula</h2>
+      <p>The calculator uses the standard compound interest formula with optional monthly contributions:</p>
+      <div class="formula">A = P(1 + r/n)<sup>nt</sup> + PMT × [((1 + r/n)<sup>nt</sup> − 1) ÷ (r/n)]</div>
+      <ul>
+        <li><strong>A</strong> = Future Value of the investment</li>
+        <li><strong>P</strong> = Initial Principal</li>
+        <li><strong>PMT</strong> = Monthly Contribution</li>
+        <li><strong>r</strong> = Annual Interest Rate (as a decimal)</li>
+        <li><strong>n</strong> = Number of times interest is compounded per year</li>
+        <li><strong>t</strong> = Time in years</li>
+      </ul>
+
+      <h2>Frequently Asked Questions</h2>
+      
+      <details class="faq" open>
+        <summary>What is compound interest?</summary>
+        <p>Compound interest is the interest you earn on both your original money and on the interest you've accumulated over time. It's often called 'interest on interest'.</p>
+      </details>
+      
+      <details class="faq">
+        <summary>How does compounding frequency affect my investment?</summary>
+        <p>The more frequently interest is compounded (e.g., monthly vs annually), the faster your investment grows because you start earning interest on the interest sooner.</p>
+      </details>
+
+      <details class="faq">
+        <summary>Is this calculator adjusted for inflation?</summary>
+        <p>No. This calculator shows the nominal future value. To see the "real" value adjusted for inflation, you would need to subtract the expected inflation rate from your interest rate.</p>
+      </details>
+
+      <h2>Related Calculators</h2>
+      <p>Explore other tools from our finance category:</p>
+      <ul>
+        <li><a href="/calculators/mortgage-calculator">Mortgage Calculator</a> — For home loans.</li>
+        <li><a href="/calculators/loan-calculator">Loan Calculator</a> — For personal or auto loans.</li>
+        <li><a href="/calculators/emi-calculator">EMI Calculator</a> — For Equated Monthly Installments.</li>
+        <li><a href="/calculators">View all calculators →</a></li>
+      </ul>
+    </article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+          <p>Free, fast, and accurate online calculators for finance, health, and everyday life.</p>
+        </div>
+        <nav class="footer-col">
+          <h5>Finance</h5>
+          <ul>
+            <li><a href="/calculators/mortgage-calculator">Mortgage</a></li>
+            <li><a href="/calculators/loan-calculator">Loan</a></li>
+            <li><a href="/calculators/compound-interest-calculator">Compound Interest</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Health</h5>
+          <ul>
+            <li><a href="/calculators/bmi-calculator">BMI</a></li>
+            <li><a href="/calculators/calorie-calculator">Calorie</a></li>
+            <li><a href="/calculators/bmr-calculator">BMR</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="/pages/about">About</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/pages/privacy">Privacy</a></li>
+            <li><a href="/pages/contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SitPanda. All rights reserved.</span>
+        <span>Calculators are for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js"></script>
+
+  <script>
+    const COUNTRIES = {
+      US:['United States','USD'], GB:['United Kingdom','GBP'], CA:['Canada','CAD'], AU:['Australia','AUD'],
+      NZ:['New Zealand','NZD'], IE:['Ireland','EUR'], DE:['Germany','EUR'], FR:['France','EUR'],
+      ES:['Spain','EUR'], IT:['Italy','EUR'], NL:['Netherlands','EUR'], CH:['Switzerland','CHF'],
+      SE:['Sweden','SEK'], NO:['Norway','NOK'], DK:['Denmark','DKK'], PL:['Poland','PLN'],
+      CZ:['Czech Republic','CZK'], HU:['Hungary','HUF'], RO:['Romania','RON'], TR:['Turkey','TRY'],
+      RU:['Russia','RUB'], AE:['UAE','AED'], SA:['Saudi Arabia','SAR'], QA:['Qatar','QAR'],
+      KW:['Kuwait','KWD'], BH:['Bahrain','BHD'], OM:['Oman','OMR'], JO:['Jordan','JOD'],
+      EG:['Egypt','EGP'], ZA:['South Africa','ZAR'], NG:['Nigeria','NGN'], KE:['Kenya','KES'],
+      GH:['Ghana','GHS'], PK:['Pakistan','PKR'], IN:['India','INR'], BD:['Bangladesh','BDT'],
+      LK:['Sri Lanka','LKR'], NP:['Nepal','NPR'], CN:['China','CNY'], JP:['Japan','JPY'],
+      KR:['South Korea','KRW'], SG:['Singapore','SGD'], MY:['Malaysia','MYR'], TH:['Thailand','THB'],
+      ID:['Indonesia','IDR'], PH:['Philippines','PHP'], VN:['Vietnam','VND'], HK:['Hong Kong','HKD'],
+      TW:['Taiwan','TWD'], BR:['Brazil','BRL'], MX:['Mexico','MXN'], AR:['Argentina','ARS']
+    };
+    const CURRENCIES = ['USD','GBP','EUR','CAD','AUD','NZD','CHF','SEK','NOK','DKK','PLN','CZK','HUF','RON','TRY','RUB','AED','SAR','QAR','KWD','BHD','OMR','JOD','EGP','ZAR','NGN','KES','GHS','PKR','INR','BDT','LKR','NPR','CNY','JPY','KRW','SGD','MYR','THB','IDR','PHP','VND','HKD','TWD','BRL','MXN','ARS'];
+
+    const $ = id => document.getElementById(id);
+    const getVal = id => parseFloat($(id).value) || 0;
+    const locale = navigator.language || 'en-US';
+
+    function fmt(val) {
+      let cur = $('currencySelect').value;
+      try {
+        return new Intl.NumberFormat(locale, { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(val);
+      } catch(e) { return cur + ' ' + val.toFixed(0); }
+    }
+    
+    function updateCurSymbols() {
+      let cur = $('currencySelect').value;
+      let symbol = cur;
+      try {
+        let parts = new Intl.NumberFormat(locale, { style: 'currency', currency: cur, currencyDisplay: 'narrowSymbol' }).formatToParts(0);
+        symbol = parts.find(p => p.type === 'currency').value;
+      } catch(e) {}
+      $('curSymbol1').textContent = symbol;
+      $('curSymbol2').textContent = symbol;
+    }
+
+    function initDropdowns() {
+      let cSel = $('countrySelect'), curSel = $('currencySelect');
+      Object.keys(COUNTRIES).forEach(k => {
+        let o = document.createElement('option');
+        o.value = k; o.textContent = COUNTRIES[k][0];
+        cSel.appendChild(o);
+      });
+      CURRENCIES.forEach(c => {
+        let o = document.createElement('option');
+        o.value = c; o.textContent = c;
+        curSel.appendChild(o);
+      });
+
+      cSel.value = 'PK';
+      curSel.value = 'PKR';
+      
+      cSel.addEventListener('change', function() {
+        curSel.value = COUNTRIES[this.value][1];
+        updateCurSymbols(); calculate();
+      });
+      curSel.addEventListener('change', function() {
+        updateCurSymbols(); calculate();
+      });
+    }
+
+    function calculate() {
+      let principal = getVal('principal');
+      let monthly = getVal('monthlyContribution');
+      let rate = getVal('interestRate');
+      let years = getVal('timeYears');
+      let freq = parseInt($('compoundFreq').value, 10); // 1, 2, 4, 12
+
+      if (principal === 0 && monthly === 0 || years === 0 || rate === 0) {
+        $('futureValue').textContent = '--';
+        $('subLabel').textContent = 'Enter investment details to calculate';
+        $('totalPrincipal').textContent = '--';
+        $('totalInterest').textContent = '--';
+        return;
+      }
+
+      let r = rate / 100;
+      let t = years;
+      
+      // Future Value of initial principal
+      let fvPrincipal = principal * Math.pow(1 + (r / freq), freq * t);
+      
+      // Future Value of monthly contributions (Annuity)
+      // Since contributions are monthly but compounding might be different, we convert monthly rate
+      let monthlyRate = r / 12;
+      let totalMonths = t * 12;
+      let fvMonthly = 0;
+      
+      if (monthly > 0) {
+        if (monthlyRate === 0) {
+          fvMonthly = monthly * totalMonths;
+        } else {
+          fvMonthly = monthly * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate);
+        }
+      }
+
+      let futureValue = fvPrincipal + fvMonthly;
+      let totalPrincipal = principal + (monthly * totalMonths);
+      let totalInterest = Math.max(futureValue - totalPrincipal, 0);
+
+      $('futureValue').textContent = fmt(futureValue);
+      $('subLabel').textContent = `After ${t} years at ${rate}% interest`;
+      $('totalPrincipal').textContent = fmt(totalPrincipal);
+      $('totalInterest').textContent = fmt(totalInterest);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initDropdowns();
+      updateCurSymbols();
+      calculate();
+    });
+  </script>
+</body>
+</html>
