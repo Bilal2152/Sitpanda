@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loan Calculator — EMI & Interest | SitPanda</title>
+  <meta name="description" content="Free loan calculator to find your monthly payment (EMI), total interest, and total cost for personal, auto, or student loans. Works with any currency.">
+  <link rel="canonical" href="https://sitpanda.com/calculators/loan-calculator">
+  
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sp_theme') === 'dark') document.documentElement.classList.add('dark'); } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Main CSS & Calculator CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/calculator.css">
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Loan Calculator",
+    "url": "https://sitpanda.com/calculators/loan-calculator",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "description": "Free loan calculator that estimates monthly payment and total interest for any loan type.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+      "@type": "Question",
+      "name": "How is a loan monthly payment (EMI) calculated?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The standard formula is M = P × r × (1+r)^n ÷ ((1+r)^n − 1), where P is the loan amount, r is the monthly interest rate, and n is the number of months." }
+    },{
+      "@type": "Question",
+      "name": "Can I use this calculator for a 0% interest loan?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. If you enter 0% as the interest rate, the calculator automatically switches to a simple division formula (Loan Amount ÷ Number of Months)." }
+    }]
+  }
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+      <nav class="header-nav">
+        <a href="/#finance">Finance</a>
+        <a href="/#health">Health</a>
+        <a href="/#math">Math</a>
+        <a href="/#everyday">Everyday</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/blog/" class="btn-blog">Blog</a>
+        <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
+        <a href="/#finance" class="btn-cta">Browse →</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span>›</span> <a href="/#finance">Finance</a> <span>›</span> <span>Loan Calculator</span>
+    </nav>
+
+    <div class="calc-header">
+      <h1>Loan Calculator</h1>
+      <p>Calculate your monthly payment (EMI), total interest, and total cost for personal, auto, or student loans.</p>
+    </div>
+
+    <div class="calc-layout">
+      
+      <!-- INPUT FORM -->
+      <div class="calc-box">
+        
+        <div class="settings-bar">
+          <div class="setting-group">
+            <label for="countrySelect">🌍 Country</label>
+            <select id="countrySelect"></select>
+          </div>
+          <div class="setting-group">
+            <label for="currencySelect">💱 Currency</label>
+            <select id="currencySelect"></select>
+          </div>
+        </div>
+
+        <form id="calcForm" onsubmit="return false">
+          
+          <div class="input-group">
+            <label for="loanAmount">Loan Amount</label>
+            <div class="input-row">
+              <input type="number" id="loanAmount" placeholder="e.g. 1000000" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol1">PKR</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="interestRate">Annual Interest Rate (%)</label>
+            <div class="input-row">
+              <input type="number" id="interestRate" placeholder="e.g. 12" step="0.01" min="0" oninput="calculate()">
+              <span class="unit">%</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="loanTerm">Loan Term</label>
+            <div class="input-row">
+              <input type="number" id="loanTerm" placeholder="e.g. 3" min="1" max="50" oninput="calculate()">
+              <select id="termUnit" onchange="calculate()">
+                <option value="years">Years</option>
+                <option value="months">Months</option>
+              </select>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- RESULT CARD -->
+      <div class="calc-box result-box">
+        <div class="result-label" id="mainLabel">Monthly Payment (EMI)</div>
+        <div class="result-value" id="monthlyPayment">--</div>
+        <div class="result-sub" id="subLabel">Enter loan details to calculate</div>
+
+        <div class="result-grid">
+          <div class="res-item">
+            <div class="label">Total Interest</div>
+            <div class="val" id="totalInterest">--</div>
+          </div>
+          <div class="res-item">
+            <div class="label">Total Payment</div>
+            <div class="val" id="totalPayment">--</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="ymyl-disclaimer" style="max-width: 1000px; margin: 0 auto 40px;">
+      <strong>⚠️ Financial Disclaimer:</strong> This calculator provides estimates for educational purposes only. It is not financial advice. Actual loan terms, fees, and rates may vary by lender.
+    </div>
+
+    <!-- SEO CONTENT -->
+    <article class="seo-content">
+      <h2>How to Use This Loan Calculator</h2>
+      <p>This free tool works for any type of loan: <strong>personal loans, auto loans, student loans, or business loans</strong>. Simply enter the loan amount, the annual interest rate, and the term (in years or months).</p>
+      <p>The calculator will instantly show your <strong>Equated Monthly Installment (EMI)</strong>, which is the fixed amount you need to pay every month. It also shows the total interest you'll pay over the life of the loan.</p>
+
+      <h2>Loan Payment Formula</h2>
+      <p>The calculator uses the standard reducing-balance formula:</p>
+      <div class="formula">M = P × r × (1 + r)<sup>n</sup> ÷ ((1 + r)<sup>n</sup> − 1)</div>
+      <ul>
+        <li><strong>M</strong> = Monthly Payment (EMI)</li>
+        <li><strong>P</strong> = Principal Loan Amount</li>
+        <li><strong>r</strong> = Monthly Interest Rate (Annual Rate ÷ 12 ÷ 100)</li>
+        <li><strong>n</strong> = Total Number of Months (Years × 12)</li>
+      </ul>
+      <p><em>Note: For 0% interest loans, the calculator uses M = P ÷ n.</em></p>
+
+      <h2>Frequently Asked Questions</h2>
+      
+      <details class="faq" open>
+        <summary>How is a loan monthly payment (EMI) calculated?</summary>
+        <p>The standard formula is M = P × r × (1+r)^n ÷ ((1+r)^n − 1), where P is the loan amount, r is the monthly interest rate, and n is the number of months.</p>
+      </details>
+      
+      <details class="faq">
+        <summary>Can I use this calculator for a 0% interest loan?</summary>
+        <p>Yes. If you enter 0% as the interest rate (common in Islamic banking or special promotions), the calculator automatically switches to a simple division formula (Loan Amount ÷ Number of Months).</p>
+      </details>
+
+      <details class="faq">
+        <summary>What is the difference between flat rate and reducing balance?</summary>
+        <p>This calculator uses the <strong>reducing balance</strong> method (most common globally), where interest is calculated on the remaining principal. A <strong>flat rate</strong> calculates interest on the original amount for the entire term, making it more expensive.</p>
+      </details>
+
+      <h2>Related Calculators</h2>
+      <p>Explore other tools from our finance category:</p>
+      <ul>
+        <li><a href="/calculators/mortgage-calculator">Mortgage Calculator</a> — For home loans.</li>
+        <li><a href="/calculators/compound-interest-calculator">Compound Interest Calculator</a> — To see how investments grow.</li>
+        <li><a href="/calculators/emi-calculator">EMI Calculator</a> — For Equated Monthly Installments.</li>
+        <li><a href="/calculators">View all calculators →</a></li>
+      </ul>
+    </article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+          <p>Free, fast, and accurate online calculators for finance, health, and everyday life.</p>
+        </div>
+        <nav class="footer-col">
+          <h5>Finance</h5>
+          <ul>
+            <li><a href="/calculators/mortgage-calculator">Mortgage</a></li>
+            <li><a href="/calculators/loan-calculator">Loan</a></li>
+            <li><a href="/calculators/compound-interest-calculator">Compound Interest</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Health</h5>
+          <ul>
+            <li><a href="/calculators/bmi-calculator">BMI</a></li>
+            <li><a href="/calculators/calorie-calculator">Calorie</a></li>
+            <li><a href="/calculators/bmr-calculator">BMR</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="/pages/about">About</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/pages/privacy">Privacy</a></li>
+            <li><a href="/pages/contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SitPanda. All rights reserved.</span>
+        <span>Calculators are for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js"></script>
+
+  <script>
+    const COUNTRIES = {
+      US:['United States','USD'], GB:['United Kingdom','GBP'], CA:['Canada','CAD'], AU:['Australia','AUD'],
+      NZ:['New Zealand','NZD'], IE:['Ireland','EUR'], DE:['Germany','EUR'], FR:['France','EUR'],
+      ES:['Spain','EUR'], IT:['Italy','EUR'], NL:['Netherlands','EUR'], CH:['Switzerland','CHF'],
+      SE:['Sweden','SEK'], NO:['Norway','NOK'], DK:['Denmark','DKK'], PL:['Poland','PLN'],
+      CZ:['Czech Republic','CZK'], HU:['Hungary','HUF'], RO:['Romania','RON'], TR:['Turkey','TRY'],
+      RU:['Russia','RUB'], AE:['UAE','AED'], SA:['Saudi Arabia','SAR'], QA:['Qatar','QAR'],
+      KW:['Kuwait','KWD'], BH:['Bahrain','BHD'], OM:['Oman','OMR'], JO:['Jordan','JOD'],
+      EG:['Egypt','EGP'], ZA:['South Africa','ZAR'], NG:['Nigeria','NGN'], KE:['Kenya','KES'],
+      GH:['Ghana','GHS'], PK:['Pakistan','PKR'], IN:['India','INR'], BD:['Bangladesh','BDT'],
+      LK:['Sri Lanka','LKR'], NP:['Nepal','NPR'], CN:['China','CNY'], JP:['Japan','JPY'],
+      KR:['South Korea','KRW'], SG:['Singapore','SGD'], MY:['Malaysia','MYR'], TH:['Thailand','THB'],
+      ID:['Indonesia','IDR'], PH:['Philippines','PHP'], VN:['Vietnam','VND'], HK:['Hong Kong','HKD'],
+      TW:['Taiwan','TWD'], BR:['Brazil','BRL'], MX:['Mexico','MXN'], AR:['Argentina','ARS']
+    };
+    const CURRENCIES = ['USD','GBP','EUR','CAD','AUD','NZD','CHF','SEK','NOK','DKK','PLN','CZK','HUF','RON','TRY','RUB','AED','SAR','QAR','KWD','BHD','OMR','JOD','EGP','ZAR','NGN','KES','GHS','PKR','INR','BDT','LKR','NPR','CNY','JPY','KRW','SGD','MYR','THB','IDR','PHP','VND','HKD','TWD','BRL','MXN','ARS'];
+
+    const $ = id => document.getElementById(id);
+    const getVal = id => parseFloat($(id).value) || 0;
+    const locale = navigator.language || 'en-US';
+
+    function fmt(val) {
+      let cur = $('currencySelect').value;
+      try {
+        return new Intl.NumberFormat(locale, { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(val);
+      } catch(e) { return cur + ' ' + val.toFixed(0); }
+    }
+    
+    function updateCurSymbols() {
+      let cur = $('currencySelect').value;
+      let symbol = cur;
+      try {
+        let parts = new Intl.NumberFormat(locale, { style: 'currency', currency: cur, currencyDisplay: 'narrowSymbol' }).formatToParts(0);
+        symbol = parts.find(p => p.type === 'currency').value;
+      } catch(e) {}
+      $('curSymbol1').textContent = symbol;
+    }
+
+    function initDropdowns() {
+      let cSel = $('countrySelect'), curSel = $('currencySelect');
+      Object.keys(COUNTRIES).forEach(k => {
+        let o = document.createElement('option');
+        o.value = k; o.textContent = COUNTRIES[k][0];
+        cSel.appendChild(o);
+      });
+      CURRENCIES.forEach(c => {
+        let o = document.createElement('option');
+        o.value = c; o.textContent = c;
+        curSel.appendChild(o);
+      });
+
+      cSel.value = 'PK';
+      curSel.value = 'PKR';
+      
+      cSel.addEventListener('change', function() {
+        curSel.value = COUNTRIES[this.value][1];
+        updateCurSymbols(); calculate();
+      });
+      curSel.addEventListener('change', function() {
+        updateCurSymbols(); calculate();
+      });
+    }
+
+    function calculate() {
+      let loan = getVal('loanAmount');
+      let rate = getVal('interestRate');
+      let term = getVal('loanTerm');
+      let n = $('termUnit').value === 'years' ? term * 12 : term;
+      let r = rate / 1200;
+
+      if (loan === 0 || n === 0) {
+        $('monthlyPayment').textContent = '--';
+        $('subLabel').textContent = 'Enter loan details to calculate';
+        $('totalInterest').textContent = '--';
+        $('totalPayment').textContent = '--';
+        return;
+      }
+
+      // Handle 0% Interest Rate (Islamic Banking / Promo)
+      let pmt = 0;
+      if (rate === 0) {
+        pmt = loan / n;
+      } else {
+        pmt = loan * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
+      }
+
+      let totalPayment = pmt * n;
+      let totalInterest = Math.max(totalPayment - loan, 0);
+
+      $('monthlyPayment').textContent = fmt(pmt);
+      $('subLabel').textContent = 'Principal & Interest only';
+      $('totalInterest').textContent = fmt(totalInterest);
+      $('totalPayment').textContent = fmt(totalPayment);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initDropdowns();
+      updateCurSymbols();
+      calculate();
+    });
+  </script>
+</body>
+</html>
