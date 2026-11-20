@@ -34,7 +34,7 @@
       let parts = new Intl.NumberFormat(locale, { style: 'currency', currency: cur, currencyDisplay: 'narrowSymbol' }).formatToParts(0);
       symbol = parts.find(p => p.type === 'currency').value;
     } catch(e) {}
-    for(let i=1; i<=6; i++) {
+    for(let i=1; i<=8; i++) {
       let el = $('curSymbol'+i);
       if(el) el.textContent = symbol;
     }
@@ -65,7 +65,6 @@
     });
   }
 
-  // LIVE NISAB FETCH FUNCTION (Smart Fallback Version)
   function fetchLiveNisab() {
     const status = $('nisabStatus');
     status.innerHTML = '⏳ Calculating Nisab based on current market standards...';
@@ -104,11 +103,13 @@
     let cash = getVal('cash');
     let gold = getVal('goldValue');
     let silver = getVal('silverValue');
+    let precious = getVal('preciousMetals');
     let business = getVal('businessAssets');
+    let loans = getVal('loansGiven');
     let liabilities = getVal('liabilities');
     let nisab = getVal('nisab');
 
-    let totalAssets = cash + gold + silver + business;
+    let totalAssets = cash + gold + silver + precious + business + loans;
     let netWealth = Math.max(totalAssets - liabilities, 0);
 
     if (netWealth === 0) {
@@ -132,8 +133,9 @@
     }
   }
 
-  // Expose function to window so the HTML button can call it
+  // Make globally accessible for HTML events
   window.fetchLiveNisab = fetchLiveNisab;
+  window.calculate = calculate;
 
   document.addEventListener('DOMContentLoaded', () => {
     initDropdowns();
