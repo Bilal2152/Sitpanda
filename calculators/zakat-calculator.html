@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zakat Calculator — Calculate Your Zakat (2.5%) | SitPanda</title>
-  <meta name="description" content="Free Zakat calculator with live Nisab value. Calculate your annual Zakat on cash, gold, silver, and business assets using the standard 2.5% rate.">
+  <meta name="description" content="Free Zakat calculator with live Nisab value. Calculate your annual Zakat on cash, gold, silver, business assets, and loans given.">
   <link rel="canonical" href="https://sitpanda.com/calculators/zakat-calculator">
   
   <script>
@@ -17,22 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Main CSS & Calculator CSS -->
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/calculator.css">
-
-  <!-- Schema -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Zakat Calculator",
-    "url": "https://sitpanda.com/calculators/zakat-calculator",
-    "applicationCategory": "FinanceApplication",
-    "operatingSystem": "Any",
-    "description": "Free Zakat calculator with live Nisab value."
-  }
-  </script>
 </head>
 <body>
 
@@ -60,7 +46,7 @@
 
     <div class="calc-header">
       <h1>Zakat Calculator</h1>
-      <p>Calculate your annual Zakat (2.5%) on cash, gold, silver, and business assets with live Nisab values.</p>
+      <p>Calculate your annual Zakat (2.5%) on cash, gold, silver, business assets, and loans given.</p>
     </div>
 
     <div class="calc-layout">
@@ -115,18 +101,34 @@
           </div>
 
           <div class="input-group">
-            <label for="businessAssets">Business Assets / Investments</label>
+            <label for="preciousMetals">Other Precious Metals (Platinum, etc.)</label>
             <div class="input-row">
-              <input type="number" id="businessAssets" placeholder="0" min="0" oninput="calculate()">
+              <input type="number" id="preciousMetals" placeholder="0" min="0" oninput="calculate()">
               <span class="unit" id="curSymbol4">PKR</span>
             </div>
           </div>
 
           <div class="input-group">
-            <label for="liabilities">Debts / Liabilities</label>
+            <label for="businessAssets">Business Assets / Investments</label>
+            <div class="input-row">
+              <input type="number" id="businessAssets" placeholder="0" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol5">PKR</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="loansGiven">Loans Given (Money you expect back)</label>
+            <div class="input-row">
+              <input type="number" id="loansGiven" placeholder="0" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol6">PKR</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="liabilities">Debts / Liabilities (Amount due immediately)</label>
             <div class="input-row">
               <input type="number" id="liabilities" placeholder="0" min="0" oninput="calculate()">
-              <span class="unit" id="curSymbol5">PKR</span>
+              <span class="unit" id="curSymbol7">PKR</span>
             </div>
           </div>
 
@@ -134,7 +136,7 @@
             <label for="nisab">Nisab Threshold</label>
             <div class="input-row">
               <input type="number" id="nisab" placeholder="e.g. 150000" min="0" oninput="calculate()">
-              <span class="unit" id="curSymbol6">PKR</span>
+              <span class="unit" id="curSymbol8">PKR</span>
             </div>
             <div style="font-size: 0.8rem; color: var(--muted); margin-top: 6px;">Enter manually or use the live button above. Zakat is only due if your net wealth exceeds this.</div>
           </div>
@@ -171,35 +173,28 @@
     <article class="seo-content">
       <h2>What is Zakat?</h2>
       <p>Zakat is one of the Five Pillars of Islam. It is an obligatory charitable contribution, typically <strong>2.5%</strong> of a Muslim's accumulated wealth, paid annually to those in need. The word "Zakat" literally means "to cleanse" — Muslims believe that paying Zakat purifies their wealth and pleases Allah SWT.</p>
-      <p>Zakat is only due if your wealth exceeds a minimum threshold called <strong>Nisab</strong>, and if you have held that wealth for one full lunar year (Hawl).</p>
-
+      
       <h2>What is Nisab?</h2>
       <p>Nisab is the minimum amount of wealth a Muslim must possess before they become eligible to pay Zakat. The Nisab was set by Prophet Muhammad (PBUH) at a rate equivalent to <strong>87.48 grams of gold</strong> or <strong>612.36 grams of silver</strong>.</p>
-      
-      <h3>Gold Nisab vs Silver Nisab</h3>
-      <p>Because the prices of gold and silver fluctuate daily, the Nisab value in your local currency also changes. Many scholars recommend using the <strong>silver Nisab</strong> because it is almost always a lower threshold than gold. This allows more people to be eligible to pay Zakat, which means more help for those in need.</p>
-      <p>However, if your wealth consists entirely of gold, you must use the gold Nisab. Similarly, if it consists entirely of silver, use the silver Nisab. For mixed assets, the majority of scholars recommend the silver standard.</p>
+      <p>Many scholars recommend using the <strong>silver Nisab</strong> because it is almost always a lower threshold than gold. This allows more people to be eligible to pay Zakat, which means more help for those in need.</p>
 
       <h2>Which Assets Are Subject to Zakat?</h2>
-      <p>Only assets that have the potential to grow or increase are subject to Zakat. These include:</p>
+      <p>Only assets that have the potential to grow or increase are subject to Zakat. Our calculator includes:</p>
       <ul>
         <li><strong>Cash & Bank Balances:</strong> Savings, current accounts, and cash in hand.</li>
-        <li><strong>Gold & Silver:</strong> In any form (jewelry, coins, bars) — according to most scholars.</li>
+        <li><strong>Gold, Silver & Precious Metals:</strong> In any form (jewelry, coins, bars).</li>
         <li><strong>Business Assets:</strong> Trading stock, inventory, and receivables.</li>
         <li><strong>Investments:</strong> Stocks, shares, and mutual funds (at current market value).</li>
         <li><strong>Loans Given:</strong> Money you have lent to others that you expect to be repaid.</li>
       </ul>
       <p><strong>Not subject to Zakat:</strong> Your primary residence, personal car, furniture, and other fixed assets used for personal use.</p>
 
-      <h2>When is Zakat Due?</h2>
-      <p>Zakat becomes obligatory once a full lunar year (approximately 354 days) has passed since your wealth first reached or exceeded the Nisab. This date is your personal "Zakat anniversary" or "seed date." You calculate and pay Zakat on that date each year, regardless of fluctuations in your wealth during the year.</p>
-
       <h2>Related Calculators</h2>
       <p>Explore other tools from our finance category:</p>
       <ul>
-        <li><a href="/calculators/loan-calculator">Loan Calculator</a> — For personal or auto loans.</li>
-        <li><a href="/calculators/inflation-calculator">Inflation Calculator</a> — See how money value changes.</li>
-        <li><a href="/calculators/salary-calculator">Salary Calculator</a> — Convert your pay.</li>
+        <li><a href="/calculators/loan-calculator">Loan Calculator</a></li>
+        <li><a href="/calculators/inflation-calculator">Inflation Calculator</a></li>
+        <li><a href="/calculators/salary-calculator">Salary Calculator</a></li>
         <li><a href="/calculators">View all calculators →</a></li>
       </ul>
     </article>
