@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Income Tax Calculator — Progressive Tax | SitPanda</title>
+  <meta name="description" content="Free income tax calculator. Calculate your net income and effective tax rate based on custom progressive tax brackets.">
+  <link rel="canonical" href="https://sitpanda.com/calculators/tax-calculator">
+  
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sp_theme') === 'dark') document.documentElement.classList.add('dark'); } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/calculator.css">
+
+  <style>
+    /* Specific styles for the tax brackets grid */
+    .bracket-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding: 16px;
+      background: var(--surface-2);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .bracket-input { display: flex; flex-direction: column; gap: 4px; }
+    .bracket-input label { font-size: 0.75rem; color: var(--muted); font-weight: 600; }
+    .bracket-input input { padding: 8px 10px; font-size: 0.9rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--ink); }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+      <nav class="header-nav">
+        <a href="/#finance">Finance</a>
+        <a href="/#health">Health</a>
+        <a href="/#math">Math</a>
+        <a href="/#everyday">Everyday</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/blog/" class="btn-blog">Blog</a>
+        <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
+        <a href="/#finance" class="btn-cta">Browse →</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span>›</span> <a href="/#finance">Finance</a> <span>›</span> <span>Income Tax Calculator</span>
+    </nav>
+
+    <div class="calc-header">
+      <h1>Income Tax Calculator</h1>
+      <p>Calculate your net income and effective tax rate using custom progressive tax brackets.</p>
+    </div>
+
+    <div class="calc-layout">
+      
+      <!-- INPUT FORM -->
+      <div class="calc-box">
+        
+        <div class="settings-bar">
+          <div class="setting-group">
+            <label for="countrySelect">🌍 Country</label>
+            <select id="countrySelect"></select>
+          </div>
+          <div class="setting-group">
+            <label for="currencySelect">💱 Currency</label>
+            <select id="currencySelect"></select>
+          </div>
+        </div>
+
+        <form id="calcForm" onsubmit="return false">
+          
+          <div class="input-group">
+            <label for="grossIncome">Gross Annual Income</label>
+            <div class="input-row">
+              <input type="number" id="grossIncome" placeholder="e.g. 1200000" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol1">PKR</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="deductions">Total Deductions (Exemptions, etc.)</label>
+            <div class="input-row">
+              <input type="number" id="deductions" placeholder="e.g. 50000" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol2">PKR</span>
+            </div>
+          </div>
+
+          <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--ink);">Tax Brackets (Progressive)</label>
+          <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 12px;">Enter the upper limit and tax rate for each bracket. The last bracket has no limit.</p>
+          
+          <!-- TAX BRACKETS (Defaulting to a generic 4-tier system) -->
+          <div class="bracket-grid">
+            <div class="bracket-input">
+              <label>Bracket 1 Limit</label>
+              <input type="number" id="bracketLimit1" value="50000" oninput="calculate()">
+            </div>
+            <div class="bracket-input">
+              <label>Rate (%)</label>
+              <input type="number" id="bracketRate1" value="0" oninput="calculate()">
+            </div>
+
+            <div class="bracket-input">
+              <label>Bracket 2 Limit</label>
+              <input type="number" id="bracketLimit2" value="100000" oninput="calculate()">
+            </div>
+            <div class="bracket-input">
+              <label>Rate (%)</label>
+              <input type="number" id="bracketRate2" value="5" oninput="calculate()">
+            </div>
+
+            <div class="bracket-input">
+              <label>Bracket 3 Limit</label>
+              <input type="number" id="bracketLimit3" value="200000" oninput="calculate()">
+            </div>
+            <div class="bracket-input">
+              <label>Rate (%)</label>
+              <input type="number" id="bracketRate3" value="15" oninput="calculate()">
+            </div>
+
+            <div class="bracket-input" style="grid-column: span 2;">
+              <label>Above Bracket 3 (Remaining Income)</label>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.85rem; color: var(--muted);">Rate (%)</span>
+                <input type="number" id="bracketRate4" value="25" oninput="calculate()" style="flex: 1;">
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- RESULT CARD -->
+      <div class="calc-box result-box">
+        <div class="result-label">Net Annual Income</div>
+        <div class="result-value" id="netIncome">--</div>
+        <div class="result-sub" id="subLabel">Enter your income to calculate</div>
+
+        <div class="result-grid" style="grid-template-columns: 1fr;">
+          <div class="res-item" style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 12px;">
+            <div class="label">Total Tax Owed</div>
+            <div class="val" id="totalTax" style="color: #B91C1C;">--</div>
+          </div>
+          <div class="res-item" style="display: flex; justify-content: space-between;">
+            <div class="label">Effective Tax Rate</div>
+            <div class="val" id="effectiveRate">--</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="ymyl-disclaimer" style="max-width: 1000px; margin: 0 auto 40px;">
+      <strong>⚠️ Financial Disclaimer:</strong> This calculator provides estimates for educational purposes only. Tax laws vary significantly by country. Always consult a qualified tax professional or refer to your local tax authority for exact figures.
+    </div>
+
+    <!-- SEO CONTENT -->
+    <article class="seo-content">
+      <h2>How to Use This Income Tax Calculator</h2>
+      <p>Because tax brackets differ greatly between countries, this calculator allows you to enter your own progressive tax brackets. By default, it is set up with a simple 4-tier progressive system.</p>
+      <p>To use it, simply enter your <strong>Gross Income</strong> and any <strong>Deductions</strong> you are eligible for. Then, adjust the tax bracket limits and rates to match the tax laws of your country.</p>
+
+      <h2>What is a Progressive Tax?</h2>
+      <p>A progressive tax system means that as your income increases, the tax rate you pay on the <em>next</em> unit of currency also increases. This is why it's called "marginal" tax. You do not pay the highest rate on all your income, only on the portion that falls into that highest bracket.</p>
+      
+      <h2>What is Effective Tax Rate?</h2>
+      <p>The Effective Tax Rate is the average rate at which your income is taxed. It is calculated by dividing your Total Tax Owed by your Gross Income. It is always lower than your highest marginal tax rate.</p>
+
+      <h2>Related Calculators</h2>
+      <p>Explore other tools from our finance category:</p>
+      <ul>
+        <li><a href="/calculators/salary-calculator">Salary Calculator</a> — Convert hourly to annual pay.</li>
+        <li><a href="/calculators/emi-calculator">EMI Calculator</a> — For Equated Monthly Installments.</li>
+        <li><a href="/calculators/inflation-calculator">Inflation Calculator</a> — See how money value changes.</li>
+        <li><a href="/calculators">View all calculators →</a></li>
+      </ul>
+    </article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+          <p>Free, fast, and accurate online calculators for finance, health, and everyday life.</p>
+        </div>
+        <nav class="footer-col">
+          <h5>Finance</h5>
+          <ul>
+            <li><a href="/calculators/mortgage-calculator">Mortgage</a></li>
+            <li><a href="/calculators/loan-calculator">Loan</a></li>
+            <li><a href="/calculators/compound-interest-calculator">Compound Interest</a></li>
+            <li><a href="/calculators/salary-calculator">Salary</a></li>
+            <li><a href="/calculators/inflation-calculator">Inflation</a></li>
+            <li><a href="/calculators/zakat-calculator">Zakat</a></li>
+            <li><a href="/calculators/emi-calculator">EMI</a></li>
+            <li><a href="/calculators/tax-calculator">Tax</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Health</h5>
+          <ul>
+            <li><a href="/calculators/bmi-calculator">BMI</a></li>
+            <li><a href="/calculators/calorie-calculator">Calorie</a></li>
+            <li><a href="/calculators/bmr-calculator">BMR</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="/pages/about">About</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/pages/privacy">Privacy</a></li>
+            <li><a href="/pages/contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SitPanda. All rights reserved.</span>
+        <span>Calculators are for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- External JS -->
+  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/tax.js"></script>
+</body>
+</html>
