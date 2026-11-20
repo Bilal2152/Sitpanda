@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EMI Calculator — Equated Monthly Installment | SitPanda</title>
+  <meta name="description" content="Free EMI calculator to find your monthly loan installment, total interest payable, and total payment amount. Works for home, auto, and personal loans.">
+  <link rel="canonical" href="https://sitpanda.com/calculators/emi-calculator">
+  
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sp_theme') === 'dark') document.documentElement.classList.add('dark'); } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Main CSS & Calculator CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/calculator.css">
+
+  <!-- Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "EMI Calculator",
+    "url": "https://sitpanda.com/calculators/emi-calculator",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "description": "Free EMI calculator to find monthly loan installments."
+  }
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+      <nav class="header-nav">
+        <a href="/#finance">Finance</a>
+        <a href="/#health">Health</a>
+        <a href="/#math">Math</a>
+        <a href="/#everyday">Everyday</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/blog/" class="btn-blog">Blog</a>
+        <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
+        <a href="/#finance" class="btn-cta">Browse →</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span>›</span> <a href="/#finance">Finance</a> <span>›</span> <span>EMI Calculator</span>
+    </nav>
+
+    <div class="calc-header">
+      <h1>EMI Calculator</h1>
+      <p>Calculate your Equated Monthly Installment (EMI) for any type of loan instantly.</p>
+    </div>
+
+    <div class="calc-layout">
+      
+      <!-- INPUT FORM -->
+      <div class="calc-box">
+        
+        <div class="settings-bar">
+          <div class="setting-group">
+            <label for="countrySelect">🌍 Country</label>
+            <select id="countrySelect"></select>
+          </div>
+          <div class="setting-group">
+            <label for="currencySelect">💱 Currency</label>
+            <select id="currencySelect"></select>
+          </div>
+        </div>
+
+        <form id="calcForm" onsubmit="return false">
+          
+          <div class="input-group">
+            <label for="loanAmount">Principal Loan Amount</label>
+            <div class="input-row">
+              <input type="number" id="loanAmount" placeholder="e.g. 1000000" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol1">PKR</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="interestRate">Annual Interest Rate (%)</label>
+            <div class="input-row">
+              <input type="number" id="interestRate" placeholder="e.g. 10.5" step="0.01" min="0" oninput="calculate()">
+              <span class="unit">%</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="loanTerm">Loan Tenure</label>
+            <div class="input-row">
+              <input type="number" id="loanTerm" placeholder="e.g. 5" min="1" max="50" oninput="calculate()">
+              <select id="termUnit" onchange="calculate()">
+                <option value="years">Years</option>
+                <option value="months">Months</option>
+              </select>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- RESULT CARD -->
+      <div class="calc-box result-box">
+        <div class="result-label">Monthly EMI</div>
+        <div class="result-value" id="emiValue">--</div>
+        <div class="result-sub" id="subLabel">Enter loan details to calculate</div>
+
+        <div class="result-grid" style="grid-template-columns: 1fr;">
+          <div class="res-item" style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 12px;">
+            <div class="label">Total Interest Payable</div>
+            <div class="val" id="totalInterest" style="color: #B45309;">--</div>
+          </div>
+          <div class="res-item" style="display: flex; justify-content: space-between;">
+            <div class="label">Total Payment (Principal + Interest)</div>
+            <div class="val" id="totalPayment" style="color: var(--brand);">--</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="ymyl-disclaimer" style="max-width: 1000px; margin: 0 auto 40px;">
+      <strong>⚠️ Financial Disclaimer:</strong> This calculator provides estimates for educational purposes only. Actual EMI may vary based on processing fees, taxes, and lender policies.
+    </div>
+
+    <!-- SEO CONTENT -->
+    <article class="seo-content">
+      <h2>What is EMI?</h2>
+      <p>EMI stands for <strong>Equated Monthly Installment</strong>. It is a fixed payment amount made by a borrower to a lender at a specified date each calendar month. EMIs are used to pay off both interest and principal each month, so that over a specified number of years, the loan is paid off in full.</p>
+
+      <h2>EMI Calculation Formula</h2>
+      <p>The mathematical formula for calculating EMI is:</p>
+      <div class="formula">EMI = P × r × (1 + r)<sup>n</sup> ÷ ((1 + r)<sup>n</sup> − 1)</div>
+      <ul>
+        <li><strong>P</strong> = Principal Loan Amount</li>
+        <li><strong>r</strong> = Monthly Interest Rate (Annual Rate ÷ 12 ÷ 100)</li>
+        <li><strong>n</strong> = Loan Tenure in Months</li>
+      </ul>
+
+      <h2>Why is EMI Important?</h2>
+      <p>Knowing your EMI helps you budget effectively. It tells you exactly how much money you need to set aside each month to repay the loan. It also helps you compare different loan offers. A lower interest rate or a longer tenure will reduce your monthly EMI, but a longer tenure means you will pay more total interest over the life of the loan.</p>
+
+      <h2>Related Calculators</h2>
+      <p>Explore other tools from our finance category:</p>
+      <ul>
+        <li><a href="/calculators/loan-calculator">Loan Calculator</a> — For simple loan calculations.</li>
+        <li><a href="/calculators/mortgage-calculator">Mortgage Calculator</a> — For home loans with amortization.</li>
+        <li><a href="/calculators/compound-interest-calculator">Compound Interest Calculator</a> — For investment growth.</li>
+        <li><a href="/calculators">View all calculators →</a></li>
+      </ul>
+    </article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+          <p>Free, fast, and accurate online calculators for finance, health, and everyday life.</p>
+        </div>
+        <nav class="footer-col">
+          <h5>Finance</h5>
+          <ul>
+            <li><a href="/calculators/mortgage-calculator">Mortgage</a></li>
+            <li><a href="/calculators/loan-calculator">Loan</a></li>
+            <li><a href="/calculators/compound-interest-calculator">Compound Interest</a></li>
+            <li><a href="/calculators/salary-calculator">Salary</a></li>
+            <li><a href="/calculators/inflation-calculator">Inflation</a></li>
+            <li><a href="/calculators/zakat-calculator">Zakat</a></li>
+            <li><a href="/calculators/emi-calculator">EMI</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Health</h5>
+          <ul>
+            <li><a href="/calculators/bmi-calculator">BMI</a></li>
+            <li><a href="/calculators/calorie-calculator">Calorie</a></li>
+            <li><a href="/calculators/bmr-calculator">BMR</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="/pages/about">About</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/pages/privacy">Privacy</a></li>
+            <li><a href="/pages/contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SitPanda. All rights reserved.</span>
+        <span>Calculators are for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- External JS -->
+  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/emi.js"></script>
+</body>
+</html>
