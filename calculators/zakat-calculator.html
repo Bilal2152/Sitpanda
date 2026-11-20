@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zakat Calculator — Calculate Your Zakat | SitPanda</title>
+  <meta name="description" content="Free Zakat calculator to determine your annual Zakat on cash, gold, silver, and business assets. Uses the standard 2.5% rate.">
+  <link rel="canonical" href="https://sitpanda.com/calculators/zakat-calculator">
+  
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sp_theme') === 'dark') document.documentElement.classList.add('dark'); } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Main CSS & Calculator CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/calculator.css">
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Zakat Calculator",
+    "url": "https://sitpanda.com/calculators/zakat-calculator",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "description": "Free Zakat calculator to determine your annual Zakat on wealth.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+      <nav class="header-nav">
+        <a href="/#finance">Finance</a>
+        <a href="/#health">Health</a>
+        <a href="/#math">Math</a>
+        <a href="/#everyday">Everyday</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/blog/" class="btn-blog">Blog</a>
+        <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
+        <a href="/#finance" class="btn-cta">Browse →</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span>›</span> <a href="/#finance">Finance</a> <span>›</span> <span>Zakat Calculator</span>
+    </nav>
+
+    <div class="calc-header">
+      <h1>Zakat Calculator</h1>
+      <p>Calculate your annual Zakat (2.5%) on cash, gold, silver, and business assets.</p>
+    </div>
+
+    <div class="calc-layout">
+      
+      <!-- INPUT FORM -->
+      <div class="calc-box">
+        
+        <div class="settings-bar">
+          <div class="setting-group">
+            <label for="countrySelect">🌍 Country</label>
+            <select id="countrySelect"></select>
+          </div>
+          <div class="setting-group">
+            <label for="currencySelect">💱 Currency</label>
+            <select id="currencySelect"></select>
+          </div>
+        </div>
+
+        <form id="calcForm" onsubmit="return false">
+          
+          <div class="input-group">
+            <label for="cash">Cash & Bank Balance</label>
+            <div class="input-row">
+              <input type="number" id="cash" placeholder="0" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol1">PKR</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="goldValue">Value of Gold (in currency)</label>
+            <div class="input-row">
+              <input type="number" id="goldValue" placeholder="0" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol2">PKR</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="silverValue">Value of Silver (in currency)</label>
+            <div class="input-row">
+              <input type="number" id="silverValue" placeholder="0" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol3">PKR</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="businessAssets">Business Assets / Investments</label>
+            <div class="input-row">
+              <input type="number" id="businessAssets" placeholder="0" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol4">PKR</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="liabilities">Debts / Liabilities</label>
+            <div class="input-row">
+              <input type="number" id="liabilities" placeholder="0" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol5">PKR</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="nisab">Nisab Threshold (Value of 87.48g Gold or 612.36g Silver)</label>
+            <div class="input-row">
+              <input type="number" id="nisab" placeholder="e.g. 150000" min="0" oninput="calculate()">
+              <span class="unit" id="curSymbol6">PKR</span>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--muted); margin-top: 6px;">Enter current Nisab value in your currency. Zakat is only due if your net wealth exceeds this.</div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- RESULT CARD -->
+      <div class="calc-box result-box">
+        <div class="result-label">Total Zakat Due</div>
+        <div class="result-value" id="zakatAmount">--</div>
+        <div class="result-sub" id="subLabel">Enter your assets to calculate</div>
+
+        <div class="result-grid">
+          <div class="res-item">
+            <div class="label">Net Wealth</div>
+            <div class="val" id="netWealth">--</div>
+          </div>
+          <div class="res-item">
+            <div class="label">Zakat Rate</div>
+            <div class="val">2.5%</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="ymyl-disclaimer" style="max-width: 1000px; margin: 0 auto 40px;">
+      <strong>🕌 Religious Disclaimer:</strong> This calculator uses the standard 2.5% rate on wealth held for one lunar year. Nisab values change with market prices. For specific religious rulings, please consult with an Islamic scholar.
+    </div>
+
+    <!-- SEO CONTENT -->
+    <article class="seo-content">
+      <h2>What is Zakat?</h2>
+      <p>Zakat is one of the Five Pillars of Islam. It is an obligatory charitable contribution, typically <strong>2.5%</strong> of a Muslim's accumulated wealth, paid annually to those in need.</p>
+      <p>Zakat is only due if your wealth exceeds a minimum threshold called <strong>Nisab</strong>, and if you have held that wealth for one full lunar year (Hawl).</p>
+
+      <h2>How is Zakat Calculated?</h2>
+      <p>The calculation is straightforward:</p>
+      <div class="formula">Zakat = 2.5% × (Total Assets − Liabilities)</div>
+      <ul>
+        <li><strong>Total Assets:</strong> Cash, bank balances, gold, silver, stocks, and business inventory.</li>
+        <li><strong>Liabilities:</strong> Debts you owe that are due immediately.</li>
+        <li><strong>Nisab:</strong> The minimum threshold. If your net wealth is below this, Zakat is not due.</li>
+      </ul>
+
+      <h2>What is Nisab?</h2>
+      <p>Nisab is the minimum amount of wealth a Muslim must have before being liable for Zakat. There are two standards:</p>
+      <ul>
+        <li><strong>Gold Standard:</strong> 87.48 grams (7.5 tola) of gold.</li>
+        <li><strong>Silver Standard:</strong> 612.36 grams (52.5 tola) of silver.</li>
+      </ul>
+      <p>Most scholars recommend using the silver standard for the poor, as it results in more people being eligible to receive Zakat and more Zakat being distributed.</p>
+
+      <h2>Related Calculators</h2>
+      <p>Explore other tools from our finance category:</p>
+      <ul>
+        <li><a href="/calculators/loan-calculator">Loan Calculator</a> — For personal or auto loans.</li>
+        <li><a href="/calculators/inflation-calculator">Inflation Calculator</a> — See how money value changes.</li>
+        <li><a href="/calculators/salary-calculator">Salary Calculator</a> — Convert your pay.</li>
+        <li><a href="/calculators">View all calculators →</a></li>
+      </ul>
+    </article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+          <p>Free, fast, and accurate online calculators for finance, health, and everyday life.</p>
+        </div>
+        <nav class="footer-col">
+          <h5>Finance</h5>
+          <ul>
+            <li><a href="/calculators/mortgage-calculator">Mortgage</a></li>
+            <li><a href="/calculators/loan-calculator">Loan</a></li>
+            <li><a href="/calculators/compound-interest-calculator">Compound Interest</a></li>
+            <li><a href="/calculators/salary-calculator">Salary</a></li>
+            <li><a href="/calculators/inflation-calculator">Inflation</a></li>
+            <li><a href="/calculators/zakat-calculator">Zakat</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Health</h5>
+          <ul>
+            <li><a href="/calculators/bmi-calculator">BMI</a></li>
+            <li><a href="/calculators/calorie-calculator">Calorie</a></li>
+            <li><a href="/calculators/bmr-calculator">BMR</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="/pages/about">About</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/pages/privacy">Privacy</a></li>
+            <li><a href="/pages/contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SitPanda. All rights reserved.</span>
+        <span>Calculators are for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js"></script>
+
+  <script>
+    const COUNTRIES = {
+      US:['United States','USD'], GB:['United Kingdom','GBP'], CA:['Canada','CAD'], AU:['Australia','AUD'],
+      NZ:['New Zealand','NZD'], IE:['Ireland','EUR'], DE:['Germany','EUR'], FR:['France','EUR'],
+      ES:['Spain','EUR'], IT:['Italy','EUR'], NL:['Netherlands','EUR'], CH:['Switzerland','CHF'],
+      SE:['Sweden','SEK'], NO:['Norway','NOK'], DK:['Denmark','DKK'], PL:['Poland','PLN'],
+      CZ:['Czech Republic','CZK'], HU:['Hungary','HUF'], RO:['Romania','RON'], TR:['Turkey','TRY'],
+      RU:['Russia','RUB'], AE:['UAE','AED'], SA:['Saudi Arabia','SAR'], QA:['Qatar','QAR'],
+      KW:['Kuwait','KWD'], BH:['Bahrain','BHD'], OM:['Oman','OMR'], JO:['Jordan','JOD'],
+      EG:['Egypt','EGP'], ZA:['South Africa','ZAR'], NG:['Nigeria','NGN'], KE:['Kenya','KES'],
+      GH:['Ghana','GHS'], PK:['Pakistan','PKR'], IN:['India','INR'], BD:['Bangladesh','BDT'],
+      LK:['Sri Lanka','LKR'], NP:['Nepal','NPR'], CN:['China','CNY'], JP:['Japan','JPY'],
+      KR:['South Korea','KRW'], SG:['Singapore','SGD'], MY:['Malaysia','MYR'], TH:['Thailand','THB'],
+      ID:['Indonesia','IDR'], PH:['Philippines','PHP'], VN:['Vietnam','VND'], HK:['Hong Kong','HKD'],
+      TW:['Taiwan','TWD'], BR:['Brazil','BRL'], MX:['Mexico','MXN'], AR:['Argentina','ARS']
+    };
+    const CURRENCIES = ['USD','GBP','EUR','CAD','AUD','NZD','CHF','SEK','NOK','DKK','PLN','CZK','HUF','RON','TRY','RUB','AED','SAR','QAR','KWD','BHD','OMR','JOD','EGP','ZAR','NGN','KES','GHS','PKR','INR','BDT','LKR','NPR','CNY','JPY','KRW','SGD','MYR','THB','IDR','PHP','VND','HKD','TWD','BRL','MXN','ARS'];
+
+    const $ = id => document.getElementById(id);
+    const getVal = id => parseFloat($(id).value) || 0;
+    const locale = navigator.language || 'en-US';
+
+    function fmt(val) {
+      let cur = $('currencySelect').value;
+      try {
+        return new Intl.NumberFormat(locale, { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(val);
+      } catch(e) { return cur + ' ' + val.toFixed(0); }
+    }
+    
+    function updateCurSymbols() {
+      let cur = $('currencySelect').value;
+      let symbol = cur;
+      try {
+        let parts = new Intl.NumberFormat(locale, { style: 'currency', currency: cur, currencyDisplay: 'narrowSymbol' }).formatToParts(0);
+        symbol = parts.find(p => p.type === 'currency').value;
+      } catch(e) {}
+      $('curSymbol1').textContent = symbol;
+      $('curSymbol2').textContent = symbol;
+      $('curSymbol3').textContent = symbol;
+      $('curSymbol4').textContent = symbol;
+      $('curSymbol5').textContent = symbol;
+      $('curSymbol6').textContent = symbol;
+    }
+
+    function initDropdowns() {
+      let cSel = $('countrySelect'), curSel = $('currencySelect');
+      Object.keys(COUNTRIES).forEach(k => {
+        let o = document.createElement('option');
+        o.value = k; o.textContent = COUNTRIES[k][0];
+        cSel.appendChild(o);
+      });
+      CURRENCIES.forEach(c => {
+        let o = document.createElement('option');
+        o.value = c; o.textContent = c;
+        curSel.appendChild(o);
+      });
+
+      cSel.value = 'PK';
+      curSel.value = 'PKR';
+      
+      cSel.addEventListener('change', function() {
+        curSel.value = COUNTRIES[this.value][1];
+        updateCurSymbols(); calculate();
+      });
+      curSel.addEventListener('change', function() {
+        updateCurSymbols(); calculate();
+      });
+    }
+
+    function calculate() {
+      let cash = getVal('cash');
+      let gold = getVal('goldValue');
+      let silver = getVal('silverValue');
+      let business = getVal('businessAssets');
+      let liabilities = getVal('liabilities');
+      let nisab = getVal('nisab');
+
+      let totalAssets = cash + gold + silver + business;
+      let netWealth = Math.max(totalAssets - liabilities, 0);
+
+      if (netWealth === 0) {
+        $('zakatAmount').textContent = '--';
+        $('subLabel').textContent = 'Enter your assets to calculate';
+        $('netWealth').textContent = '--';
+        return;
+      }
+
+      $('netWealth').textContent = fmt(netWealth);
+
+      if (nisab > 0 && netWealth < nisab) {
+        $('zakatAmount').textContent = '0';
+        $('subLabel').textContent = 'Your net wealth is below the Nisab threshold.';
+      } else {
+        let zakat = netWealth * 0.025;
+        $('zakatAmount').textContent = fmt(zakat);
+        $('subLabel').textContent = nisab > 0 
+          ? 'Your wealth exceeds Nisab. Zakat is due.' 
+          : 'Enter Nisab value for accurate calculation.';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initDropdowns();
+      updateCurSymbols();
+      calculate();
+    });
+  </script>
+</body>
+</html>
