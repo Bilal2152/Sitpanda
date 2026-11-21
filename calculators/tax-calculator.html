@@ -20,6 +20,51 @@
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/calculator.css">
 
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Income Tax Calculator",
+    "url": "https://sitpanda.com/calculators/tax-calculator",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "description": "Free income tax calculator with custom progressive tax brackets.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sitpanda.com/"
+    },{
+      "@type": "ListItem", "position": 2, "name": "Finance Calculators", "item": "https://sitpanda.com/#finance"
+    },{
+      "@type": "ListItem", "position": 3, "name": "Income Tax Calculator", "item": "https://sitpanda.com/calculators/tax-calculator"
+    }]
+  }
+  </script>
+
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+      "@type": "Question",
+      "name": "How is my income tax calculated?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The calculator uses a progressive tax system. Your income is divided into brackets. Each portion of your income is taxed at the rate of its respective bracket, not your highest rate on the total amount." }
+    },{
+      "@type": "Question",
+      "name": "What is the Effective Tax Rate?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The Effective Tax Rate is the average rate at which your income is taxed. It is calculated by dividing your Total Tax Owed by your Gross Income. It is always lower than your highest marginal tax rate." }
+    }]
+  }
+  </script>
 </head>
 <body>
 
@@ -87,7 +132,7 @@
           <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--ink);">Tax Brackets (Progressive)</label>
           <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 12px;">Enter the upper limit and tax rate for each bracket. The last bracket has no limit.</p>
           
-          <!-- TAX BRACKETS (Defaulting to a generic 4-tier system) -->
+          <!-- TAX BRACKETS -->
           <div class="bracket-grid">
             <div class="bracket-input">
               <label>Bracket 1 Limit</label>
@@ -164,6 +209,18 @@
       
       <h2>What is Effective Tax Rate?</h2>
       <p>The Effective Tax Rate is the average rate at which your income is taxed. It is calculated by dividing your Total Tax Owed by your Gross Income. It is always lower than your highest marginal tax rate.</p>
+
+      <h2>Frequently Asked Questions</h2>
+      
+      <details class="faq" open>
+        <summary>How is my income tax calculated?</summary>
+        <p>The calculator uses a progressive tax system. Your income is divided into brackets. Each portion of your income is taxed at the rate of its respective bracket, not your highest rate on the total amount.</p>
+      </details>
+
+      <details class="faq">
+        <summary>What is the Effective Tax Rate?</summary>
+        <p>The Effective Tax Rate is the average rate at which your income is taxed. It is calculated by dividing your Total Tax Owed by your Gross Income. It is always lower than your highest marginal tax rate.</p>
+      </details>
 
       <h2>Related Calculators</h2>
       <p>Explore other tools from our finance category:</p>
