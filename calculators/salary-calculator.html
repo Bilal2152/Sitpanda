@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Salary Calculator — Hourly, Monthly & Annual Pay | SitPanda</title>
-  <meta name="description" content="Free salary calculator to convert hourly, daily, weekly, and monthly pay into annual income. Works with any currency and includes optional tax deductions.">
+  <meta name="description" content="Free salary calculator to convert hourly, daily, weekly, and monthly pay into annual income. Works with any currency.">
   <link rel="canonical" href="https://sitpanda.com/calculators/salary-calculator">
   
   <script>
@@ -17,7 +17,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Main CSS & Calculator CSS -->
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/calculator.css">
 
@@ -32,6 +31,38 @@
     "operatingSystem": "Any",
     "description": "Free salary calculator to convert hourly, daily, weekly, and monthly pay into annual income.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sitpanda.com/"
+    },{
+      "@type": "ListItem", "position": 2, "name": "Finance Calculators", "item": "https://sitpanda.com/#finance"
+    },{
+      "@type": "ListItem", "position": 3, "name": "Salary Calculator", "item": "https://sitpanda.com/calculators/salary-calculator"
+    }]
+  }
+  </script>
+
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+      "@type": "Question",
+      "name": "How does the salary calculator work?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The calculator converts your pay between hourly, daily, weekly, bi-weekly, monthly, and annual amounts based on standard full-time assumptions of 40 hours per week and 52 weeks per year. You can adjust the hours and days if your schedule is different." }
+    },{
+      "@type": "Question",
+      "name": "Does this calculator include taxes?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. This is a gross income calculator. It does not calculate or deduct taxes. To estimate your net income after tax, use our Income Tax Calculator." }
+    }]
   }
   </script>
 </head>
@@ -177,12 +208,22 @@
         <li><strong>Budgeting:</strong> Understand your weekly or monthly cash flow.</li>
       </ul>
 
+      <h2>Frequently Asked Questions</h2>
+      <details class="faq" open>
+        <summary>How does the salary calculator work?</summary>
+        <p>The calculator converts your pay between hourly, daily, weekly, bi-weekly, monthly, and annual amounts based on standard full-time assumptions of 40 hours per week and 52 weeks per year. You can adjust the hours and days if your schedule is different.</p>
+      </details>
+      <details class="faq">
+        <summary>Does this calculator include taxes?</summary>
+        <p>No. This is a gross income calculator. It does not calculate or deduct taxes. To estimate your net income after tax, use our <a href="/calculators/tax-calculator">Income Tax Calculator</a>.</p>
+      </details>
+
       <h2>Related Calculators</h2>
       <p>Explore other tools from our finance category:</p>
       <ul>
+        <li><a href="/calculators/tax-calculator">Income Tax Calculator</a> — Calculate your net income after tax.</li>
         <li><a href="/calculators/mortgage-calculator">Mortgage Calculator</a> — For home loans.</li>
         <li><a href="/calculators/loan-calculator">Loan Calculator</a> — For personal or auto loans.</li>
-        <li><a href="/calculators/compound-interest-calculator">Compound Interest Calculator</a> — To see how investments grow.</li>
         <li><a href="/calculators">View all calculators →</a></li>
       </ul>
     </article>
@@ -203,6 +244,10 @@
             <li><a href="/calculators/loan-calculator">Loan</a></li>
             <li><a href="/calculators/compound-interest-calculator">Compound Interest</a></li>
             <li><a href="/calculators/salary-calculator">Salary</a></li>
+            <li><a href="/calculators/inflation-calculator">Inflation</a></li>
+            <li><a href="/calculators/zakat-calculator">Zakat</a></li>
+            <li><a href="/calculators/emi-calculator">EMI</a></li>
+            <li><a href="/calculators/tax-calculator">Tax</a></li>
           </ul>
         </nav>
         <nav class="footer-col">
@@ -231,123 +276,6 @@
   </footer>
 
   <script src="/assets/js/main.js"></script>
-
-  <script>
-    const COUNTRIES = {
-      US:['United States','USD'], GB:['United Kingdom','GBP'], CA:['Canada','CAD'], AU:['Australia','AUD'],
-      NZ:['New Zealand','NZD'], IE:['Ireland','EUR'], DE:['Germany','EUR'], FR:['France','EUR'],
-      ES:['Spain','EUR'], IT:['Italy','EUR'], NL:['Netherlands','EUR'], CH:['Switzerland','CHF'],
-      SE:['Sweden','SEK'], NO:['Norway','NOK'], DK:['Denmark','DKK'], PL:['Poland','PLN'],
-      CZ:['Czech Republic','CZK'], HU:['Hungary','HUF'], RO:['Romania','RON'], TR:['Turkey','TRY'],
-      RU:['Russia','RUB'], AE:['UAE','AED'], SA:['Saudi Arabia','SAR'], QA:['Qatar','QAR'],
-      KW:['Kuwait','KWD'], BH:['Bahrain','BHD'], OM:['Oman','OMR'], JO:['Jordan','JOD'],
-      EG:['Egypt','EGP'], ZA:['South Africa','ZAR'], NG:['Nigeria','NGN'], KE:['Kenya','KES'],
-      GH:['Ghana','GHS'], PK:['Pakistan','PKR'], IN:['India','INR'], BD:['Bangladesh','BDT'],
-      LK:['Sri Lanka','LKR'], NP:['Nepal','NPR'], CN:['China','CNY'], JP:['Japan','JPY'],
-      KR:['South Korea','KRW'], SG:['Singapore','SGD'], MY:['Malaysia','MYR'], TH:['Thailand','THB'],
-      ID:['Indonesia','IDR'], PH:['Philippines','PHP'], VN:['Vietnam','VND'], HK:['Hong Kong','HKD'],
-      TW:['Taiwan','TWD'], BR:['Brazil','BRL'], MX:['Mexico','MXN'], AR:['Argentina','ARS']
-    };
-    const CURRENCIES = ['USD','GBP','EUR','CAD','AUD','NZD','CHF','SEK','NOK','DKK','PLN','CZK','HUF','RON','TRY','RUB','AED','SAR','QAR','KWD','BHD','OMR','JOD','EGP','ZAR','NGN','KES','GHS','PKR','INR','BDT','LKR','NPR','CNY','JPY','KRW','SGD','MYR','THB','IDR','PHP','VND','HKD','TWD','BRL','MXN','ARS'];
-
-    const $ = id => document.getElementById(id);
-    const getVal = id => parseFloat($(id).value) || 0;
-    const locale = navigator.language || 'en-US';
-
-    function fmt(val) {
-      let cur = $('currencySelect').value;
-      try {
-        return new Intl.NumberFormat(locale, { style: 'currency', currency: cur, maximumFractionDigits: 2 }).format(val);
-      } catch(e) { return cur + ' ' + val.toFixed(2); }
-    }
-    
-    function updateCurSymbols() {
-      let cur = $('currencySelect').value;
-      let symbol = cur;
-      try {
-        let parts = new Intl.NumberFormat(locale, { style: 'currency', currency: cur, currencyDisplay: 'narrowSymbol' }).formatToParts(0);
-        symbol = parts.find(p => p.type === 'currency').value;
-      } catch(e) {}
-      $('curSymbol1').textContent = symbol;
-    }
-
-    function initDropdowns() {
-      let cSel = $('countrySelect'), curSel = $('currencySelect');
-      Object.keys(COUNTRIES).forEach(k => {
-        let o = document.createElement('option');
-        o.value = k; o.textContent = COUNTRIES[k][0];
-        cSel.appendChild(o);
-      });
-      CURRENCIES.forEach(c => {
-        let o = document.createElement('option');
-        o.value = c; o.textContent = c;
-        curSel.appendChild(o);
-      });
-
-      cSel.value = 'PK';
-      curSel.value = 'PKR';
-      
-      cSel.addEventListener('change', function() {
-        curSel.value = COUNTRIES[this.value][1];
-        updateCurSymbols(); calculate();
-      });
-      curSel.addEventListener('change', function() {
-        updateCurSymbols(); calculate();
-      });
-    }
-
-    function calculate() {
-      let amount = getVal('salaryAmount');
-      let freq = $('payFrequency').value;
-      let hoursWeek = getVal('hoursPerWeek') || 40;
-      let daysWeek = getVal('daysPerWeek') || 5;
-
-      if (amount === 0) {
-        $('annualIncome').textContent = '--';
-        $('subLabel').textContent = 'Enter your pay details';
-        $('monthlyPay').textContent = '--';
-        $('weeklyPay').textContent = '--';
-        $('dailyPay').textContent = '--';
-        $('hourlyPay').textContent = '--';
-        return;
-      }
-
-      let annual = 0;
-
-      if (freq === 'hourly') {
-        annual = amount * hoursWeek * 52;
-      } else if (freq === 'daily') {
-        annual = amount * daysWeek * 52;
-      } else if (freq === 'weekly') {
-        annual = amount * 52;
-      } else if (freq === 'biweekly') {
-        annual = amount * 26;
-      } else if (freq === 'monthly') {
-        annual = amount * 12;
-      } else if (freq === 'annual') {
-        annual = amount;
-      }
-
-      // Calculate breakdowns
-      let monthly = annual / 12;
-      let weekly = annual / 52;
-      let daily = weekly / daysWeek;
-      let hourly = weekly / hoursWeek;
-
-      $('annualIncome').textContent = fmt(annual);
-      $('subLabel').textContent = 'Based on 52 weeks per year';
-      
-      $('monthlyPay').textContent = fmt(monthly);
-      $('weeklyPay').textContent = fmt(weekly);
-      $('dailyPay').textContent = fmt(daily);
-      $('hourlyPay').textContent = fmt(hourly);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      initDropdowns();
-      updateCurSymbols();
-      calculate();
-    });
-  </script>
+  <script src="/assets/js/salary.js"></script>
 </body>
 </html>
