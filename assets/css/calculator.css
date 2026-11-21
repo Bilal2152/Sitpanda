@@ -76,3 +76,38 @@ details.faq summary::-webkit-details-marker { display: none; }
 details.faq summary::after { content: "+"; color: var(--brand); font-size: 1.2rem; font-weight: 700; }
 details.faq[open] summary::after { content: "−"; }
 details.faq p { padding-bottom: 20px; margin: 0; }
+/* =========================================
+   TAX CALCULATOR SPECIFIC STYLES
+   ========================================= */
+
+.bracket-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--surface-2);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.bracket-input { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 4px; 
+}
+
+.bracket-input label { 
+  font-size: 0.75rem; 
+  color: var(--muted); 
+  font-weight: 600; 
+}
+
+.bracket-input input { 
+  padding: 8px 10px; 
+  font-size: 0.9rem; 
+  border: 1px solid var(--border); 
+  border-radius: 8px; 
+  background: var(--bg); 
+  color: var(--ink); 
+}
