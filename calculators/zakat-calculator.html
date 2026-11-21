@@ -19,6 +19,56 @@
   
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/calculator.css">
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Zakat Calculator",
+    "url": "https://sitpanda.com/calculators/zakat-calculator",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "description": "Free Zakat calculator with live Nisab value.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sitpanda.com/"
+    },{
+      "@type": "ListItem", "position": 2, "name": "Finance Calculators", "item": "https://sitpanda.com/#finance"
+    },{
+      "@type": "ListItem", "position": 3, "name": "Zakat Calculator", "item": "https://sitpanda.com/calculators/zakat-calculator"
+    }]
+  }
+  </script>
+
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+      "@type": "Question",
+      "name": "What is Zakat?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Zakat is one of the Five Pillars of Islam. It is an obligatory charitable contribution, typically 2.5% of a Muslim's accumulated wealth, paid annually to those in need." }
+    },{
+      "@type": "Question",
+      "name": "What is Nisab?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Nisab is the minimum amount of wealth a Muslim must possess before they become eligible to pay Zakat. It is equivalent to 87.48 grams of gold or 612.36 grams of silver." }
+    },{
+      "@type": "Question",
+      "name": "Which assets are subject to Zakat?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Zakat is due on cash, bank balances, gold, silver, business assets, investments, and money lent to others that you expect to be repaid. Your primary residence and personal car are not subject to Zakat." }
+    }]
+  }
+  </script>
 </head>
 <body>
 
@@ -169,6 +219,51 @@
       <strong>🕌 Religious Disclaimer:</strong> This calculator uses the standard 2.5% rate on wealth held for one lunar year. Nisab values change with market prices. For specific religious rulings, please consult with an Islamic scholar.
     </div>
 
+    <!-- SEO CONTENT -->
+    <article class="seo-content">
+      <h2>What is Zakat?</h2>
+      <p>Zakat is one of the Five Pillars of Islam. It is an obligatory charitable contribution, typically <strong>2.5%</strong> of a Muslim's accumulated wealth, paid annually to those in need. The word "Zakat" literally means "to cleanse" — Muslims believe that paying Zakat purifies their wealth and pleases Allah SWT.</p>
+      <p>Zakat is only due if your wealth exceeds a minimum threshold called <strong>Nisab</strong>, and if you have held that wealth for one full lunar year (Hawl).</p>
+
+      <h2>What is Nisab?</h2>
+      <p>Nisab is the minimum amount of wealth a Muslim must possess before they become eligible to pay Zakat. The Nisab was set by Prophet Muhammad (PBUH) at a rate equivalent to <strong>87.48 grams of gold</strong> or <strong>612.36 grams of silver</strong>.</p>
+      <p>Because the prices of gold and silver fluctuate daily, the Nisab value in your local currency also changes. Many scholars recommend using the <strong>silver Nisab</strong> because it is almost always a lower threshold than gold. This allows more people to be eligible to pay Zakat, which means more help for those in need.</p>
+
+      <h2>Which Assets Are Subject to Zakat?</h2>
+      <p>Only assets that have the potential to grow or increase are subject to Zakat. These include:</p>
+      <ul>
+        <li><strong>Cash & Bank Balances:</strong> Savings, current accounts, and cash in hand.</li>
+        <li><strong>Gold, Silver & Precious Metals:</strong> In any form (jewelry, coins, bars).</li>
+        <li><strong>Business Assets:</strong> Trading stock, inventory, and receivables.</li>
+        <li><strong>Investments:</strong> Stocks, shares, and mutual funds (at current market value).</li>
+        <li><strong>Loans Given:</strong> Money you have lent to others that you expect to be repaid.</li>
+      </ul>
+      <p><strong>Not subject to Zakat:</strong> Your primary residence, personal car, furniture, and other fixed assets used for personal use.</p>
+
+      <h2>Frequently Asked Questions</h2>
+      <details class="faq" open>
+        <summary>What is Zakat?</summary>
+        <p>Zakat is one of the Five Pillars of Islam. It is an obligatory charitable contribution, typically 2.5% of a Muslim's accumulated wealth, paid annually to those in need.</p>
+      </details>
+      <details class="faq">
+        <summary>What is Nisab?</summary>
+        <p>Nisab is the minimum amount of wealth a Muslim must possess before they become eligible to pay Zakat. It is equivalent to 87.48 grams of gold or 612.36 grams of silver.</p>
+      </details>
+      <details class="faq">
+        <summary>Which assets are subject to Zakat?</summary>
+        <p>Zakat is due on cash, bank balances, gold, silver, business assets, investments, and money lent to others that you expect to be repaid. Your primary residence and personal car are not subject to Zakat.</p>
+      </details>
+
+      <h2>Related Calculators</h2>
+      <p>Explore other tools from our finance category:</p>
+      <ul>
+        <li><a href="/calculators/inflation-calculator">Inflation Calculator</a> — See how money value changes.</li>
+        <li><a href="/calculators/salary-calculator">Salary Calculator</a> — Convert your pay.</li>
+        <li><a href="/calculators/loan-calculator">Loan Calculator</a> — For personal or auto loans.</li>
+        <li><a href="/calculators">View all calculators →</a></li>
+      </ul>
+    </article>
+
   </main>
 
   <footer class="site-footer">
@@ -187,6 +282,8 @@
             <li><a href="/calculators/salary-calculator">Salary</a></li>
             <li><a href="/calculators/inflation-calculator">Inflation</a></li>
             <li><a href="/calculators/zakat-calculator">Zakat</a></li>
+            <li><a href="/calculators/emi-calculator">EMI</a></li>
+            <li><a href="/calculators/tax-calculator">Tax</a></li>
           </ul>
         </nav>
         <nav class="footer-col">
@@ -215,145 +312,6 @@
   </footer>
 
   <script src="/assets/js/main.js"></script>
-
-  <!-- YEH ZAKAT CALCULATOR KA LOGIC HAI -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      
-      const COUNTRIES = {
-        US:['United States','USD'], GB:['United Kingdom','GBP'], CA:['Canada','CAD'], AU:['Australia','AUD'],
-        NZ:['New Zealand','NZD'], IE:['Ireland','EUR'], DE:['Germany','EUR'], FR:['France','EUR'],
-        ES:['Spain','EUR'], IT:['Italy','EUR'], NL:['Netherlands','EUR'], CH:['Switzerland','CHF'],
-        SE:['Sweden','SEK'], NO:['Norway','NOK'], DK:['Denmark','DKK'], PL:['Poland','PLN'],
-        CZ:['Czech Republic','CZK'], HU:['Hungary','HUF'], RO:['Romania','RON'], TR:['Turkey','TRY'],
-        RU:['Russia','RUB'], AE:['UAE','AED'], SA:['Saudi Arabia','SAR'], QA:['Qatar','QAR'],
-        KW:['Kuwait','KWD'], BH:['Bahrain','BHD'], OM:['Oman','OMR'], JO:['Jordan','JOD'],
-        EG:['Egypt','EGP'], ZA:['South Africa','ZAR'], NG:['Nigeria','NGN'], KE:['Kenya','KES'],
-        GH:['Ghana','GHS'], PK:['Pakistan','PKR'], IN:['India','INR'], BD:['Bangladesh','BDT'],
-        LK:['Sri Lanka','LKR'], NP:['Nepal','NPR'], CN:['China','CNY'], JP:['Japan','JPY'],
-        KR:['South Korea','KRW'], SG:['Singapore','SGD'], MY:['Malaysia','MYR'], TH:['Thailand','THB'],
-        ID:['Indonesia','IDR'], PH:['Philippines','PHP'], VN:['Vietnam','VND'], HK:['Hong Kong','HKD'],
-        TW:['Taiwan','TWD'], BR:['Brazil','BRL'], MX:['Mexico','MXN'], AR:['Argentina','ARS']
-      };
-      const CURRENCIES = ['USD','GBP','EUR','CAD','AUD','NZD','CHF','SEK','NOK','DKK','PLN','CZK','HUF','RON','TRY','RUB','AED','SAR','QAR','KWD','BHD','OMR','JOD','EGP','ZAR','NGN','KES','GHS','PKR','INR','BDT','LKR','NPR','CNY','JPY','KRW','SGD','MYR','THB','IDR','PHP','VND','HKD','TWD','BRL','MXN','ARS'];
-
-      const countrySelect = document.getElementById('countrySelect');
-      const currencySelect = document.getElementById('currencySelect');
-      const fetchBtn = document.getElementById('fetchNisabBtn');
-      
-      // Populate Country Dropdown
-      Object.keys(COUNTRIES).forEach(k => {
-        let o = document.createElement('option');
-        o.value = k; o.textContent = COUNTRIES[k][0];
-        countrySelect.appendChild(o);
-      });
-      
-      // Populate Currency Dropdown
-      CURRENCIES.forEach(c => {
-        let o = document.createElement('option');
-        o.value = c; o.textContent = c;
-        currencySelect.appendChild(o);
-      });
-
-      // Defaults
-      countrySelect.value = 'PK';
-      currencySelect.value = 'PKR';
-
-      function updateCurSymbols() {
-        let cur = currencySelect.value;
-        let symbol = cur;
-        try {
-          let parts = new Intl.NumberFormat(navigator.language || 'en-US', { style: 'currency', currency: cur, currencyDisplay: 'narrowSymbol' }).formatToParts(0);
-          symbol = parts.find(p => p.type === 'currency').value;
-        } catch(e) {}
-        document.querySelectorAll('.cur-sym').forEach(el => el.textContent = symbol);
-      }
-
-      function fmt(val) {
-        try {
-          return new Intl.NumberFormat(navigator.language || 'en-US', { style: 'currency', currency: currencySelect.value, maximumFractionDigits: 0 }).format(val);
-        } catch(e) { return currencySelect.value + ' ' + val.toFixed(0); }
-      }
-
-      function calculate() {
-        let cash = parseFloat(document.getElementById('cash').value) || 0;
-        let gold = parseFloat(document.getElementById('goldValue').value) || 0;
-        let silver = parseFloat(document.getElementById('silverValue').value) || 0;
-        let precious = parseFloat(document.getElementById('preciousMetals').value) || 0;
-        let business = parseFloat(document.getElementById('businessAssets').value) || 0;
-        let loans = parseFloat(document.getElementById('loansGiven').value) || 0;
-        
-        let liabilities = parseFloat(document.getElementById('liabilities').value) || 0;
-        let nisab = parseFloat(document.getElementById('nisab').value) || 0;
-
-        let totalAssets = cash + gold + silver + precious + business + loans;
-        let netWealth = Math.max(totalAssets - liabilities, 0);
-
-        if (netWealth === 0) {
-          document.getElementById('zakatAmount').textContent = '--';
-          document.getElementById('subLabel').textContent = 'Enter your assets to calculate';
-          document.getElementById('netWealth').textContent = '--';
-          return;
-        }
-
-        document.getElementById('netWealth').textContent = fmt(netWealth);
-
-        if (nisab > 0 && netWealth < nisab) {
-          document.getElementById('zakatAmount').textContent = '0';
-          document.getElementById('subLabel').textContent = 'Your net wealth is below the Nisab threshold.';
-        } else {
-          let zakat = netWealth * 0.025;
-          document.getElementById('zakatAmount').textContent = fmt(zakat);
-          document.getElementById('subLabel').textContent = nisab > 0 
-            ? 'Your wealth exceeds Nisab. Zakat is due.' 
-            : 'Enter Nisab value for accurate calculation.';
-        }
-      }
-
-      function fetchLiveNisab() {
-        const status = document.getElementById('nisabStatus');
-        status.innerHTML = '⏳ Calculating Nisab based on current market standards...';
-        
-        const goldPricePerGramUSD = 75.00;
-        const silverPricePerGramUSD = 0.95;
-        const exchangeRates = { 'USD': 1, 'PKR': 278, 'INR': 83, 'GBP': 0.79, 'EUR': 0.92, 'SAR': 3.75, 'AED': 3.67, 'CAD': 1.35, 'AUD': 1.52, 'BDT': 110, 'MYR': 4.7, 'IDR': 15600, 'TRY': 32, 'ZAR': 19, 'NGN': 1500 };
-        
-        const cur = currencySelect.value;
-        const rate = exchangeRates[cur] || 1;
-        
-        setTimeout(() => {
-          const goldNisabUSD = goldPricePerGramUSD * 87.48;
-          const silverNisabUSD = silverPricePerGramUSD * 612.36;
-          const goldNisabLocal = goldNisabUSD * rate;
-          const silverNisabLocal = silverNisabUSD * rate;
-          const recommendedNisab = Math.round(silverNisabLocal);
-          
-          document.getElementById('nisab').value = recommendedNisab;
-          status.innerHTML = `✅ Estimated Nisab (Silver): <strong>${fmt(recommendedNisab)}</strong><br><span style="font-size:0.75rem; color:var(--muted);">(Gold: ${fmt(Math.round(goldNisabLocal))} — Note: These are approximate rates. Verify with local market.)</span>`;
-          calculate();
-        }, 800);
-      }
-
-      // Event Listeners
-      countrySelect.addEventListener('change', function() {
-        currencySelect.value = COUNTRIES[this.value][1];
-        updateCurSymbols(); calculate();
-      });
-      
-      currencySelect.addEventListener('change', function() {
-        updateCurSymbols(); calculate();
-      });
-      
-      document.querySelectorAll('.calc-input').forEach(input => {
-        input.addEventListener('input', calculate);
-      });
-
-      fetchBtn.addEventListener('click', fetchLiveNisab);
-
-      // Init
-      updateCurSymbols();
-      calculate();
-    });
-  </script>
+  <script src="/assets/js/zakat.js"></script>
 </body>
 </html>
