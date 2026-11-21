@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMI Calculator — Free Body Mass Index Calculator | SitPanda</title>
+  <meta name="description" content="Calculate your Body Mass Index (BMI) using metric or imperial units. Understand your weight category based on WHO standards.">
+  <link rel="canonical" href="https://sitpanda.com/calculators/bmi-calculator">
+  
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sp_theme') === 'dark') document.documentElement.classList.add('dark'); } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/calculator.css">
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "BMI Calculator",
+    "url": "https://sitpanda.com/calculators/bmi-calculator",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Any",
+    "description": "Calculate your Body Mass Index (BMI) using metric or imperial units.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sitpanda.com/"
+    },{
+      "@type": "ListItem", "position": 2, "name": "Health Calculators", "item": "https://sitpanda.com/#health"
+    },{
+      "@type": "ListItem", "position": 3, "name": "BMI Calculator", "item": "https://sitpanda.com/calculators/bmi-calculator"
+    }]
+  }
+  </script>
+
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+      "@type": "Question",
+      "name": "What is BMI?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Body Mass Index (BMI) is a simple measure using your height and weight to work out if your weight is healthy. It is calculated by dividing your weight in kilograms by the square of your height in meters." }
+    },{
+      "@type": "Question",
+      "name": "What is a healthy BMI range?",
+      "acceptedAnswer": { "@type": "Answer", "text": "According to the WHO, a BMI between 18.5 and 24.9 is considered normal or healthy weight. Below 18.5 is underweight, 25 to 29.9 is overweight, and 30 or above is obese." }
+    },{
+      "@type": "Question",
+      "name": "Does BMI apply to everyone?",
+      "acceptedAnswer": { "@type": "Answer", "text": "BMI is a general guideline and has limitations. It may not be accurate for athletes with high muscle mass, older adults, pregnant women, or children. Always consult a healthcare professional for a proper assessment." }
+    }]
+  }
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+      <nav class="header-nav">
+        <a href="/#finance">Finance</a>
+        <a href="/#health">Health</a>
+        <a href="/#math">Math</a>
+        <a href="/#everyday">Everyday</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/blog/" class="btn-blog">Blog</a>
+        <button class="theme-toggle" id="sp-master-btn" aria-label="Toggle dark mode">🌙</button>
+        <a href="/#health" class="btn-cta">Browse →</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span>›</span> <a href="/#health">Health</a> <span>›</span> <span>BMI Calculator</span>
+    </nav>
+
+    <div class="calc-header">
+      <h1>BMI Calculator</h1>
+      <p>Calculate your Body Mass Index (BMI) and find out your weight category based on WHO standards.</p>
+    </div>
+
+    <div class="calc-layout">
+      
+      <!-- INPUT FORM -->
+      <div class="calc-box">
+        
+        <div class="unit-toggle">
+          <button type="button" id="btn-metric" class="active" onclick="switchUnit('metric')">Metric (kg/cm)</button>
+          <button type="button" id="btn-imperial" onclick="switchUnit('imperial')">Imperial (lbs/ft)</button>
+        </div>
+
+        <form id="bmiForm" onsubmit="event.preventDefault();">
+          
+          <!-- METRIC INPUTS -->
+          <div id="metric-inputs">
+            <div class="input-group">
+              <label for="weight-kg">Weight (kg)</label>
+              <input type="number" id="weight-kg" placeholder="e.g. 70" min="1" max="300" step="0.1" oninput="calculateBMI()">
+            </div>
+            <div class="input-group">
+              <label for="height-cm">Height (cm)</label>
+              <input type="number" id="height-cm" placeholder="e.g. 175" min="50" max="250" step="0.1" oninput="calculateBMI()">
+            </div>
+          </div>
+
+          <!-- IMPERIAL INPUTS -->
+          <div id="imperial-inputs" style="display: none;">
+            <div class="input-group">
+              <label for="weight-lbs">Weight (lbs)</label>
+              <input type="number" id="weight-lbs" placeholder="e.g. 150" min="1" max="600" step="0.1" oninput="calculateBMI()">
+            </div>
+            <div class="input-row">
+              <div class="input-group">
+                <label for="height-ft">Height (ft)</label>
+                <input type="number" id="height-ft" placeholder="e.g. 5" min="1" max="8" step="1" oninput="calculateBMI()">
+              </div>
+              <div class="input-group">
+                <label for="height-in">(in)</label>
+                <input type="number" id="height-in" placeholder="e.g. 9" min="0" max="11" step="1" oninput="calculateBMI()">
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- RESULT CARD -->
+      <div class="calc-box result-box">
+        <div class="result-label">Your BMI</div>
+        <div class="result-value" id="bmi-value">--</div>
+        <div class="result-category" id="bmi-category" style="background: var(--surface-2); color: var(--muted); display: inline-block;">Enter details</div>
+      </div>
+
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="ymyl-disclaimer" style="max-width: 1000px; margin: 0 auto 40px;">
+      <strong>⚕️ Medical Disclaimer:</strong> This calculator provides estimates only and is not a substitute for professional medical advice, diagnosis, or treatment. Always consult a licensed healthcare provider before making health-related decisions.
+    </div>
+
+    <!-- SEO CONTENT -->
+    <article class="seo-content">
+      <h2>What is BMI?</h2>
+      <p>Body Mass Index (BMI) is a simple measure using your height and weight to work out if your weight is healthy. It is used by healthcare professionals worldwide as a quick screening tool to categorize individuals into weight ranges that may lead to health problems.</p>
+
+      <h2>BMI Formula</h2>
+      <p>The formula differs slightly between metric and imperial units:</p>
+      <div class="formula">Metric: BMI = Weight (kg) ÷ Height (m)<sup>2</sup></div>
+      <div class="formula">Imperial: BMI = (Weight (lbs) ÷ Height (in)<sup>2</sup>) × 703</div>
+
+      <h2>BMI Categories (WHO Standard)</h2>
+      <ul>
+        <li><strong>Underweight:</strong> Below 18.5</li>
+        <li><strong>Normal weight:</strong> 18.5 to 24.9</li>
+        <li><strong>Overweight:</strong> 25.0 to 29.9</li>
+        <li><strong>Obese:</strong> 30.0 and above</li>
+      </ul>
+
+      <h2>Limitations of BMI</h2>
+      <p>BMI does not distinguish between muscle and fat. Athletes with high muscle mass may have a high BMI but low body fat. It is also not accurate for pregnant women, older adults, and children. Use this tool as a general guideline only.</p>
+
+      <h2>Frequently Asked Questions</h2>
+      
+      <details class="faq" open>
+        <summary>What is BMI?</summary>
+        <p>Body Mass Index (BMI) is a simple measure using your height and weight to work out if your weight is healthy. It is calculated by dividing your weight in kilograms by the square of your height in meters.</p>
+      </details>
+
+      <details class="faq">
+        <summary>What is a healthy BMI range?</summary>
+        <p>According to the WHO, a BMI between 18.5 and 24.9 is considered normal or healthy weight. Below 18.5 is underweight, 25 to 29.9 is overweight, and 30 or above is obese.</p>
+      </details>
+
+      <details class="faq">
+        <summary>Does BMI apply to everyone?</summary>
+        <p>BMI is a general guideline and has limitations. It may not be accurate for athletes with high muscle mass, older adults, pregnant women, or children. Always consult a healthcare professional for a proper assessment.</p>
+      </details>
+
+      <h2>Related Calculators</h2>
+      <p>Explore other tools from our health category:</p>
+      <ul>
+        <li><a href="/calculators/calorie-calculator">Calorie Calculator</a> — Find your daily calorie needs.</li>
+        <li><a href="/calculators/bmr-calculator">BMR Calculator</a> — Calculate your basal metabolic rate.</li>
+        <li><a href="/calculators/body-fat-calculator">Body Fat Calculator</a> — Estimate your body fat percentage.</li>
+        <li><a href="/calculators">View all calculators →</a></li>
+      </ul>
+    </article>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo"><span class="logo-icon">🐼</span><span>SitPanda</span></a>
+          <p>Free, fast, and accurate online calculators for finance, health, and everyday life.</p>
+        </div>
+        <nav class="footer-col">
+          <h5>Finance</h5>
+          <ul>
+            <li><a href="/calculators/mortgage-calculator">Mortgage</a></li>
+            <li><a href="/calculators/loan-calculator">Loan</a></li>
+            <li><a href="/calculators/compound-interest-calculator">Compound Interest</a></li>
+            <li><a href="/calculators/salary-calculator">Salary</a></li>
+            <li><a href="/calculators/inflation-calculator">Inflation</a></li>
+            <li><a href="/calculators/zakat-calculator">Zakat</a></li>
+            <li><a href="/calculators/emi-calculator">EMI</a></li>
+            <li><a href="/calculators/tax-calculator">Tax</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Health</h5>
+          <ul>
+            <li><a href="/calculators/bmi-calculator">BMI</a></li>
+            <li><a href="/calculators/calorie-calculator">Calorie</a></li>
+            <li><a href="/calculators/bmr-calculator">BMR</a></li>
+            <li><a href="/calculators/body-fat-calculator">Body Fat</a></li>
+            <li><a href="/calculators/ideal-weight-calculator">Ideal Weight</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="/pages/about">About</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/pages/privacy">Privacy</a></li>
+            <li><a href="/pages/contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SitPanda. All rights reserved.</span>
+        <span>Calculators are for informational purposes only.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/bmi.js"></script>
+</body>
+</html>
